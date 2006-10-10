@@ -1,0 +1,76 @@
+#/bin/sh
+
+
+function printhelp() {
+	echo "Usage $1 [OPTION]..."
+	echo
+	echo "Options:"
+	echo
+	echo "  --prefix=PREFIX        architecture-independent files [/usr/local]"
+	echo "  --exec-prefix=EPREFIX  architecture-dependent files [PREFIX]"
+	echo
+	echo "  --bindir=BINDIR        user executables [EPREFIX/bin]"
+	echo "  --datadir=DATADIR      read-only data [PREFIX/share/openorbiter]"
+	echo 
+	echo "  --help                 display this help and exit"
+	echo
+	exit 0
+}
+
+
+function printinvalid() {
+	echo Invalid option passed: $1
+	exit 1
+}
+
+
+for arg do
+	opt=$(expr "x$arg" : 'x[^=]*=\(.*\)')
+
+	case $arg in
+	--help)
+		printhelp $0
+		;;
+	--prefix=*)
+		PREFIX=$opt
+		;;
+	--exec-prefix=*)
+		EPREFIX=$opt
+		;;
+	--bindir=*)
+		BINDIR=$opt
+		;;
+	--datadir=*)
+		DATADIR=$opt
+		;;
+	*)
+		printinvalid $arg
+		;;
+	esac
+done
+
+[ -z $PREFIX ] && PREFIX=/usr/local
+[ -z $EPREFIX ] && EPREFIX=$PREFIX
+
+[ -z $BINDIR ] && BINDIR=$EPREFIX/bin
+[ -z $DATADIR ] && DATADIR=$PREFIX/share/openorbiter
+
+mkdir -p build
+
+echo BINDIR  = $BINDIR  >  build/configure.pri
+echo DATADIR = $DATADIR >> build/configure.pri
+
+
+echo "#ifndef CONFIG_H"              > build/configure.h
+echo "#define CONFIG_H"             >> build/configure.h
+
+echo "#define DATADIR \"$DATADIR\"" >> build/configure.h
+
+echo "#endif"                       >> build/configure.h
+
+
+echo Configuration complete
+echo
+echo "  BINDIR  = $BINDIR"
+echo "  DATADIR = $DATADIR"
+echo
