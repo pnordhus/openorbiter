@@ -24,6 +24,15 @@ function printinvalid() {
 }
 
 
+function test_qt() {
+	if [ -x "$1" ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+
 for arg do
 	opt=$(expr "x$arg" : 'x[^=]*=\(.*\)')
 
@@ -49,6 +58,24 @@ for arg do
 	esac
 done
 
+QM_FOUND=""
+QM="$QTDIR/bin/qmake"
+if test_qt $QM; then
+	QM_FOUND="1"
+fi
+
+if [ -z "$QM_FOUND" ]; then
+	QM=$(type -p qmake)
+	if test_qt $QM; then
+		QM_FOUND="1"
+	fi
+fi
+
+if [ -z "$QM_FOUND" ]; then
+	echo "Qmake not found, or wrong version. You need Qt 4.0 or above."
+	exit 1
+fi
+
 [ -z $PREFIX ] && PREFIX=/usr/local
 [ -z $EPREFIX ] && EPREFIX=$PREFIX
 
@@ -68,6 +95,7 @@ echo "#define DATADIR \"$DATADIR\"" >> build/configure.h
 
 echo "#endif"                       >> build/configure.h
 
+"$QM"
 
 echo Configuration complete
 echo

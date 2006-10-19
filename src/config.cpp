@@ -52,6 +52,8 @@ Config::Config()
 	m_firstNodeTime = 60.0f;
 	m_nextNodeTime = 10.0f;
 
+	m_mapColor = QColor(200,200,200);
+
 	m_statsVisibility.clear();
 	m_statsVisibility.append(false);
 	m_statsVisibility.append(true);
@@ -178,6 +180,12 @@ void Config::statsVisibility(const QList<bool>& list)
 {
 	Q_ASSERT(list.size() == 7);
 	m_statsVisibility = list;
+}
+
+
+void Config::mapColor(const QColor& color)
+{
+	m_mapColor = color;
 }
 
 

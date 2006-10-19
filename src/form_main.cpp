@@ -21,6 +21,7 @@
 
 #include "form_creatematch.h"
 #include "form_selectkey.h"
+#include "form_settings.h"
 #include "form_main.h"
 #include "orbiter.h"
 #include "../build/ui_form_main.h"
@@ -45,7 +46,8 @@ private:
 
 FormMain::FormMain(bool showStats) :
 	QMainWindow(NULL),
-	m_timer(this),
+	m_processTimer(this),
+	m_updateTimer(this),
 	m_lastWinner(NULL),
 	m_modelStats(7, 0)
 {
@@ -54,12 +56,16 @@ FormMain::FormMain(bool showStats) :
 	m_window->setupUi(this);
 	m_window->frameMapBack->setFormMain(this);
 
-	connect(&m_timer, SIGNAL(timeout()), this, SLOT(process()));
-	m_timer.start(20);
+	connect(&m_processTimer, SIGNAL(timeout()), this, SLOT(process()));
+	m_processTimer.start(20);
+
+	connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
+	m_updateTimer.start(100);
 
 	connect(m_window->actionNewMatch, SIGNAL(activated()), this, SLOT(createMatch()));
 	connect(m_window->actionFullScreenMode, SIGNAL(activated()), this, SLOT(toggleFullscreen()));
 	connect(m_window->actionShowStats, SIGNAL(toggled(bool)), this, SLOT(toggleStats(bool)));
+	connect(m_window->actionPreferences, SIGNAL(activated()), this, SLOT(showPreferences()));
 
 	m_window->actionShowStats->setChecked(showStats);
 
@@ -129,12 +135,15 @@ FormMain::FormMain(bool showStats) :
 	connect(m_window->tableStats, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(statsContextMenu(const QPoint&)));
 
 	changeVisibleStats();
+	updateStats();
+	setMapColor();
 }
 
 
 FormMain::~FormMain()
 {
-	m_timer.stop();
+	m_updateTimer.stop();
+	m_processTimer.stop();
 
 	foreach (QShortcut* sc, m_shortcuts)
 		delete sc;
@@ -210,49 +219,7 @@ void FormMain::resume()
 
 void FormMain::process()
 {
-	int count = 0;
-	foreach (Player* player, g_openorbiter->selectedPlayers())  {
-		QModelIndex index;
-		QColor color = player->getColor();
-		color.setAlpha(100);
 
-		index = m_modelStats.index(0, count);
-		m_modelStats.setData(index, QString::number(player->matchStats().speed(), 'f', 1), Qt::DisplayRole);
-		m_modelStats.setData(index, Qt::AlignCenter, Qt::TextAlignmentRole);
-		m_modelStats.setData(index, color, Qt::BackgroundColorRole);
-
-		index = m_modelStats.index(1, count);
-		m_modelStats.setData(index, player->matchStats().frags(), Qt::DisplayRole);
-		m_modelStats.setData(index, Qt::AlignCenter, Qt::TextAlignmentRole);
-		m_modelStats.setData(index, color, Qt::BackgroundColorRole);
-
-		index = m_modelStats.index(2, count);
-		m_modelStats.setData(index, player->matchStats().losses(), Qt::DisplayRole);
-		m_modelStats.setData(index, Qt::AlignCenter, Qt::TextAlignmentRole);
-		m_modelStats.setData(index, color, Qt::BackgroundColorRole);
-
-		index = m_modelStats.index(3, count);
-		m_modelStats.setData(index, QString::number(player->matchStats().time(), 'f', 1), Qt::DisplayRole);
-		m_modelStats.setData(index, Qt::AlignCenter, Qt::TextAlignmentRole);
-		m_modelStats.setData(index, color, Qt::BackgroundColorRole);
-
-		index = m_modelStats.index(4, count);
-		m_modelStats.setData(index, QString::number(player->matchStats().topSpeed(), 'f', 1), Qt::DisplayRole);
-		m_modelStats.setData(index, Qt::AlignCenter, Qt::TextAlignmentRole);
-		m_modelStats.setData(index, color, Qt::BackgroundColorRole);
-
-		index = m_modelStats.index(5, count);
-		m_modelStats.setData(index, QString::number(player->matchStats().way(), 'f', 1), Qt::DisplayRole);
-		m_modelStats.setData(index, Qt::AlignCenter, Qt::TextAlignmentRole);
-		m_modelStats.setData(index, color, Qt::BackgroundColorRole);
-
-		index = m_modelStats.index(6, count);
-		m_modelStats.setData(index, player->matchStats().wins(), Qt::DisplayRole);
-		m_modelStats.setData(index, Qt::AlignCenter, Qt::TextAlignmentRole);
-		m_modelStats.setData(index, color, Qt::BackgroundColorRole);
-
-		count++;
-	}
 	//qDebug() << m_model->headerData(0, Qt::Vertical, Qt::SizeHintRole);
 
 	if (!g_openorbiter->isRunning()) {
@@ -277,6 +244,39 @@ void FormMain::process()
 
 	g_openorbiter->process();
 	m_window->frameMap->process();
+}
+
+
+void FormMain::updateStat(int row, int col, const QVariant& value, Qt::ItemDataRole role)
+{
+	QModelIndex index = m_modelStats.index(row, col);
+	if (m_modelStats.data(index, role) != value)
+		m_modelStats.setData(index, value, role);
+}
+
+
+void FormMain::updateStats()
+{
+	int count = 0;
+	foreach (Player* player, g_openorbiter->selectedPlayers())  {
+		QColor color = player->getColor();
+		color.setAlpha(100);
+
+		for (int i = 0; i < 7; i++) {
+			updateStat(i, count, Qt::AlignCenter, Qt::TextAlignmentRole);
+			updateStat(i, count, color, Qt::BackgroundColorRole);
+		}
+
+		updateStat(0, count, QString::number(player->matchStats().speed(), 'f', 1), Qt::DisplayRole);
+		updateStat(1, count, player->matchStats().frags(), Qt::DisplayRole);
+		updateStat(2, count, player->matchStats().losses(), Qt::DisplayRole);
+		updateStat(3, count, QString::number(player->matchStats().time(), 'f', 1), Qt::DisplayRole);
+		updateStat(4, count, QString::number(player->matchStats().topSpeed(), 'f', 1), Qt::DisplayRole);
+		updateStat(5, count, QString::number(player->matchStats().way(), 'f', 1), Qt::DisplayRole);
+		updateStat(6, count, player->matchStats().wins(), Qt::DisplayRole);
+
+		count++;
+	}
 }
 
 
@@ -358,7 +358,7 @@ void FormMain::changeVisibleStats()
 
 	int h = m_window->tableStats->frameSize().height() - m_window->tableStats->contentsRect().height();
 	h += (header->count() - header->hiddenSectionCount() + 1) * header->sizeHint().height();
-	m_window->tableStats->setFixedHeight(h);	
+	m_window->tableStats->setFixedHeight(h);
 }
 
 
@@ -432,4 +432,21 @@ void FormMain::statsContextMenu(const QPoint& p)
 		QWidget* w = dynamic_cast<QWidget*>(sender());
 		m_window->menuStatistics->popup(w->mapToGlobal(p));
 	}
+}
+
+
+void FormMain::showPreferences()
+{
+	FormSettings dlg(this);
+	if (dlg.exec()) {
+		setMapColor();
+	}
+}
+
+
+void FormMain::setMapColor()
+{
+	QPalette p = m_window->frameMap->palette();
+	p.setColor(QPalette::Background, g_openorbiter->config().mapColor());
+	m_window->frameMap->setPalette(p);
 }

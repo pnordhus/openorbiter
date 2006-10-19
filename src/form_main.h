@@ -64,6 +64,7 @@ public slots:
 private slots:
 	void	resume();
 	void	process();
+	void	updateStats();
 	void	input();
 	void	toggleFullscreen();
 	void	toggleStats(bool show);
@@ -75,13 +76,18 @@ private slots:
 
 	void	statsContextMenu(const QPoint&);
 
+	void	showPreferences();
+	void	setMapColor();
+
 private:
+	void	updateStat(int row, int col, const QVariant& value, Qt::ItemDataRole role);
 	void	resizeEvent(QResizeEvent*);
 
 private:
 	Ui::FormMain*	m_window;
 
-	QTimer			m_timer;
+	QTimer			m_processTimer;
+	QTimer			m_updateTimer;
 
 	QList<PlayerShortcut*>m_shortcuts;
 

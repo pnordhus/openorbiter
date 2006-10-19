@@ -11,7 +11,8 @@ FORMS += \
 	ui/form_creatematch.ui \
 	ui/form_main.ui \
 	ui/form_selectkey.ui \
-	ui/form_selectmap.ui
+	ui/form_selectmap.ui \
+	ui/form_settings.ui
 
 
 HEADERS +=	\
@@ -21,6 +22,7 @@ HEADERS +=	\
 	src/form_main.h \
 	src/form_selectkey.h \
 	src/form_selectmap.h \
+	src/form_settings.h \
 	src/frame_map.h \
 	src/frame_mapback.h \
 	src/game.h \
@@ -42,6 +44,7 @@ SOURCES +=	\
 	src/form_main.cpp \
 	src/form_selectkey.cpp \
 	src/form_selectmap.cpp \
+	src/form_settings.cpp \
 	src/frame_map.cpp \
 	src/frame_mapback.cpp \
 	src/game.cpp \

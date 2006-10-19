@@ -31,9 +31,6 @@ FrameMap::FrameMap(QWidget* parent) :
 	QWidget(parent)
 {
 	setAutoFillBackground(true);
-	QPalette p = palette();
-	p.setColor(QPalette::Background, QColor(200,200,200));
-	setPalette(p);
 }
 
 
@@ -51,7 +48,7 @@ void FrameMap::process()
 }
 
 
-void FrameMap::paintEvent(QPaintEvent *e)
+void FrameMap::paintEvent(QPaintEvent*)
 {
 	if (!g_openorbiter->isRunning())
 		return;

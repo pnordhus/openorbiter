@@ -20,7 +20,7 @@
 
 
 #include "form_selectmap.h"
-#include "build/ui_form_selectmap.h"
+#include "../build/ui_form_selectmap.h"
 #include "openorbiter.h"
 
 

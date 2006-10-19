@@ -20,7 +20,7 @@
 
 
 #include "form_selectkey.h"
-#include "build/ui_form_selectkey.h"
+#include "../build/ui_form_selectkey.h"
 #include "openorbiter.h"
 #include <QDebug>
 #include <QKeyEvent>

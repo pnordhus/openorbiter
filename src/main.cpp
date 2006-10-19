@@ -21,6 +21,7 @@
 
 #include "form_main.h"
 #include "openorbiter.h"
+#include "randomizer.h"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -67,7 +68,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	srandom(time(NULL));
+	initRandom();
 
 	OpenOrbiter::create();
 	QApplication app(argc, argv);

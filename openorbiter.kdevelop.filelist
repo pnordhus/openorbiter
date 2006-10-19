@@ -51,3 +51,5 @@ COPYING
 openorbiter.kdevelop
 openorbiter.kdevelop.filelist
 configure
+src/form_settings.cpp
+src/form_settings.h

@@ -23,6 +23,7 @@
 #define OPENORBITER_CONFIG_H
 
 
+#include <QColor>
 #include <QList>
 #include <QString>
 
@@ -62,6 +63,9 @@ public:
 	const QString&	lastMap() const { return m_lastMap; }
 	void			lastMap(const QString&);
 
+	const QColor&	mapColor() { return m_mapColor; }
+	void			mapColor(const QColor&);
+
 	void	save(const QString& filename);
 	void	load(const QString& filename);
 
@@ -82,6 +86,7 @@ private:
 
 	float	m_firstNodeTime;
 	float	m_nextNodeTime;
+	QColor	m_mapColor;
 	
 	QString	m_lastMap;
 };

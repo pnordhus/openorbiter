@@ -272,7 +272,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>29</height>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -319,6 +319,8 @@
     </widget>
     <addaction name="actionFullScreenMode" />
     <addaction name="menuStatistics" />
+    <addaction name="separator" />
+    <addaction name="actionPreferences" />
    </widget>
    <addaction name="menuGame" />
    <addaction name="menuSettings" />
@@ -428,6 +430,11 @@
   <action name="actionShowNone" >
    <property name="text" >
     <string>Hide all</string>
+   </property>
+  </action>
+  <action name="actionPreferences" >
+   <property name="text" >
+    <string>&amp;Preferences</string>
    </property>
   </action>
  </widget>
