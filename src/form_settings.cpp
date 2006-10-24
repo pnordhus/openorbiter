@@ -54,7 +54,7 @@ void FormSettings::setColor(const QColor& color)
 
 void FormSettings::accept()
 {
-	g_openorbiter->config().mapColor(m_window->frameColor->palette().color(QPalette::Window));
+	g_openorbiter->config().setMapColor(m_window->frameColor->palette().color(QPalette::Window));
 	QDialog::accept();
 }
 

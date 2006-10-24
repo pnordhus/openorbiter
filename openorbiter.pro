@@ -1,10 +1,11 @@
-QT += uitool xml
+QT += xml
 MOC_DIR = build
 UI_DIR = build
 OBJECTS_DIR = build
 TARGET = openorbiter
 DESTDIR = bin
 TEMPLATE = app
+CONFIG += debug
 
 
 FORMS += \
@@ -17,7 +18,7 @@ FORMS += \
 
 HEADERS +=	\
 	src/config.h \
-	src/config_parser.h \
+	src/defs.h \
 	src/form_creatematch.h \
 	src/form_main.h \
 	src/form_selectkey.h \
@@ -28,6 +29,7 @@ HEADERS +=	\
 	src/game.h \
 	src/gamestats.h \
 	src/map.h \
+	src/mapview.h \
 	src/match.h \
 	src/matchstats.h \
 	src/node.h \
@@ -37,9 +39,9 @@ HEADERS +=	\
 	src/spawnpoint.h \
 	src/vector.h
 
+
 SOURCES +=	\
 	src/config.cpp \
-	src/config_parser.cpp \
 	src/form_creatematch.cpp \
 	src/form_main.cpp \
 	src/form_selectkey.cpp \
@@ -51,6 +53,7 @@ SOURCES +=	\
 	src/gamestats.cpp \
 	src/main.cpp \
 	src/map.cpp \
+	src/mapview.cpp \
 	src/match.cpp \
 	src/matchstats.cpp \
 	src/node.cpp \
@@ -64,6 +67,7 @@ SOURCES +=	\
 !include(build/configure.pri) {
 	error("Please run ./configure first!")
 }
+
 
 !exists(build/configure.h) {
 	error("Please run ./configure again!")

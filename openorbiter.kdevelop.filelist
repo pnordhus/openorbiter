@@ -53,3 +53,8 @@ openorbiter.kdevelop.filelist
 configure
 src/form_settings.cpp
 src/form_settings.h
+src/defs.h
+src/mapview.h
+src/mapview.cpp
+src/mapparser.h
+src/mapparser.cpp

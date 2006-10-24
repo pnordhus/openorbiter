@@ -24,6 +24,7 @@
 
 
 #include "openorbiter.h"
+#include "mapview.h"
 
 #include <QMainWindow>
 #include <QEvent>

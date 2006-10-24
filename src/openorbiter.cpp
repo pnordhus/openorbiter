@@ -20,7 +20,6 @@
 
 
 #include "openorbiter.h"
-#include "config_parser.h"
 
 
 #include <QDebug>
@@ -41,10 +40,13 @@ OpenOrbiter::~OpenOrbiter()
 {
 	delete m_match;
 
-	m_config.save(m_config.getUserDir() + "config.xml");
+	m_config.save(m_config.userDir() + "config.xml");
 
 	for (int i = 0; i < MaxPlayers; i++)
 		delete m_players[i];
+
+	foreach (Map* map, m_maps)
+		delete map;
 }
 
 
@@ -65,7 +67,7 @@ void OpenOrbiter::newMatch(int map)
 	m_match = new Match(getMap(map));
 
 	m_lastMap = map;
-	m_config.lastMap(getMap(map).getName());
+	m_config.setLastMap(getMap(map)->name());
 }
 
 
@@ -121,28 +123,17 @@ void OpenOrbiter::initPlayers()
 }
 
 
-void OpenOrbiter::addMap(const Map& map)
-{
-	m_maps.append(map);
-}
-
-
 void OpenOrbiter::loadConfig()
 {
-	ConfigParser cp;
 	QString file;
 
-	file = m_config.getDataDir() + "config.xml";
-	if (QFileInfo(file).isReadable()) {
+	file = m_config.dataDir() + "config.xml";
+	if (QFileInfo(file).isReadable())
 		m_config.load(file);
-		cp.parse(file, ConfigParser::CONFIG | ConfigParser::PLAYERS);
-	}
 
-	file = m_config.getUserDir() + "config.xml";
-	if (QFileInfo(file).isReadable()) {
+	file = m_config.userDir() + "config.xml";
+	if (QFileInfo(file).isReadable())
 		m_config.load(file);
-		cp.parse(file, ConfigParser::CONFIG | ConfigParser::PLAYERS);
-	}
 }
 
 
@@ -150,20 +141,20 @@ void OpenOrbiter::loadMaps()
 {
 	m_maps.clear();
 
-	loadMapsFromDir(m_config.getDataDir() + "maps");
-	loadMapsFromDir(m_config.getUserDir() + "maps");
+	loadMapsFromDir(m_config.dataDir() + "maps");
+	loadMapsFromDir(m_config.userDir() + "maps");
 
 	qStableSort(m_maps);
 	
 	// remove duplicate maps
 	for (int i = m_maps.size() - 2; i >= 0; i--) {
 		if (m_maps.value(i) == m_maps.value(i + 1)) {
-			m_maps.removeAt(i + 1);
+			delete m_maps.takeAt(i + 1);
 		}
 	}
 	m_lastMap = 0;
 	for (int i = 0; i < m_maps.size(); i++) {
-		if (m_maps.value(i).getName() == m_config.lastMap()) {
+		if (m_maps.value(i)->name() == m_config.lastMap()) {
 			m_lastMap = i;
 			break;
 		}
@@ -173,13 +164,13 @@ void OpenOrbiter::loadMaps()
 
 void OpenOrbiter::loadMapsFromDir(const QDir& dir)
 {
-	ConfigParser cp;
-
 	qDebug() << "Looking for maps in" << dir.path();
 
 	QStringList cfgFiles = dir.entryList(QStringList("*.xml"), QDir::Files | QDir::Readable, QDir::Name);
 	foreach (QString file, cfgFiles) {
-		cp.parse(dir.path() + QDir::separator() + file, ConfigParser::MAP);
+		Map* map = Map::load(dir.path() + QDir::separator() + file);
+		if (map)
+			m_maps.append(map);
 	}
 }
 

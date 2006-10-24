@@ -25,7 +25,7 @@
 #include "randomizer.h"
 
 
-Game::Game(const Map& map, const QList<Player*>& p) :
+Game::Game(const Map* map, const QList<Player*>& p) :
 	m_map(map),
 	m_time(0.0),
 	m_players(p),
@@ -33,16 +33,16 @@ Game::Game(const Map& map, const QList<Player*>& p) :
 {
 	m_nodeTimer = g_openorbiter->config().firstNodeTime();
 
-	m_nodes = m_map.getNodes();
+	m_nodes = m_map->nodes();
 	randomize(m_nodes);
 
-	Map::SpawnPointList spawns = m_map.getSpawnPoints();
+	Map::SpawnPointList spawns = m_map->spawnPoints();
 	randomize(spawns);
 	randomize(m_players);
 
 	foreach (Player* player, m_players) {
 		player->startGame();
-		player->getOrbiter().setPosition(spawns.takeLast());
+		player->getOrbiter().setPosition(*spawns.takeLast());
 	}
 }
 
@@ -56,18 +56,18 @@ bool Game::process(float time)
 	if (m_nodes.size() > 1) {
 		m_nodeTimer -= time;
 		if (m_nodeTimer <= 4.0f)
-			m_nodes.last().setMark(int(m_nodeTimer * 2.0f) & 1);
+			m_nodes.last()->setMark(int(m_nodeTimer * 2.0f) & 1);
 
 		if (m_nodeTimer <= 0.0f) {
 			m_nodeTimer = g_openorbiter->config().nextNodeTime();
 			foreach (Player* player, m_players) {
-				if (player->getOrbiter().node() == &m_nodes.last())
+				if (player->getOrbiter().node() == m_nodes.last())
 					player->getOrbiter().setNode(NULL);
 			}
 			m_nodes.takeLast();
 		}
 	} else {
-		//m_gravityFactor *= 1.0f + time;
+		m_gravityFactor += time;
 	}
 
 	foreach (Player* player, m_players) {
@@ -75,11 +75,11 @@ bool Game::process(float time)
 		if (o.needsNode()) {
 			const Node* nearest = NULL;
 			float distance = HUGE_VALF;
-			foreach (const Node& node, m_nodes) {
-				float d = o.getPosition().distance(node);
+			foreach (const Node* node, m_nodes) {
+				float d = o.getPosition().distance(*node);
 				if (d < distance) {
 					distance = d;
-					nearest = &node;
+					nearest = node;
 				}
 			}
 			Q_ASSERT(nearest != NULL);
@@ -92,7 +92,7 @@ bool Game::process(float time)
 	randomize(m_players);
 
 	for (unsigned int it = 0; it < iterations; it++) {
-		Vector v = m_map.getGravity() * g_openorbiter->config().getGravityFactor() * m_gravityFactor * time;
+		Vector v = m_map->gravity() * g_openorbiter->config().gravityFactor() * m_gravityFactor * time;
 		foreach (Player* player, m_players) {
 			player->getOrbiter().process(time, v);
 		}
@@ -107,7 +107,7 @@ bool Game::process(float time)
 		for (int i = m_players.size() - 1; (i >= 0) && (m_players.size() > 1); i--) {
 			Player* player = m_players.value(i);
 			const Vector& p = player->getOrbiter().getPosition();
-			if ((p.x < 0.0) || (p.x >= m_map.getWidth()) || (p.y < 0.0) || (p.y >= m_map.getHeight())) {
+			if ((p.x < 0.0) || (p.x >= m_map->width()) || (p.y < 0.0) || (p.y >= m_map->height())) {
 				player->endGame(false);
 				m_players.removeAt(i);
 			}
@@ -125,7 +125,7 @@ bool Game::process(float time)
 
 QPoint Game::drawingPos(const Vector& v, int width) const
 {
-	float factor = float(width) / m_map.getWidth();
+	float factor = float(width) / m_map->width();
 	return QPoint(int(v.x * factor), int(v.y * factor));
 }
 
@@ -138,13 +138,13 @@ QRect Game::drawingRect(const Orbiter& o, int width) const
 
 QRect Game::drawingRect(const Node& n, int width) const
 {
-	return drawingRect(n, 0.4f, width);
+	return drawingRect(n, 0.3f, width);
 }
 
 
 QRect Game::drawingRect(const Vector& pos, float radius, int width) const
 {
-	float factor = float(width) / m_map.getWidth();
+	float factor = float(width) / m_map->width();
 
 	return QRect(int((pos.x - radius) * factor), int((pos.y - radius) * factor), int(2.0f * radius * factor), int(2.0f * radius * factor));
 }

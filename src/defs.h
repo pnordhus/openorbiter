@@ -19,66 +19,22 @@
  ***************************************************************************/
 
 
-#include "match.h"
-#include "openorbiter.h"
-#include "randomizer.h"
-#include <QDebug>
+#ifndef OPENORBITER_DEFS_H
+#define OPENORBITER_DEFS_H
 
 
-Match::Match(const Map* map) :
-	m_map(map),
-	m_time(0.0),
-	m_lastWinner(NULL),
-	m_game(NULL)
-{
-	m_players = g_openorbiter->selectedPlayers();
-	foreach (Player* player, m_players) {
-		player->startMatch();
-	}
-
-	newGame();
-}
+#include <QString>
 
 
-Match::~Match()
-{
-	delete m_game;
+static const int APP_VERSION_MAJOR = 0;
+static const int APP_VERSION_MINOR = 3;
+static const int APP_VERSION_MICRO = 0;
 
-	foreach (Player* player, m_players) {
-		player->endMatch();
-	}
-}
+static const QString APP_BUILD_DATE = __DATE__;
+static const QString APP_BUILD_TIME = __TIME__;
 
-
-void Match::setPlayers(QList<Player*>& players)
-{
-	foreach (Player* player, m_players) {
-		if (!players.contains(player))
-			player->endMatch();
-	}
-
-	foreach (Player* player, players) {
-		if (!m_players.contains(player))
-			player->startMatch();
-	}
-
-	m_players = players;
-}
+static const QString APP_NAME = "OpenOrbiter";
+static const QString APP_NAME_VERSION = QString("%1 %2.%3.%4").arg(APP_NAME).arg(APP_VERSION_MAJOR).arg(APP_VERSION_MINOR).arg(APP_VERSION_MICRO);
 
 
-void Match::newGame()
-{
-	delete m_game;
-	m_game = new Game(m_map, m_players);
-}
-
-
-void Match::process(float time)
-{
-	m_time += time;
-
-	if (!m_game->process(time)) { // game over
-		m_lastWinner = m_game->winner();
-		newGame();
-	}
-}
+#endif

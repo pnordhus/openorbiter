@@ -39,8 +39,8 @@ FormCreateMatch::FormCreateMatch(QWidget* parent) :
 
 	connect(m_window->buttonMapSelect, SIGNAL(clicked()), this, SLOT(selectMap()));
 
-	foreach (const Map& map, g_openorbiter->getMaps()) {
-		m_window->comboMap->addItem(map.getName());
+	foreach (const Map* map, g_openorbiter->getMaps()) {
+		m_window->comboMap->addItem(map->name());
 	}
 
 	m_window->comboMap->setCurrentIndex(g_openorbiter->getLastMap());
@@ -93,7 +93,7 @@ void FormCreateMatch::accept()
 		return;
 	}
 
-	if (count > g_openorbiter->getMap(m_window->comboMap->currentIndex()).getSpawnPoints().size()) {
+	if (count > g_openorbiter->getMap(m_window->comboMap->currentIndex())->spawnPoints().size()) {
 		QMessageBox::warning(this, tr("Too many players"), tr("You have to select more players than this map supports."));
 		return;
 	}

@@ -30,8 +30,8 @@ FormSelectMap::FormSelectMap(QWidget* parent, int currentMap) :
 	m_window = new Ui::FormSelectMap;
 	m_window->setupUi(this);
 
-	foreach (const Map& map, g_openorbiter->getMaps()) {
-		const QString& name = map.getName();
+	foreach (const Map* map, g_openorbiter->getMaps()) {
+		const QString& name = map->name();
 		m_window->listMaps->addItem(name);
 	}
 
@@ -55,19 +55,19 @@ int FormSelectMap::getMap() const
 
 void FormSelectMap::mapSelected(int index)
 {
-	const Map& map = g_openorbiter->getMaps().value(index);
+	const Map* map = g_openorbiter->getMap(index);
 	
-	m_window->labelName->setText(map.getName());
-	m_window->labelNodeCount->setText(QString::number(map.getNodes().size()));
-	m_window->labelSpawnPoints->setText(QString::number(map.getSpawnPoints().size()));
+	m_window->labelName->setText(map->name());
+	m_window->labelNodeCount->setText(QString::number(map->nodes().size()));
+	m_window->labelSpawnPoints->setText(QString::number(map->spawnPoints().size()));
 
-	const QString& auth = map.getAuthor();
+	const QString& auth = map->author();
 	if (auth.isEmpty())
 		m_window->labelAuthor->setText(tr("n/a"));
 	else
 		m_window->labelAuthor->setText(auth);
 
-	const QString& desc = map.getDescription();
+	const QString& desc = map->description();
 	if (desc.isEmpty())
 		m_window->textDescription->setHtml(tr("n/a"));
 	else

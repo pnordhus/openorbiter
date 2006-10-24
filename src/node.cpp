@@ -30,6 +30,12 @@ Node::Node(float x, float y) :
 }
 
 
+Node::~Node()
+{
+
+}
+
+
 void Node::setMark(bool b)
 {
 	m_mark = b;

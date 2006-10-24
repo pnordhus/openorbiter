@@ -25,18 +25,28 @@
 
 #include "vector.h"
 #include <QColor>
+#include <QGraphicsEllipseItem>
 
 
 class Node : public Vector
 {
 public:
 	Node(float x, float y);
+	~Node();
 
 	void	setMark(bool b);
 	QColor	getColor() const;
+	
+	QGraphicsEllipseItem&	item() { return m_item; }
 
 private:
-	bool	m_mark;
+	bool					m_mark;
+	QGraphicsEllipseItem	m_item;
+
+private:
+	/* disable copy constructor */
+	Node(const Node&);
+	Node& operator = (const Node&);
 };
 
 

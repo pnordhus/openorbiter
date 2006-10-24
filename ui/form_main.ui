@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>FormMain</class>
  <widget class="QMainWindow" name="FormMain" >
   <property name="geometry" >
@@ -30,6 +27,22 @@
      <number>6</number>
     </property>
     <item>
+     <widget class="MapView" name="graphicsMap" >
+      <property name="verticalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="interactive" >
+       <bool>false</bool>
+      </property>
+      <property name="renderHints" >
+       <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="FrameMapBack" name="frameMapBack" >
       <property name="sizePolicy" >
        <sizepolicy>
@@ -48,7 +61,7 @@
       <widget class="FrameMap" name="frameMap" >
        <property name="geometry" >
         <rect>
-         <x>180</x>
+         <x>110</x>
          <y>40</y>
          <width>198</width>
          <height>139</height>
@@ -161,7 +174,7 @@
           </sizepolicy>
          </property>
          <property name="title" >
-          <string/>
+          <string>Stats:</string>
          </property>
          <layout class="QGridLayout" >
           <property name="margin" >
@@ -256,9 +269,6 @@
          <property name="selectionMode" >
           <enum>QAbstractItemView::NoSelection</enum>
          </property>
-         <property name="showGrid" >
-          <bool>false</bool>
-         </property>
         </widget>
        </item>
       </layout>
@@ -272,7 +282,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>31</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -290,11 +300,6 @@
     <addaction name="actionNewMatch" />
     <addaction name="separator" />
     <addaction name="actionQuit" />
-   </widget>
-   <widget class="QMenu" name="menu_Statistics" >
-    <property name="title" >
-     <string>S&amp;tatistics</string>
-    </property>
    </widget>
    <widget class="QMenu" name="menuSettings" >
     <property name="title" >
@@ -336,15 +341,7 @@
     <string>&amp;New match</string>
    </property>
    <property name="font" >
-    <font>
-     <family>Sans Serif</family>
-     <pointsize>9</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-     <underline>false</underline>
-     <strikeout>false</strikeout>
-    </font>
+    <font/>
    </property>
   </action>
   <action name="actionFullScreenMode" >
@@ -438,21 +435,21 @@
    </property>
   </action>
  </widget>
- <pixmapfunction></pixmapfunction>
  <customwidgets>
+  <customwidget>
+   <class>MapView</class>
+   <extends>QGraphicsView</extends>
+   <header>../src/mapview.h</header>
+  </customwidget>
   <customwidget>
    <class>FrameMap</class>
    <extends>QFrame</extends>
    <header>../src/frame_map.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>FrameMapBack</class>
    <extends>QFrame</extends>
    <header>../src/frame_mapback.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <resources/>

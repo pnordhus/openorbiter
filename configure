@@ -11,9 +11,12 @@ function printhelp() {
 	echo
 	echo "  --bindir=BINDIR        user executables [EPREFIX/bin]"
 	echo "  --datadir=DATADIR      read-only data [PREFIX/share/openorbiter]"
-	echo 
+	echo ""
+	echo "  --enable-opengl        build with OpenGL support"
+	echo "  --enable-debug         build with debug output"
+	echo ""
 	echo "  --help                 display this help and exit"
-	echo
+	echo ""
 	exit 0
 }
 
@@ -31,6 +34,10 @@ function test_qt() {
 		return 1
 	fi
 }
+
+
+OPENGL=""
+DEBUG=""
 
 
 for arg do
@@ -51,6 +58,12 @@ for arg do
 		;;
 	--datadir=*)
 		DATADIR=$opt
+		;;
+	--enable-opengl)
+		OPENGL=1
+		;;
+	--enable-debug)
+		DEBUG=1
 		;;
 	*)
 		printinvalid $arg
@@ -84,8 +97,15 @@ fi
 
 mkdir -p build
 
-echo BINDIR  = $BINDIR  >  build/configure.pri
-echo DATADIR = $DATADIR >> build/configure.pri
+echo "BINDIR  = $BINDIR"  >  build/configure.pri
+echo "DATADIR = $DATADIR" >> build/configure.pri
+if [ -n "$OPENGL" ]; then
+	echo "QT += opengl" >> build/configure.pri
+fi
+
+if [ -n "$DEBUG" ]; then
+	echo "CONFIG += debug" >> build/configure.pri
+fi
 
 
 echo "#ifndef CONFIG_H"              > build/configure.h
@@ -101,4 +121,17 @@ echo Configuration complete
 echo
 echo "  BINDIR  = $BINDIR"
 echo "  DATADIR = $DATADIR"
+
+if [ -n "$OPENGL" ]; then
+	echo "  Building with OpenGL support"
+else
+	echo "  Building without OpenGL support"
+fi
+
+if [ -n "$DEBUG" ]; then
+	echo "  Building with debug output"
+else
+	echo "  Building without debug output"
+fi
+
 echo

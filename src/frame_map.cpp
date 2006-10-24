@@ -76,9 +76,9 @@ void FrameMap::paintEvent(QPaintEvent*)
 		QPoint posNode = g_openorbiter->game()->drawingPos(*node, width());
 
 		if (orb.isConnected())
-			pen.setColor("white");
+			pen.setColor("black");
 		else
-			pen.setColor("red");
+			pen.setColor("maroon");
 
 		painter.setPen(pen);
 
@@ -95,9 +95,9 @@ void FrameMap::paintEvent(QPaintEvent*)
 	painter.setPen(oldPen);
 	painter.setPen(QColor("black"));
 
-	foreach (const Node& node, g_openorbiter->game()->getNodes()) {
-		QRect rect = g_openorbiter->game()->drawingRect(node, width());
-		painter.setBrush(node.getColor());
+	foreach (const Node* node, g_openorbiter->game()->getNodes()) {
+		QRect rect = g_openorbiter->game()->drawingRect(*node, width());
+		painter.setBrush(node->getColor());
 		painter.drawEllipse(rect);
 		m_updateRegion += rect.adjusted(-2, -2, 2, 2);
 	}
@@ -119,7 +119,7 @@ void FrameMap::recalcSize()
 
 	qreal ratio;
 	if (g_openorbiter->isRunning())
-		ratio = g_openorbiter->game()->getMap().getAspectRatio();
+		ratio = g_openorbiter->game()->getMap()->aspectRatio();
 	else
 		ratio = 2.0 / 1.0;
 

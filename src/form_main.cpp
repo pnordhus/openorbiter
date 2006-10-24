@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 
+#include "defs.h"
 #include "form_creatematch.h"
 #include "form_selectkey.h"
 #include "form_settings.h"
@@ -29,6 +30,10 @@
 #include <cmath>
 #include <QHeaderView>
 #include <QShortcut>
+
+#ifdef QT_MODULE_OPENGL
+#  include <QGLWidget>
+#endif
 
 
 class PlayerShortcut : public QShortcut
@@ -137,6 +142,15 @@ FormMain::FormMain(bool showStats) :
 	changeVisibleStats();
 	updateStats();
 	setMapColor();
+
+	setWindowTitle(APP_NAME_VERSION);
+
+#ifdef QT_MODULE_OPENGL
+	qDebug() << "Using OpenGL";
+	m_window->graphicsMap->setViewport(new QGLWidget);
+#endif
+
+	m_window->graphicsMap->setView(m_window->graphicsMap);
 }
 
 
@@ -166,14 +180,16 @@ void FormMain::createMatch()
 
 		FormSelectKey keySelect(this);
 		if (keySelect.exec()) {
-			m_window->labelMapName->setText(g_openorbiter->getMap(dialog.getMap()).getName());
+			m_window->labelMapName->setText(g_openorbiter->getMap(dialog.getMap())->name());
 			m_window->buttonResume->setText(QApplication::translate("FormMain", "Start", 0, QApplication::UnicodeUTF8));
 			disconnect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(createMatch()));
 			disconnect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(resume()));
 			connect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(resume()));
 			m_window->buttonResume->show();
+			m_window->frameMap->unsetCursor();
 
 			g_openorbiter->newMatch(dialog.getMap());
+			m_window->graphicsMap->setMap(g_openorbiter->getMap(dialog.getMap()));
 			setKeys();
 			updateMapFrame();
 		}
@@ -210,6 +226,7 @@ void FormMain::updatePlayers()
 void FormMain::resume()
 {
 	if (g_openorbiter->isRunning()) {
+		m_window->frameMap->setCursor(Qt::BlankCursor);
 		m_window->buttonResume->hide();
 		m_window->buttonResume->setText(QApplication::translate("FormMain", "Resume", 0, QApplication::UnicodeUTF8));
 		g_openorbiter->resume();
@@ -221,6 +238,50 @@ void FormMain::process()
 {
 
 	//qDebug() << m_model->headerData(0, Qt::Vertical, Qt::SizeHintRole);
+
+	if (!g_openorbiter->isRunning())
+		return;
+
+	g_openorbiter->process();
+
+	if (g_openorbiter->isPaused())
+		return;
+
+	m_window->graphicsMap->process();
+	m_window->frameMap->process();
+}
+
+
+void FormMain::updateStat(int row, int col, const QVariant& value, Qt::ItemDataRole role)
+{
+	QModelIndex index = m_modelStats.index(row, col);
+	if (m_modelStats.data(index, role) != value)
+		m_modelStats.setData(index, value, role);
+}
+
+
+void FormMain::updateStats()
+{
+	int count = 0;
+	foreach (Player* player, g_openorbiter->selectedPlayers())  {
+		QColor color = player->getColor();
+		color.setAlpha(75);
+
+		for (int i = 0; i < 7; i++) {
+			updateStat(i, count, Qt::AlignCenter, Qt::TextAlignmentRole);
+			updateStat(i, count, color, Qt::BackgroundColorRole);
+		}
+
+		updateStat(0, count, QString::number(player->matchStats().speed(), 'f', 1), Qt::DisplayRole);
+		updateStat(1, count, player->matchStats().frags(), Qt::DisplayRole);
+		updateStat(2, count, player->matchStats().losses(), Qt::DisplayRole);
+		updateStat(3, count, QString::number(player->matchStats().time(), 'f', 1), Qt::DisplayRole);
+		updateStat(4, count, QString::number(player->matchStats().topSpeed(), 'f', 1), Qt::DisplayRole);
+		updateStat(5, count, QString::number(player->matchStats().way(), 'f', 1), Qt::DisplayRole);
+		updateStat(6, count, player->matchStats().wins(), Qt::DisplayRole);
+
+		count++;
+	}
 
 	if (!g_openorbiter->isRunning()) {
 		m_window->labelMatchTime->setText("0.0s");
@@ -240,42 +301,7 @@ void FormMain::process()
 	if (!g_openorbiter->isPaused() && !isActiveWindow()) {
 		g_openorbiter->pause();
 		m_window->buttonResume->show();
-	}
-
-	g_openorbiter->process();
-	m_window->frameMap->process();
-}
-
-
-void FormMain::updateStat(int row, int col, const QVariant& value, Qt::ItemDataRole role)
-{
-	QModelIndex index = m_modelStats.index(row, col);
-	if (m_modelStats.data(index, role) != value)
-		m_modelStats.setData(index, value, role);
-}
-
-
-void FormMain::updateStats()
-{
-	int count = 0;
-	foreach (Player* player, g_openorbiter->selectedPlayers())  {
-		QColor color = player->getColor();
-		color.setAlpha(100);
-
-		for (int i = 0; i < 7; i++) {
-			updateStat(i, count, Qt::AlignCenter, Qt::TextAlignmentRole);
-			updateStat(i, count, color, Qt::BackgroundColorRole);
-		}
-
-		updateStat(0, count, QString::number(player->matchStats().speed(), 'f', 1), Qt::DisplayRole);
-		updateStat(1, count, player->matchStats().frags(), Qt::DisplayRole);
-		updateStat(2, count, player->matchStats().losses(), Qt::DisplayRole);
-		updateStat(3, count, QString::number(player->matchStats().time(), 'f', 1), Qt::DisplayRole);
-		updateStat(4, count, QString::number(player->matchStats().topSpeed(), 'f', 1), Qt::DisplayRole);
-		updateStat(5, count, QString::number(player->matchStats().way(), 'f', 1), Qt::DisplayRole);
-		updateStat(6, count, player->matchStats().wins(), Qt::DisplayRole);
-
-		count++;
+		m_window->frameMap->unsetCursor();
 	}
 }
 
@@ -335,6 +361,7 @@ void FormMain::menuAboutToShow()
 	if (g_openorbiter->isRunning() && !g_openorbiter->isPaused()) {
 		g_openorbiter->pause();
 		m_window->buttonResume->show();
+		m_window->frameMap->unsetCursor();
 	}
 }
 

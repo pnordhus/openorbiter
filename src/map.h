@@ -26,6 +26,7 @@
 #include "node.h"
 #include "spawnpoint.h"
 
+
 #include <QHash>
 #include <QList>
 #include <QString>
@@ -37,25 +38,29 @@ class QDomElement;
 class Map
 {
 public:
-	typedef QList<Node>			NodeList;
-	typedef QList<SpawnPoint>	SpawnPointList;
+	typedef QList<Node*>		NodeList;
+	typedef QList<SpawnPoint*>	SpawnPointList;
 
-	Map() { Q_ASSERT(false); }
-	Map(const QString& name, const QString& author, const QString& description, float width, float height, float scale, const Vector& gravity, const NodeList& nodes, const SpawnPointList& spawns);
+	~Map();
 
-	const QString&	getName() const { return m_name; }
-	const QString&	getDescription() const { return m_description; }
-	const QString&	getAuthor() const { return m_author; }
-	const Vector&	getGravity() const { return m_gravity; }
-	const NodeList&	getNodes() const { return m_nodes; }
-	const SpawnPointList&	getSpawnPoints() const { return m_spawnPoints; }
-	float			getAspectRatio() const;
-	float			getWidth() const { return m_width; }
-	float			getHeight() const { return m_height; }
+	const QString&	name() const		{ return m_name; }
+	const QString&	description() const	{ return m_description; }
+	const QString&	author() const		{ return m_author; }
+	const Vector&	gravity() const		{ return m_gravity; }
+
+	float	width() const		{ return m_width; }
+	float	height() const		{ return m_height; }
+	float	aspectRatio() const	{ return m_width / m_height; }
+
+	const NodeList&			nodes() const		{ return m_nodes; }
+	const SpawnPointList&	spawnPoints() const	{ return m_spawnPoints; }
 
 private:
-	bool	parseNode(const QDomElement& elem);
-	bool	parseSpawnPoint(const QDomElement& elem);
+	// constructor is private, maps can only be created by static member fn
+	Map() {}
+	// copy constructor deactivated
+	Map(const Map&);
+	Map& operator = (const Map&);
 
 private:
 	QString	m_name;
@@ -69,18 +74,24 @@ private:
 
 	NodeList		m_nodes;
 	SpawnPointList	m_spawnPoints;
+
+public:
+	static Map*	load(const QString& filename);
+
+private:
+	static Map*	parse(QDomElement&);
 };
 
 
 inline bool operator < (const Map& m1, const Map& m2)
 {
-	return m1.getName().toLower() < m2.getName().toLower();
+	return m1.name().toLower() < m2.name().toLower();
 }
 
 
 inline bool operator == (const Map& m1, const Map& m2)
 {
-	return m1.getName().toLower() == m2.getName().toLower();
+	return m1.name().toLower() == m2.name().toLower();
 }
 
 

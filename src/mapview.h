@@ -19,35 +19,35 @@
  ***************************************************************************/
 
 
-#ifndef OPENORBITER_CONFIG_PARSER_H
-#define OPENORBITER_CONFIG_PARSER_H
+#ifndef OPENORBITER_MAPVIEW_H
+#define OPENORBITER_MAPVIEW_H
 
 
-#include <QDomDocument>
-#include <QString>
+#include "map.h"
+#include <QGraphicsRectItem>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 
 
-class ConfigParser
+class MapView : public QGraphicsView
 {
 public:
-	enum { MAP, CONFIG, PLAYERS };
+	MapView(QWidget*);
 
-	bool	parse(const QString& filename, int type);
-
-private:
-	bool	open();
-	void	parseElement(QDomElement element);
-	void	parseConfig(QDomElement element);
-	void	parsePlayers(QDomElement element);
-	void	parseMap(QDomElement element);
-
-	template <typename T>
-	static	T	convertAttribute(const QString& attr, T def);
+	void	setMap(const Map* map);
+	void	setView(QGraphicsView*);
+	void	updateSize();
+	void	process();
 
 private:
-	QString			m_filename;
-	QDomDocument	m_document;
-	int				m_type;
+	void	resizeEvent(QResizeEvent*);
+
+private:
+	QGraphicsView*	m_view;
+	QGraphicsScene	m_scene;
+	const Map*		m_map;
+
+	QGraphicsRectItem*		m_background;
 };
 
 

@@ -28,46 +28,63 @@
 #include <QString>
 
 
+class QDomDocument;
+class QDomElement;
+
+
 class Config
 {
 public:
 	Config();
 
-	const QString&	getDataDir() const { return m_dataDir; }
-	const QString&	getUserDir() const { return m_userDir; }
+	const QString&	dataDir() const	{ return m_dataDir; }
+	const QString&	userDir() const	{ return m_userDir; }
 
-	float			getGravityFactor() const { return m_gravityFactor; }
 
-	void	windowPosX(int x);
-	void	windowPosY(int y);
-	void	windowWidth(int w);
-	void	windowHeight(int h);
-	void	windowMaximized(bool m);
-	void	windowFullScreen(bool f);
-	void	windowShowStats(bool s);
+	int		windowPosX() const			{ return m_windowPosX; }
+	int		windowPosY() const			{ return m_windowPosY; }
+	int		windowWidth() const			{ return m_windowWidth; }
+	int		windowHeight() const		{ return m_windowHeight; }
+	bool	windowMaximized() const 	{ return m_windowMaximized; }
+	bool	windowFullScreen() const	{ return m_windowFullScreen; }
+	bool	windowShowStats() const		{ return m_windowShowStats; }
 
-	int		windowPosX() const { return m_windowPosX; }
-	int		windowPosY() const { return m_windowPosY; }
-	int		windowWidth() const { return m_windowWidth; }
-	int		windowHeight() const { return m_windowHeight; }
-	bool	windowMaximized() const { return m_windowMaximized; }
-	bool	windowFullScreen() const { return m_windowFullScreen; }
-	bool	windowShowStats() const { return m_windowShowStats; }
+	float				gravityFactor() const	{ return m_gravityFactor; }
+	const QList<bool>&	statsVisibility() const	{ return m_statsVisibility; }
 
-	void	statsVisibility(const QList<bool>& list);
-	const QList<bool>& statsVisibility() const { return m_statsVisibility; }
+
+	void	setWindowPosX(int);
+	void	setWindowPosY(int);
+	void	setWindowWidth(int);
+	void	setWindowHeight(int);
+	void	setWindowMaximized(bool);
+	void	setWindowFullScreen(bool);
+	void	setWindowShowStats(bool);
+
+	void	setGravityFactor(float);
+	void	setStatsVisibility(const QList<bool>&);
+
 
 	float	firstNodeTime() const { return m_firstNodeTime; }
 	float	nextNodeTime() const { return m_nextNodeTime; }
 
 	const QString&	lastMap() const { return m_lastMap; }
-	void			lastMap(const QString&);
+	void			setLastMap(const QString&);
 
 	const QColor&	mapColor() { return m_mapColor; }
-	void			mapColor(const QColor&);
+	void			setMapColor(const QColor&);
 
 	void	save(const QString& filename);
 	void	load(const QString& filename);
+
+private:
+	void	saveGame(QDomDocument&, QDomElement&);
+	void	savePlayers(QDomDocument&, QDomElement&);
+	void	saveWindow(QDomDocument&, QDomElement&);
+
+	void	loadGame(const QDomElement&);
+	void	loadPlayers(const QDomElement&);
+	void	loadWindow(const QDomElement&);
 
 private:
 	QString	m_dataDir;

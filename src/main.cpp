@@ -106,17 +106,17 @@ int main(int argc, char* argv[])
 
 		ret = app.exec();
 
-		g_openorbiter->config().statsVisibility(form.getStatsVisibility());
+		g_openorbiter->config().setStatsVisibility(form.getStatsVisibility());
 
-		g_openorbiter->config().windowMaximized(form.isMaximized());
-		g_openorbiter->config().windowFullScreen(form.isFullScreen());
-		g_openorbiter->config().windowShowStats(form.statsShown());
+		g_openorbiter->config().setWindowMaximized(form.isMaximized());
+		g_openorbiter->config().setWindowFullScreen(form.isFullScreen());
+		g_openorbiter->config().setWindowShowStats(form.statsShown());
 
 		QRect geometry = form.normalGeometry();
-		g_openorbiter->config().windowPosX(geometry.left());
-		g_openorbiter->config().windowPosY(geometry.top());
-		g_openorbiter->config().windowWidth(geometry.width());
-		g_openorbiter->config().windowHeight(geometry.height());
+		g_openorbiter->config().setWindowPosX(geometry.left());
+		g_openorbiter->config().setWindowPosY(geometry.top());
+		g_openorbiter->config().setWindowWidth(geometry.width());
+		g_openorbiter->config().setWindowHeight(geometry.height());
 	} catch (...) {
 	
 	}

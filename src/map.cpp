@@ -21,63 +21,109 @@
 
 #include "map.h"
 
-#include <QDebug>
-#include <QtGlobal>
+
 #include <QFile>
 #include <QDomDocument>
-#include <QMessageBox>
 
 
-Map::Map(const QString& name, const QString& author, const QString& description, float width, float height, float scale, const Vector& gravity, const NodeList& nodes, const SpawnPointList& spawns) :
-	m_name(name),
-	m_author(author),
-	m_description(description),
-	m_width(width),
-	m_height(height),
-	m_scale(scale),
-	m_gravity(gravity),
-	m_nodes(nodes),
-	m_spawnPoints(spawns)
+Map::~Map()
 {
+	foreach (Node* node, m_nodes)
+		delete node;
 
+	foreach (SpawnPoint* spawn, m_spawnPoints)
+		delete spawn;
 }
 
 
-bool Map::parseNode(const QDomElement& elem)
+/* statics to load map from file */
+
+
+Map* Map::load(const QString& filename)
 {
-	float x, y;
+	QDomDocument doc;
+
+	{
+	    QFile file(filename);
+    	if (!doc.setContent(&file)) {
+			qWarning() << "Invalid XML file:" << filename;
+    	    return NULL;
+		}
+    }
+
+	QDomElement root = doc.documentElement();
+
+	Map* map = parse(root);
+	if (!map) {
+		qWarning() << "Invalid map:" << filename;
+		return NULL;
+	}
+
+	qDebug().nospace() << "Map " << map->name() << " (" << filename << ") loaded";
+
+	return map;
+}
+
+
+#define ABORT_CHECK(val)	if (!(val)) { delete map; return NULL; }
+
+
+Map* Map::parse(QDomElement& root)
+{
+	if (root.tagName() != "oomap")
+		return NULL;
+
+	Map* map = new Map;
 	bool b;
-	bool success = true;
-	
-	x = elem.attribute("x").toFloat(&b);
-	success &= b;
-	y = elem.attribute("y").toFloat(&b);
-	success &= b;
 
-	m_nodes.push_back(Node(x, y));
+	map->m_name  = root.attribute("name");
+	ABORT_CHECK(map->m_name.length() > 0);
 
-	return success;
-}
+	map->m_width = root.attribute("width").toFloat(&b);
+	ABORT_CHECK(b && (map->m_width >= 0.0f) && (map->m_width <= 4000.0f));
+
+	map->m_height = root.attribute("height").toFloat(&b);
+	ABORT_CHECK(b && (map->m_height >= 0.0f) && (map->m_height <= 4000.0f));
 
 
-bool Map::parseSpawnPoint(const QDomElement& elem)
-{
-	float x, y;
-	bool b;
-	bool success = true;
-	
-	x = elem.attribute("x").toFloat(&b);
-	success &= b;
-	y = elem.attribute("y").toFloat(&b);
-	success &= b;
+	map->m_gravity.x = root.attribute("gravityX", "0.0").toFloat(&b);
+	if (!b)
+		map->m_gravity.x = 0.0f;
+	map->m_gravity.y = root.attribute("gravityY", "10.0").toFloat(&b);
+	if (!b)
+		map->m_gravity.y = 10.0f;
 
-	m_spawnPoints.push_back(SpawnPoint(x, y));
+	map->m_author = root.firstChildElement("author").text();
+	ABORT_CHECK(map->m_author.length() > 0);
 
-	return success;
-}
+	map->m_description = root.firstChildElement("description").text();
+	ABORT_CHECK(map->m_description.length() > 0);
 
+	QDomElement child;
 
-float Map::getAspectRatio() const
-{
-	return m_width / m_height;
+	child = root.firstChildElement("spawn");
+	while (!child.isNull()) {
+		float x,y;
+		x = child.attribute("x").toFloat(&b);
+		ABORT_CHECK(b);
+		y = child.attribute("y").toFloat(&b);
+		ABORT_CHECK(b);
+
+		map->m_spawnPoints.append(new SpawnPoint(x, y));
+		child = child.nextSiblingElement("spawn");
+	}
+
+	child = root.firstChildElement("node");
+	while (!child.isNull()) {
+		float x,y;
+		x = child.attribute("x").toFloat(&b);
+		ABORT_CHECK(b);
+		y = child.attribute("y").toFloat(&b);
+		ABORT_CHECK(b);
+
+		map->m_nodes.append(new Node(x, y));
+		child = child.nextSiblingElement("node");
+	}
+
+	return map;
 }

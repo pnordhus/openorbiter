@@ -52,7 +52,7 @@ Config::Config()
 	m_firstNodeTime = 60.0f;
 	m_nextNodeTime = 10.0f;
 
-	m_mapColor = QColor(200,200,200);
+	m_mapColor = QColor(250,250,250);
 
 	m_statsVisibility.clear();
 	m_statsVisibility.append(false);
@@ -65,109 +65,81 @@ Config::Config()
 }
 
 
-void Config::windowPosX(int x)
+void Config::setWindowPosX(int x)
 {
 	m_windowPosX = x;
 }
 
 
-void Config::windowPosY(int y)
+void Config::setWindowPosY(int y)
 {
 	m_windowPosY = y;
 }
 
 
-void Config::windowWidth(int w)
+void Config::setWindowWidth(int w)
 {
 	m_windowWidth = w;
 }
 
 
-void Config::windowHeight(int h)
+void Config::setWindowHeight(int h)
 {
 	m_windowHeight = h;
 }
 
 
-void Config::windowMaximized(bool m)
+void Config::setWindowMaximized(bool m)
 {
 	m_windowMaximized = m;
 }
 
 
-void Config::windowFullScreen(bool f)
+void Config::setWindowFullScreen(bool f)
 {
 	m_windowFullScreen = f;
 }
 
 
-void Config::windowShowStats(bool s)
+void Config::setWindowShowStats(bool s)
 {
 	m_windowShowStats = s;
 }
 
 
-void Config::lastMap(const QString& map)
+void Config::setLastMap(const QString& map)
 {
 	m_lastMap = map;
 }
+
+
+void Config::setStatsVisibility(const QList<bool>& list)
+{
+	Q_ASSERT(list.size() == 7);
+	m_statsVisibility = list;
+}
+
+
+void Config::setMapColor(const QColor& color)
+{
+	m_mapColor = color;
+}
+
+
+// ***************************************************************************
+// save configuration to xml file
 
 
 void Config::save(const QString& filename)
 {
 	QDomDocument doc;
 
-	QDomElement root = doc.createElement("openorbiter");
+	QDomElement root = doc.createElement("ooconfig");
 	doc.appendChild(root);
 
-	{
-		QDomElement config = doc.createElement("config");
-		root.appendChild(config);
-
-		{
-			QDomElement window = doc.createElement("window");
-			config.appendChild(window);
-
-			window.setAttribute("posX", m_windowPosX);
-			window.setAttribute("posY", m_windowPosY);
-			window.setAttribute("width", m_windowWidth);
-			window.setAttribute("height", m_windowHeight);
-			window.setAttribute("maximized", QVariant(m_windowMaximized).toString());
-			window.setAttribute("fullscreen", QVariant(m_windowFullScreen).toString());
-			window.setAttribute("stats", QVariant(m_windowShowStats).toString());
-
-			QString statsVisibility;
-			foreach (bool b, m_statsVisibility) {
-				if (b)
-					statsVisibility += '1';
-				else
-					statsVisibility += '0';
-			}
-			window.setAttribute("statsVisibility", statsVisibility);
-		}
-
-		{	
-			QDomElement game = doc.createElement("game");
-			config.appendChild(game);
-	
-			game.setAttribute("gravity", m_gravityFactor);
-			game.setAttribute("lastMap", m_lastMap);
-		}
-	}
-
-	{
-		QDomElement players = doc.createElement("players");
-		root.appendChild(players);
-
-		for (int i = 0; i < OpenOrbiter::MaxPlayers; i++) {
-			QDomElement player = doc.createElement("player");
-			players.appendChild(player);
-
-			player.setAttribute("id", g_openorbiter->getPlayer(i).getID());
-			player.setAttribute("name", g_openorbiter->getPlayer(i).getName());
-			player.setAttribute("selected", QVariant(g_openorbiter->getPlayer(i).getSelected()).toString());
-		}
-	}
+	saveGame(doc, root);
+	savePlayers(doc, root);
+	saveWindow(doc, root);
 
 	QFile file(filename);
 	file.open(QFile::WriteOnly);
@@ -176,26 +148,164 @@ void Config::save(const QString& filename)
 }
 
 
-void Config::statsVisibility(const QList<bool>& list)
-{
-	Q_ASSERT(list.size() == 7);
-	m_statsVisibility = list;
+#define SET_TEXT(base, name, val) \
+{ \
+	QDomElement tmp = doc.createElement(name); \
+	base.appendChild(tmp); \
+	tmp.appendChild(doc.createTextNode(val)); \
 }
 
 
-void Config::mapColor(const QColor& color)
-{
-	m_mapColor = color;
+void Config::saveGame(QDomDocument& doc, QDomElement& root)
+{	
+	QDomElement game = doc.createElement("game");
+	root.appendChild(game);
+
+	game.setAttribute("gravity", m_gravityFactor);
+
+	SET_TEXT(game, "lastMap", m_lastMap);
 }
+
+
+void Config::saveWindow(QDomDocument& doc, QDomElement& root)
+{
+	QDomElement window = doc.createElement("window");
+	root.appendChild(window);
+
+	window.setAttribute("posX", m_windowPosX);
+	window.setAttribute("posY", m_windowPosY);
+	window.setAttribute("width", m_windowWidth);
+	window.setAttribute("height", m_windowHeight);
+	window.setAttribute("maximized", QVariant(m_windowMaximized).toString());
+	window.setAttribute("fullscreen", QVariant(m_windowFullScreen).toString());
+
+	{
+		QDomElement stats = doc.createElement("stats");
+		window.appendChild(stats);
+		stats.setAttribute("show", QVariant(m_windowShowStats).toString());
+
+		SET_TEXT(stats, "avgSpeed",	QVariant(m_statsVisibility[0]).toString());
+		SET_TEXT(stats, "frags",	QVariant(m_statsVisibility[1]).toString());
+		SET_TEXT(stats, "losses",	QVariant(m_statsVisibility[2]).toString());
+		SET_TEXT(stats, "playTime",	QVariant(m_statsVisibility[3]).toString());
+		SET_TEXT(stats, "topSpeed", QVariant(m_statsVisibility[4]).toString());
+		SET_TEXT(stats, "way",		QVariant(m_statsVisibility[5]).toString());
+		SET_TEXT(stats, "wins",		QVariant(m_statsVisibility[6]).toString());
+	}
+}
+
+
+void Config::savePlayers(QDomDocument& doc, QDomElement& root)
+{
+	QDomElement players = doc.createElement("players");
+	root.appendChild(players);
+
+	for (int i = 0; i < OpenOrbiter::MaxPlayers; i++) {
+		QDomElement player = doc.createElement("player");
+		players.appendChild(player);
+
+		player.setAttribute("id", g_openorbiter->getPlayer(i).getID());
+		player.setAttribute("name", g_openorbiter->getPlayer(i).getName());
+		player.setAttribute("selected", QVariant(g_openorbiter->getPlayer(i).getSelected()).toString());
+	}
+}
+
+
+// ***************************************************************************
+// load configuration from xml file
 
 
 void Config::load(const QString& filename)
 {
 	QDomDocument doc;
-	{
-		QFile file(filename);
-		doc.setContent(&file);
-	}
 
-	
+	{
+	    QFile file(filename);
+    	if (!doc.setContent(&file)) {
+			qWarning() << "Invalid XML file:" << filename;
+    	    return;
+		}
+    }
+
+	QDomElement root = doc.documentElement();
+	if (root.tagName() != "ooconfig")
+		return;
+
+	loadGame(root);
+	loadPlayers(root);
+	loadWindow(root);
+}
+
+
+#define READ_ATTR_INT(base, name, var) { bool _b; int _ret = base.attribute(name).toInt(&_b); if(_b) var = _ret; }
+#define READ_ATTR_FLOAT(base, name, var) { bool _b; float _ret = base.attribute(name).toFloat(&_b); if(_b) var = _ret; }
+#define READ_ATTR_BOOL(base, name, var) var = QVariant(base.attribute(name)).toBool();
+
+#define READ_BOOL(base, name, var) var = QVariant(base.firstChildElement(name).text()).toBool();
+#define READ_STRING(base, name, var) var = base.firstChildElement(name).text();
+
+
+void Config::loadGame(const QDomElement& elem)
+{
+	QDomElement child;
+	child = elem.firstChildElement("game");
+	if (child.isNull())
+		return;
+
+	READ_ATTR_FLOAT(child, "gravity", m_gravityFactor);
+	READ_STRING(child, "lastMap", m_lastMap);
+}
+
+
+void Config::loadPlayers(const QDomElement& elem)
+{
+	QDomElement child;
+	child = elem.firstChildElement("players");
+	child = child.firstChildElement("player");
+	while (!child.isNull()) {
+		bool b;
+		uint id = child.attribute("id").toUInt(&b);
+		if (b && (id < OpenOrbiter::MaxPlayers)) {
+			QString name = child.attribute("name");
+			if (name.length() > 0) {
+				bool selected = QVariant(child.attribute("selected")).toBool();
+				Player& player = g_openorbiter->getPlayer(id);
+				player.setName(name);
+				player.setSelected(selected);
+			}
+		}
+		child = child.nextSiblingElement("player");
+	}
+}
+
+
+void Config::loadWindow(const QDomElement& elem)
+{
+	QDomElement child;
+	child = elem.firstChildElement("window");
+	if (child.isNull())
+		return;
+
+	READ_ATTR_INT(child, "posX", m_windowPosX);
+	READ_ATTR_INT(child, "posY", m_windowPosY);
+	READ_ATTR_INT(child, "width", m_windowWidth);
+	READ_ATTR_INT(child, "height", m_windowHeight);
+
+	READ_ATTR_BOOL(child, "fullscreen", m_windowFullScreen);
+	READ_ATTR_BOOL(child, "maximized", m_windowMaximized);
+
+	{
+		QDomElement tmp = child.firstChildElement("stats");
+		if (!tmp.isNull()) {
+			READ_ATTR_BOOL(tmp, "show", m_windowShowStats);
+			
+			READ_BOOL(tmp, "avgSpeed",	m_statsVisibility[0]);
+			READ_BOOL(tmp, "frags",		m_statsVisibility[1]);
+			READ_BOOL(tmp, "losses",	m_statsVisibility[2]);
+			READ_BOOL(tmp, "playTime",	m_statsVisibility[3]);
+			READ_BOOL(tmp, "topSpeed",	m_statsVisibility[4]);
+			READ_BOOL(tmp, "way",		m_statsVisibility[5]);
+			READ_BOOL(tmp, "wins",		m_statsVisibility[6]);
+		}
+	}
 }

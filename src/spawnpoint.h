@@ -30,6 +30,11 @@ class SpawnPoint : public Vector
 {
 public:
 	SpawnPoint(float x, float y);
+
+private:
+	/* disable copy constructor */
+	SpawnPoint(const SpawnPoint&);
+	SpawnPoint& operator = (const SpawnPoint&);
 };
 
 

@@ -19,66 +19,85 @@
  ***************************************************************************/
 
 
-#include "match.h"
+#include "mapview.h"
 #include "openorbiter.h"
-#include "randomizer.h"
-#include <QDebug>
+#include <QGraphicsView>
 
 
-Match::Match(const Map* map) :
-	m_map(map),
-	m_time(0.0),
-	m_lastWinner(NULL),
-	m_game(NULL)
+MapView::MapView(QWidget* parent) :
+	QGraphicsView(parent),
+	m_view(NULL),
+	m_map(NULL)
 {
-	m_players = g_openorbiter->selectedPlayers();
-	foreach (Player* player, m_players) {
-		player->startMatch();
-	}
+	m_scene.setBackgroundBrush(QColor(0,0,0));
+	m_background = m_scene.addRect(QRectF());
 
-	newGame();
-}
+	m_background->setZValue(-100.0f);
 
+	{
+		QBrush brush(QColor(200,200,200));
+		m_background->setBrush(brush);
 
-Match::~Match()
-{
-	delete m_game;
-
-	foreach (Player* player, m_players) {
-		player->endMatch();
+		QPen pen;
+		pen.setWidth(0);
+		m_background->setPen(pen);
 	}
 }
 
 
-void Match::setPlayers(QList<Player*>& players)
+void MapView::setView(QGraphicsView* view)
 {
-	foreach (Player* player, m_players) {
-		if (!players.contains(player))
-			player->endMatch();
-	}
-
-	foreach (Player* player, players) {
-		if (!m_players.contains(player))
-			player->startMatch();
-	}
-
-	m_players = players;
+	Q_ASSERT(m_view == NULL);
+	m_view = view;
+	m_view->setScene(&m_scene);
+	setMap(NULL);
 }
 
 
-void Match::newGame()
+void MapView::setMap(const Map* map)
 {
-	delete m_game;
-	m_game = new Game(m_map, m_players);
+	Q_ASSERT(m_view != NULL);
+
+	m_map = map;
+
+	QRectF rect;
+
+	if (m_map) {
+		rect = QRectF(0.0f, 0.0f, m_map->width(), m_map->height());
+	} else {
+		rect = QRectF(0.0f, 0.0f, 200.0f, 100.0f);
+	}
+
+	m_background->setRect(rect);
+	m_scene.setSceneRect(rect);
+	updateSize();
 }
 
 
-void Match::process(float time)
+void MapView::updateSize()
 {
-	m_time += time;
+	Q_ASSERT(m_view != NULL);
 
-	if (!m_game->process(time)) { // game over
-		m_lastWinner = m_game->winner();
-		newGame();
+	const qreal wScale = (qreal) (m_view->width() - 40) / m_background->rect().width();
+	const qreal hScale = (qreal) (m_view->height() - 40) / m_background->rect().height();
+	const qreal scale  = qMin(wScale, hScale);
+
+	QMatrix mat;
+	mat.scale(scale, scale);
+	m_view->setMatrix(mat);
+}
+
+
+void MapView::resizeEvent(QResizeEvent*)
+{
+	updateSize();
+}
+
+
+void MapView::process()
+{
+	foreach (const Node* node, g_openorbiter->game()->getNodes()) {
+		QRectF rect(node->x - 0.3f, node->y - 0.3f, 0.6f, 0.6f);
+		m_scene.addEllipse(rect, QPen(), QBrush(node->getColor()));
 	}
 }

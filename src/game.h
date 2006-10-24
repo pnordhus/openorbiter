@@ -33,14 +33,14 @@ class Player;
 class Game
 {
 public:
-	Game(const Map& map, const QList<Player*>& p);
+	Game(const Map* map, const QList<Player*>& p);
 
 	bool	process(float time);
 
 	Player*	winner() { Q_ASSERT(m_players.size() == 1); return m_players.first(); }
 
 	const QList<Player*>	players() const { return m_players; }
-	const Map&				getMap() { return m_map; }
+	const Map*				getMap() { return m_map; }
 	const Map::NodeList&	getNodes() { return m_nodes; }
 
 	QPoint	drawingPos(const Vector&, int width) const;
@@ -53,7 +53,7 @@ private:
 	QRect	drawingRect(const Vector&, float radius, int width) const;
 
 private:
-	const Map&		m_map;
+	const Map*		m_map;
 	Map::NodeList	m_nodes;
 	float			m_nodeTimer;
 	double			m_time;
