@@ -1,19 +1,20 @@
-<openorbiter>
-	<map name="Classic - 2 Nodes" width="50" height="37.5" gravityX="0" gravityY="9.375">
-		<author>OpenOrbiter Testing Squad</author>
-		<description>The one and only 2 node map from the unreleased OpenOrbiter 0.2.</description>
+<?xml version="1.0"?>
+<!DOCTYPE oomap SYSTEM "oomap.dtd">
 
-		<spawn x="13.75" y="2.5" />
-		<spawn x="21.25" y="2.5" />
-		<spawn x="28.75" y="2.5" />
-		<spawn x="36.25" y="2.5" />
+<oomap name="Classic - 2 Nodes" width="50" height="37.5" gravityX="0" gravityY="9.375">
+	<author>OpenOrbiter Testing Squad</author>
+	<description>The one and only 2 node map from the unreleased OpenOrbiter 0.2.</description>
 
-		<spawn x="10" y="7.5" />
-		<spawn x="17.5" y="7.5" />
-		<spawn x="32.5" y="7.5" />
-		<spawn x="40" y="7.5" />
+	<spawn x="13.75" y="2.5" />
+	<spawn x="21.25" y="2.5" />
+	<spawn x="28.75" y="2.5" />
+	<spawn x="36.25" y="2.5" />
 
-		<node x="18.75" y="12.5" />
-		<node x="31.25" y="25" />
-	</map>
-</openorbiter>
+	<spawn x="10" y="7.5" />
+	<spawn x="17.5" y="7.5" />
+	<spawn x="32.5" y="7.5" />
+	<spawn x="40" y="7.5" />
+
+	<node x="18.75" y="12.5" />
+	<node x="31.25" y="25" />
+</oomap>

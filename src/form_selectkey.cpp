@@ -32,8 +32,6 @@ FormSelectKey::FormSelectKey(QWidget* parent) :
 	m_window = new Ui::FormSelectKey;
 	m_window->setupUi(this);
 
-	grabKeyboard();
-
 	m_players = g_openorbiter->selectedPlayers();
 
 	m_currentPlayer = -1;
@@ -46,7 +44,6 @@ FormSelectKey::FormSelectKey(QWidget* parent) :
 
 FormSelectKey::~FormSelectKey()
 {
-	releaseKeyboard();
 	delete m_window;
 }
 
@@ -83,12 +80,12 @@ void FormSelectKey::keyPressEvent(QKeyEvent* k)
 		}
 	}
 
-	if ((k->modifiers() == Qt::NoModifier) && (key < 255)) {
+	if (k->modifiers() == Qt::NoModifier) {
 		m_keys.append(key);
-		m_window->labelText->setText(tr("Key set to: ") + k->text());
+		m_window->labelText->setText(tr("Key set to: ") + QKeySequence(key).toString());
 		m_timer.start(1000);
 	} else {
-		m_window->labelText->setText(tr("Invalid key! No modifiers or control keys allowed."));
+		m_window->labelText->setText(tr("Invalid key! No modifier keys allowed."));
 	}
 }
 
@@ -96,4 +93,16 @@ void FormSelectKey::keyPressEvent(QKeyEvent* k)
 void FormSelectKey::timerEvent(QTimerEvent*)
 {
 
+}
+
+
+void FormSelectKey::showEvent(QShowEvent*)
+{
+	grabKeyboard();
+}
+
+
+void FormSelectKey::hideEvent(QShowEvent*)
+{
+	releaseKeyboard();
 }

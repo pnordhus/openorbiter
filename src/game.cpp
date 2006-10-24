@@ -25,7 +25,7 @@
 #include "randomizer.h"
 
 
-Game::Game(const Map* map, const QList<Player*>& p) :
+Game::Game(Map* map, const QList<Player*>& p) :
 	m_map(map),
 	m_time(0.0),
 	m_players(p),
@@ -44,6 +44,8 @@ Game::Game(const Map* map, const QList<Player*>& p) :
 		player->startGame();
 		player->getOrbiter().setPosition(*spawns.takeLast());
 	}
+
+	m_map->start();
 }
 
 

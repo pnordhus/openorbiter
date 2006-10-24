@@ -98,6 +98,6 @@ void MapView::process()
 {
 	foreach (const Node* node, g_openorbiter->game()->getNodes()) {
 		QRectF rect(node->x - 0.3f, node->y - 0.3f, 0.6f, 0.6f);
-		m_scene.addEllipse(rect, QPen(), QBrush(node->getColor()));
+		//m_scene.addEllipse(rect, QPen(), QBrush(node->getColor()));
 	}
 }

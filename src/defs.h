@@ -26,15 +26,15 @@
 #include <QString>
 
 
-static const int APP_VERSION_MAJOR = 0;
-static const int APP_VERSION_MINOR = 3;
-static const int APP_VERSION_MICRO = 0;
+const int APP_VERSION_MAJOR = 0;
+const int APP_VERSION_MINOR = 3;
+const int APP_VERSION_MICRO = 0;
 
-static const QString APP_BUILD_DATE = __DATE__;
-static const QString APP_BUILD_TIME = __TIME__;
+const QString APP_BUILD_TIME = QString(__DATE__) + " (" + __TIME__ + ")";
 
-static const QString APP_NAME = "OpenOrbiter";
-static const QString APP_NAME_VERSION = QString("%1 %2.%3.%4").arg(APP_NAME).arg(APP_VERSION_MAJOR).arg(APP_VERSION_MINOR).arg(APP_VERSION_MICRO);
+const QString APP_NAME = "OpenOrbiter";
+const QString APP_NAME_VERSION = QString("%1 %2.%3.%4").arg(APP_NAME).arg(APP_VERSION_MAJOR).arg(APP_VERSION_MINOR).arg(APP_VERSION_MICRO);
+const QString APP_NAME_VERSION_BUILD = APP_NAME_VERSION + " - " + APP_BUILD_TIME;
 
 
 #endif

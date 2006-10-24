@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 
+#include "defs.h"
 #include "form_main.h"
 #include "openorbiter.h"
 #include "randomizer.h"
@@ -30,7 +31,7 @@
 
 void printVersion()
 {
-	qWarning().nospace() << "OpenOrbiter 0.3 (" << __DATE__ << " " << __TIME__ << ")";
+	qWarning().nospace() << APP_NAME_VERSION_BUILD;
 }
 
 

@@ -25,7 +25,7 @@
 #include <QDebug>
 
 
-Match::Match(const Map* map) :
+Match::Match(Map* map) :
 	m_map(map),
 	m_time(0.0),
 	m_lastWinner(NULL),

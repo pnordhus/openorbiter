@@ -33,7 +33,7 @@ class Player;
 class Game
 {
 public:
-	Game(const Map* map, const QList<Player*>& p);
+	Game(Map* map, const QList<Player*>& p);
 
 	bool	process(float time);
 
@@ -53,7 +53,7 @@ private:
 	QRect	drawingRect(const Vector&, float radius, int width) const;
 
 private:
-	const Map*		m_map;
+	Map*			m_map;
 	Map::NodeList	m_nodes;
 	float			m_nodeTimer;
 	double			m_time;

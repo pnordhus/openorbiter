@@ -65,7 +65,7 @@ public:
 	static	void	destroy();
 
 	const MapList&		getMaps() const { return m_maps; }
-	const Map*			getMap(int index) const { return m_maps.at(index); }
+	Map*				getMap(int index) { return m_maps.at(index); }
 	Player&				getPlayer(int index) { return *m_players[index]; }
 	QList<Player*>		selectedPlayers();
 

@@ -1,0 +1,17 @@
+<!ELEMENT oomap			(author,description,spawn,spawn+,node+)>
+<!ELEMENT author		(#PCDATA)>
+<!ELEMENT description	(#PCDATA)>
+<!ELEMENT spawn			(#PCDATA)>
+<!ELEMENT node			(#PCDATA)>
+
+<!ATTLIST map	name		CDATA	#REQUIRED>
+<!ATTLIST map	width		CDATA	#REQUIRED>
+<!ATTLIST map	height		CDATA	#REQUIRED>
+<!ATTLIST map	gravityX	CDATA	"0.0">
+<!ATTLIST map	gravityY	CDATA	"10.0">
+
+<!ATTLIST spawn	x			CDATA	#REQUIRED>
+<!ATTLIST spawn	y			CDATA	#REQUIRED>
+
+<!ATTLIST node	x			CDATA	#REQUIRED>
+<!ATTLIST node	y			CDATA	#REQUIRED>

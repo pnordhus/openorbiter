@@ -43,6 +43,8 @@ public:
 
 	~Map();
 
+	void	start();
+
 	const QString&	name() const		{ return m_name; }
 	const QString&	description() const	{ return m_description; }
 	const QString&	author() const		{ return m_author; }

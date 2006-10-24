@@ -49,6 +49,8 @@ private slots:
 private:
 	void	keyPressEvent(QKeyEvent*);
 	void	timerEvent(QTimerEvent*);
+	void	showEvent(QShowEvent*);
+	void	hideEvent(QShowEvent*);
 
 private:
 	Ui::FormSelectKey*	m_window;

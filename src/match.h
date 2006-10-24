@@ -34,7 +34,7 @@ class Player;
 class Match
 {
 public:
-	Match(const Map* map);
+	Match(Map* map);
 	~Match();
 
 	void	setPlayers(QList<Player*>& players);
@@ -50,7 +50,7 @@ private:
 	
 private:
 	QList<Player*>	m_players;
-	const Map*		m_map;
+	Map*			m_map;
 	double			m_time;
 	Player*			m_lastWinner;
 	Game*			m_game;

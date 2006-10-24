@@ -36,6 +36,12 @@ Map::~Map()
 }
 
 
+void Map::start()
+{
+
+}
+
+
 /* statics to load map from file */
 
 
