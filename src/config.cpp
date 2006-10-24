@@ -58,6 +58,7 @@ Config::Config()
 	m_statsVisibility.append(false);
 	m_statsVisibility.append(true);
 	m_statsVisibility.append(true);
+	m_statsVisibility.append(true);
 	m_statsVisibility.append(false);
 	m_statsVisibility.append(false);
 	m_statsVisibility.append(false);
@@ -115,7 +116,7 @@ void Config::setLastMap(const QString& map)
 
 void Config::setStatsVisibility(const QList<bool>& list)
 {
-	Q_ASSERT(list.size() == 7);
+	Q_ASSERT(list.size() == 8);
 	m_statsVisibility = list;
 }
 
@@ -186,11 +187,12 @@ void Config::saveWindow(QDomDocument& doc, QDomElement& root)
 
 		SET_TEXT(stats, "avgSpeed",	QVariant(m_statsVisibility[0]).toString());
 		SET_TEXT(stats, "frags",	QVariant(m_statsVisibility[1]).toString());
-		SET_TEXT(stats, "losses",	QVariant(m_statsVisibility[2]).toString());
-		SET_TEXT(stats, "playTime",	QVariant(m_statsVisibility[3]).toString());
-		SET_TEXT(stats, "topSpeed", QVariant(m_statsVisibility[4]).toString());
-		SET_TEXT(stats, "way",		QVariant(m_statsVisibility[5]).toString());
-		SET_TEXT(stats, "wins",		QVariant(m_statsVisibility[6]).toString());
+		SET_TEXT(stats, "key",		QVariant(m_statsVisibility[2]).toString());
+		SET_TEXT(stats, "losses",	QVariant(m_statsVisibility[3]).toString());
+		SET_TEXT(stats, "playTime",	QVariant(m_statsVisibility[4]).toString());
+		SET_TEXT(stats, "topSpeed", QVariant(m_statsVisibility[5]).toString());
+		SET_TEXT(stats, "way",		QVariant(m_statsVisibility[6]).toString());
+		SET_TEXT(stats, "wins",		QVariant(m_statsVisibility[7]).toString());
 	}
 }
 
@@ -301,11 +303,12 @@ void Config::loadWindow(const QDomElement& elem)
 			
 			READ_BOOL(tmp, "avgSpeed",	m_statsVisibility[0]);
 			READ_BOOL(tmp, "frags",		m_statsVisibility[1]);
-			READ_BOOL(tmp, "losses",	m_statsVisibility[2]);
-			READ_BOOL(tmp, "playTime",	m_statsVisibility[3]);
-			READ_BOOL(tmp, "topSpeed",	m_statsVisibility[4]);
-			READ_BOOL(tmp, "way",		m_statsVisibility[5]);
-			READ_BOOL(tmp, "wins",		m_statsVisibility[6]);
+			READ_BOOL(tmp, "key",		m_statsVisibility[2]);
+			READ_BOOL(tmp, "losses",	m_statsVisibility[3]);
+			READ_BOOL(tmp, "playTime",	m_statsVisibility[4]);
+			READ_BOOL(tmp, "topSpeed",	m_statsVisibility[5]);
+			READ_BOOL(tmp, "way",		m_statsVisibility[6]);
+			READ_BOOL(tmp, "wins",		m_statsVisibility[7]);
 		}
 	}
 }

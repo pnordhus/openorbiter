@@ -313,6 +313,7 @@
      <addaction name="separator" />
      <addaction name="actionShowAverageSpeed" />
      <addaction name="actionShowFrags" />
+     <addaction name="actionShowKey" />
      <addaction name="actionShowLosses" />
      <addaction name="actionShowPlayTime" />
      <addaction name="actionShowTopSpeed" />
@@ -432,6 +433,14 @@
   <action name="actionPreferences" >
    <property name="text" >
     <string>&amp;Preferences</string>
+   </property>
+  </action>
+  <action name="actionShowKey" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Key</string>
    </property>
   </action>
  </widget>

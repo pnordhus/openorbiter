@@ -54,7 +54,7 @@ FormMain::FormMain(bool showStats) :
 	m_processTimer(this),
 	m_updateTimer(this),
 	m_lastWinner(NULL),
-	m_modelStats(7, 0)
+	m_modelStats(8, 0)
 {
 	m_window = new Ui::FormMain;
 
@@ -84,11 +84,12 @@ FormMain::FormMain(bool showStats) :
 
 	m_modelStats.setHeaderData(0, Qt::Vertical, "Avg. Speed", Qt::DisplayRole);
 	m_modelStats.setHeaderData(1, Qt::Vertical, "Frags", Qt::DisplayRole);
-	m_modelStats.setHeaderData(2, Qt::Vertical, "Losses", Qt::DisplayRole);
-	m_modelStats.setHeaderData(3, Qt::Vertical, "Play time", Qt::DisplayRole);
-	m_modelStats.setHeaderData(4, Qt::Vertical, "Top speed", Qt::DisplayRole);
-	m_modelStats.setHeaderData(5, Qt::Vertical, "Way", Qt::DisplayRole);
-	m_modelStats.setHeaderData(6, Qt::Vertical, "Wins", Qt::DisplayRole);
+	m_modelStats.setHeaderData(2, Qt::Vertical, "Key", Qt::DisplayRole);
+	m_modelStats.setHeaderData(3, Qt::Vertical, "Losses", Qt::DisplayRole);
+	m_modelStats.setHeaderData(4, Qt::Vertical, "Play time", Qt::DisplayRole);
+	m_modelStats.setHeaderData(5, Qt::Vertical, "Top speed", Qt::DisplayRole);
+	m_modelStats.setHeaderData(6, Qt::Vertical, "Way", Qt::DisplayRole);
+	m_modelStats.setHeaderData(7, Qt::Vertical, "Wins", Qt::DisplayRole);
 
 	for (int i = 0; i < 7; i++) {
 		QModelIndex index = m_modelStats.index(0, i);
@@ -129,6 +130,7 @@ FormMain::FormMain(bool showStats) :
 
 	connect(m_window->actionShowAverageSpeed, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
 	connect(m_window->actionShowFrags, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
+	connect(m_window->actionShowKey, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
 	connect(m_window->actionShowLosses, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
 	connect(m_window->actionShowPlayTime, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
 	connect(m_window->actionShowTopSpeed, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
@@ -267,18 +269,19 @@ void FormMain::updateStats()
 		QColor color = player->getColor();
 		color.setAlpha(75);
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 8; i++) {
 			updateStat(i, count, Qt::AlignCenter, Qt::TextAlignmentRole);
 			updateStat(i, count, color, Qt::BackgroundColorRole);
 		}
 
 		updateStat(0, count, QString::number(player->matchStats().speed(), 'f', 1), Qt::DisplayRole);
 		updateStat(1, count, player->matchStats().frags(), Qt::DisplayRole);
-		updateStat(2, count, player->matchStats().losses(), Qt::DisplayRole);
-		updateStat(3, count, QString::number(player->matchStats().time(), 'f', 1), Qt::DisplayRole);
-		updateStat(4, count, QString::number(player->matchStats().topSpeed(), 'f', 1), Qt::DisplayRole);
-		updateStat(5, count, QString::number(player->matchStats().way(), 'f', 1), Qt::DisplayRole);
-		updateStat(6, count, player->matchStats().wins(), Qt::DisplayRole);
+		updateStat(2, count, player->getKey().toString(), Qt::DisplayRole);
+		updateStat(3, count, player->matchStats().losses(), Qt::DisplayRole);
+		updateStat(4, count, QString::number(player->matchStats().time(), 'f', 1), Qt::DisplayRole);
+		updateStat(5, count, QString::number(player->matchStats().topSpeed(), 'f', 1), Qt::DisplayRole);
+		updateStat(6, count, QString::number(player->matchStats().way(), 'f', 1), Qt::DisplayRole);
+		updateStat(7, count, player->matchStats().wins(), Qt::DisplayRole);
 
 		count++;
 	}
@@ -377,11 +380,12 @@ void FormMain::changeVisibleStats()
 	QHeaderView* header = m_window->tableStats->verticalHeader();
 	header->setSectionHidden(0, !m_window->actionShowAverageSpeed->isChecked());
 	header->setSectionHidden(1, !m_window->actionShowFrags->isChecked());
-	header->setSectionHidden(2, !m_window->actionShowLosses->isChecked());
-	header->setSectionHidden(3, !m_window->actionShowPlayTime->isChecked());
-	header->setSectionHidden(4, !m_window->actionShowTopSpeed->isChecked());
-	header->setSectionHidden(5, !m_window->actionShowWay->isChecked());
-	header->setSectionHidden(6, !m_window->actionShowWins->isChecked());
+	header->setSectionHidden(2, !m_window->actionShowKey->isChecked());
+	header->setSectionHidden(3, !m_window->actionShowLosses->isChecked());
+	header->setSectionHidden(4, !m_window->actionShowPlayTime->isChecked());
+	header->setSectionHidden(5, !m_window->actionShowTopSpeed->isChecked());
+	header->setSectionHidden(6, !m_window->actionShowWay->isChecked());
+	header->setSectionHidden(7, !m_window->actionShowWins->isChecked());
 
 	int h = m_window->tableStats->frameSize().height() - m_window->tableStats->contentsRect().height();
 	h += (header->count() - header->hiddenSectionCount() + 1) * header->sizeHint().height();
@@ -393,6 +397,7 @@ void FormMain::showAllStats()
 {
 	m_window->actionShowAverageSpeed->setChecked(true);
 	m_window->actionShowFrags->setChecked(true);
+	m_window->actionShowKey->setChecked(true);
 	m_window->actionShowLosses->setChecked(true);
 	m_window->actionShowPlayTime->setChecked(true);
 	m_window->actionShowTopSpeed->setChecked(true);
@@ -407,6 +412,7 @@ void FormMain::hideAllStats()
 {
 	m_window->actionShowAverageSpeed->setChecked(false);
 	m_window->actionShowFrags->setChecked(false);
+	m_window->actionShowKey->setChecked(false);
 	m_window->actionShowLosses->setChecked(false);
 	m_window->actionShowPlayTime->setChecked(false);
 	m_window->actionShowTopSpeed->setChecked(false);
@@ -419,15 +425,16 @@ void FormMain::hideAllStats()
 
 void FormMain::setStatsVisibility(const QList<bool>& list)
 {
-	Q_ASSERT(list.size() == 7);
+	Q_ASSERT(list.size() == 8);
 
 	m_window->actionShowAverageSpeed->setChecked(list.at(0));
 	m_window->actionShowFrags->setChecked(list.at(1));
-	m_window->actionShowLosses->setChecked(list.at(2));
-	m_window->actionShowPlayTime->setChecked(list.at(3));
-	m_window->actionShowTopSpeed->setChecked(list.at(4));
-	m_window->actionShowWay->setChecked(list.at(5));
-	m_window->actionShowWins->setChecked(list.at(6));
+	m_window->actionShowKey->setChecked(list.at(2));
+	m_window->actionShowLosses->setChecked(list.at(3));
+	m_window->actionShowPlayTime->setChecked(list.at(4));
+	m_window->actionShowTopSpeed->setChecked(list.at(5));
+	m_window->actionShowWay->setChecked(list.at(6));
+	m_window->actionShowWins->setChecked(list.at(7));
 
 	changeVisibleStats();
 }
@@ -438,6 +445,7 @@ QList<bool> FormMain::getStatsVisibility() const
 	QList<bool> ret;
 	ret.append(m_window->actionShowAverageSpeed->isChecked());
 	ret.append(m_window->actionShowFrags->isChecked());
+	ret.append(m_window->actionShowKey->isChecked());
 	ret.append(m_window->actionShowLosses->isChecked());
 	ret.append(m_window->actionShowPlayTime->isChecked());
 	ret.append(m_window->actionShowTopSpeed->isChecked());
