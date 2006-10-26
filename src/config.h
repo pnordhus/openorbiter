@@ -23,8 +23,12 @@
 #define OPENORBITER_CONFIG_H
 
 
+#include "types.h"
+
+
 #include <QColor>
 #include <QList>
+#include <QRect>
 #include <QString>
 
 
@@ -40,29 +44,21 @@ public:
 	const QString&	dataDir() const	{ return m_dataDir; }
 	const QString&	userDir() const	{ return m_userDir; }
 
+	const QRect&	windowGeometry() const		{ return m_windowGeometry; }
+	bool			windowMaximized() const 	{ return m_windowMaximized; }
+	bool			windowFullScreen() const	{ return m_windowFullScreen; }
+	bool			windowShowStats() const		{ return m_windowShowStats; }
 
-	int		windowPosX() const			{ return m_windowPosX; }
-	int		windowPosY() const			{ return m_windowPosY; }
-	int		windowWidth() const			{ return m_windowWidth; }
-	int		windowHeight() const		{ return m_windowHeight; }
-	bool	windowMaximized() const 	{ return m_windowMaximized; }
-	bool	windowFullScreen() const	{ return m_windowFullScreen; }
-	bool	windowShowStats() const		{ return m_windowShowStats; }
+	float					gravityFactor() const	{ return m_gravityFactor; }
+	const StringBoolMap&	statsShown() const	{ return m_statsShown; }
 
-	float				gravityFactor() const	{ return m_gravityFactor; }
-	const QList<bool>&	statsVisibility() const	{ return m_statsVisibility; }
-
-
-	void	setWindowPosX(int);
-	void	setWindowPosY(int);
-	void	setWindowWidth(int);
-	void	setWindowHeight(int);
+	void	setWindowGeometry(const QRect& g);
 	void	setWindowMaximized(bool);
 	void	setWindowFullScreen(bool);
 	void	setWindowShowStats(bool);
 
 	void	setGravityFactor(float);
-	void	setStatsVisibility(const QList<bool>&);
+	void	setStatsShown(const StringBoolMap&);
 
 
 	float	firstNodeTime() const { return m_firstNodeTime; }
@@ -91,15 +87,12 @@ private:
 	QString	m_userDir;
 	float	m_gravityFactor;
 
-	int		m_windowPosX;
-	int		m_windowPosY;
-	int		m_windowWidth;
-	int		m_windowHeight;
+	QRect	m_windowGeometry;
 	bool	m_windowMaximized;
 	bool	m_windowFullScreen;
 	bool	m_windowShowStats;
 
-	QList<bool>	m_statsVisibility;
+	StringBoolMap	m_statsShown;
 
 	float	m_firstNodeTime;
 	float	m_nextNodeTime;
@@ -107,6 +100,9 @@ private:
 	
 	QString	m_lastMap;
 };
+
+
+extern Config g_config;
 
 
 #endif

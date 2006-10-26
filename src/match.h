@@ -23,10 +23,9 @@
 #define OPENORBITER_MATCH_H
 
 
-#include "game.h"
-#include "map.h"
 
-
+class Game;
+class Map;
 class Orbiter;
 class Player;
 
@@ -37,23 +36,20 @@ public:
 	Match(Map* map);
 	~Match();
 
-	void	setPlayers(QList<Player*>& players);
+	void	startGame();
 
 	void	process(float time);
 	double	time() const { return m_time; }
 
 	const Player*	lastWinner() const { return m_lastWinner; }
 	Game*			game() { return m_game; }
-
-private:
-	void	newGame();
+	Map*			map() { return m_map; }
 	
 private:
-	QList<Player*>	m_players;
-	Map*			m_map;
-	double			m_time;
-	Player*			m_lastWinner;
-	Game*			m_game;
+	Map*		m_map;
+	double		m_time;
+	Player*		m_lastWinner;
+	Game*		m_game;
 };
 
 

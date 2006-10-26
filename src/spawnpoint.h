@@ -32,9 +32,7 @@ public:
 	SpawnPoint(float x, float y);
 
 private:
-	/* disable copy constructor */
-	SpawnPoint(const SpawnPoint&);
-	SpawnPoint& operator = (const SpawnPoint&);
+	Q_DISABLE_COPY(SpawnPoint);
 };
 
 

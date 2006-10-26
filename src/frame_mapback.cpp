@@ -19,8 +19,12 @@
  ***************************************************************************/
 
 
-#include "frame_mapback.h"
 #include "form_main.h"
+#include "frame_mapback.h"
+#include "match.h"
+#include "openorbiter.h"
+#include "player.h"
+
 
 #include <QPainter>
 

@@ -19,36 +19,18 @@
  ***************************************************************************/
 
 
-#ifndef OPENORBITER_MAPVIEW_H
-#define OPENORBITER_MAPVIEW_H
+#ifndef OPENORBITER_TYPES_H
+#define OPENORBITER_TYPES_H
 
 
-#include "map.h"
-#include <QGraphicsRectItem>
-#include <QGraphicsScene>
-#include <QGraphicsView>
+#include <QList>
+#include <QMap>
+#include <QString>
 
 
-class MapView : public QGraphicsView
-{
-public:
-	MapView(QWidget*);
-
-	void	setMap(const Map* map);
-	void	setView(QGraphicsView*);
-	void	updateSize();
-	void	process();
-
-private:
-	void	resizeEvent(QResizeEvent*);
-
-private:
-	QGraphicsView*	m_view;
-	QGraphicsScene	m_scene;
-	const Map*		m_map;
-
-	QGraphicsRectItem*		m_background;
-};
+typedef QMap<QString, bool>			StringBoolMap;
+typedef QList<class Node*>			NodeList;
+typedef QList<class SpawnPoint*>	SpawnPointList;
 
 
 #endif

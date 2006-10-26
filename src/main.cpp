@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 
+#include "config.h"
 #include "defs.h"
 #include "form_main.h"
 #include "openorbiter.h"
@@ -72,6 +73,7 @@ int main(int argc, char* argv[])
 	initRandom();
 
 	OpenOrbiter::create();
+
 	QApplication app(argc, argv);
 
 	try {
@@ -83,22 +85,18 @@ int main(int argc, char* argv[])
 			return EXIT_FAILURE;
 		}
 
-		int x, y, w, h;
-		x = g_openorbiter->config().windowPosX();
-		y = g_openorbiter->config().windowPosY();
-		w = g_openorbiter->config().windowWidth();
-		h = g_openorbiter->config().windowHeight();
+		const QRect& g = g_config.windowGeometry();
 
-		FormMain form(g_openorbiter->config().windowShowStats());
-		form.resize(w, h);
+		FormMain form(g_config.windowShowStats());
+		form.resize(g.width(), g.height());
 		
-		if (g_openorbiter->config().windowMaximized())
+		if (g_config.windowMaximized())
 			form.setWindowState(form.windowState() | Qt::WindowMaximized);
 			
-		if (g_openorbiter->config().windowFullScreen())
+		if (g_config.windowFullScreen())
 			form.setWindowState(form.windowState() | Qt::WindowFullScreen);
 
-		form.setStatsVisibility(g_openorbiter->config().statsVisibility());
+		form.setStatsShown(g_config.statsShown());
 
 		form.show();
 
@@ -107,17 +105,13 @@ int main(int argc, char* argv[])
 
 		ret = app.exec();
 
-		g_openorbiter->config().setStatsVisibility(form.getStatsVisibility());
+		g_config.setStatsShown(form.statsShown());
 
-		g_openorbiter->config().setWindowMaximized(form.isMaximized());
-		g_openorbiter->config().setWindowFullScreen(form.isFullScreen());
-		g_openorbiter->config().setWindowShowStats(form.statsShown());
+		g_config.setWindowMaximized(form.isMaximized());
+		g_config.setWindowFullScreen(form.isFullScreen());
+		g_config.setWindowShowStats(form.isStatsShown());
 
-		QRect geometry = form.normalGeometry();
-		g_openorbiter->config().setWindowPosX(geometry.left());
-		g_openorbiter->config().setWindowPosY(geometry.top());
-		g_openorbiter->config().setWindowWidth(geometry.width());
-		g_openorbiter->config().setWindowHeight(geometry.height());
+		g_config.setWindowGeometry(form.normalGeometry());
 	} catch (...) {
 	
 	}

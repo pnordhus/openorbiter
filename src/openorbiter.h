@@ -22,14 +22,20 @@
 #ifndef OPENORBITER_OPENORBITER_H
 #define OPENORBITER_OPENORBITER_H
 
-
-#include "config.h"
+/*
 #include "match.h"
 #include "map.h"
 #include "player.h"
-
+*/
 #include <QDir>
 #include <QTime>
+
+
+class Game;
+class Map;
+class Match;
+class Player;
+class QGraphicsScene;
 
 
 class OpenOrbiter
@@ -52,14 +58,12 @@ public:
 	void	pause();
 	void	resume();
 
-	void	newMatch(int map);
+	void	startMatch(const Match& match);
 
 	bool	process();
 	void	init(bool loadConfig);
 
-	Config&	config() { return m_config; }
 	Match*	match() { Q_ASSERT(m_match); return m_match; }
-	Game*	game() { return m_match->game(); }
 
 	static	void	create();
 	static	void	destroy();
@@ -69,7 +73,9 @@ public:
 	Player&				getPlayer(int index) { return *m_players[index]; }
 	QList<Player*>		selectedPlayers();
 
-	int		getLastMap() { return m_lastMap; }
+	Map*	lastMap() { return m_lastMap; }
+
+	QGraphicsScene*		graphicsScene() { Q_ASSERT(m_graphicsScene != NULL); return m_graphicsScene; }
 
 private:
 	void	initPlayers();
@@ -78,7 +84,6 @@ private:
 	void	loadMapsFromDir(const QDir& dir);
 
 private:
-	Config	m_config;
 	MapList	m_maps;
 
 	bool	m_paused;
@@ -89,9 +94,8 @@ private:
 
 	Player*	m_players[MaxPlayers];
 
-	static	bool	m_isCreated;
-
-	int		m_lastMap;
+	Map*	m_lastMap;
+	QGraphicsScene*	m_graphicsScene;
 };
 
 

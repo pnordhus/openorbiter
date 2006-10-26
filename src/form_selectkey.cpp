@@ -19,9 +19,14 @@
  ***************************************************************************/
 
 
-#include "form_selectkey.h"
 #include "../build/ui_form_selectkey.h"
+
+
+#include "form_selectkey.h"
 #include "openorbiter.h"
+#include "player.h"
+
+
 #include <QDebug>
 #include <QKeyEvent>
 

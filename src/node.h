@@ -39,14 +39,15 @@ public:
 	
 	QGraphicsEllipseItem&	item() { return m_item; }
 
+	void	connectScene(QGraphicsScene*);
+	void	disconnectScene();
+
 private:
 	bool					m_mark;
 	QGraphicsEllipseItem	m_item;
 
 private:
-	/* disable copy constructor */
-	Node(const Node&);
-	Node& operator = (const Node&);
+	Q_DISABLE_COPY(Node);
 };
 
 

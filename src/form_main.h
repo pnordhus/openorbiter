@@ -23,13 +23,13 @@
 #define OPENORBITER_FORM_MAIN_H
 
 
-#include "openorbiter.h"
-#include "mapview.h"
+#include "types.h"
 
-#include <QMainWindow>
+
 #include <QEvent>
-#include <QTimer>
+#include <QMainWindow>
 #include <QStandardItemModel>
+#include <QTimer>
 
 
 namespace Ui {
@@ -37,6 +37,7 @@ namespace Ui {
 }
 
 
+class Player;
 class PlayerShortcut;
 
 
@@ -50,13 +51,15 @@ public:
 
 	void	updateMapFrame();
 	void	updatePlayers();
-	bool	statsShown() const;
+	bool	isStatsShown() const;
 	QRect	mapGeometry() const;
 
-	void	setStatsVisibility(const QList<bool>& list);
-	QList<bool>	getStatsVisibility() const;
+	void			setStatsShown(const StringBoolMap& map);
+	StringBoolMap	statsShown() const;
 
 private:
+	void	connectActions();
+	void	setShortcuts();
 	void	setKeys();
 
 public slots:
@@ -68,7 +71,6 @@ private slots:
 	void	updateStats();
 	void	input();
 	void	toggleFullscreen();
-	void	toggleStats(bool show);
 	void	menuAboutToShow();
 
 	void	changeVisibleStats();

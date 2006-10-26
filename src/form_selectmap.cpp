@@ -19,8 +19,11 @@
  ***************************************************************************/
 
 
-#include "form_selectmap.h"
 #include "../build/ui_form_selectmap.h"
+
+
+#include "form_selectmap.h"
+#include "map.h"
 #include "openorbiter.h"
 
 
@@ -30,10 +33,8 @@ FormSelectMap::FormSelectMap(QWidget* parent, int currentMap) :
 	m_window = new Ui::FormSelectMap;
 	m_window->setupUi(this);
 
-	foreach (const Map* map, g_openorbiter->getMaps()) {
-		const QString& name = map->name();
-		m_window->listMaps->addItem(name);
-	}
+	foreach (const Map* map, g_openorbiter->getMaps())
+		m_window->listMaps->addItem(map->name());
 
 	connect(m_window->listMaps, SIGNAL(currentRowChanged(int)), this, SLOT(mapSelected(int)));
 

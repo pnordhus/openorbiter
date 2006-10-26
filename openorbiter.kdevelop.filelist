@@ -58,3 +58,4 @@ src/mapview.h
 src/mapview.cpp
 src/mapparser.h
 src/mapparser.cpp
+src/types.h

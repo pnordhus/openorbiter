@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 
+#include "config.h"
 #include "form_settings.h"
 #include "openorbiter.h"
 #include "../build/ui_form_settings.h"
@@ -33,7 +34,7 @@ FormSettings::FormSettings(QWidget* parent) :
 
 	connect(m_window->buttonSelectColor, SIGNAL(clicked()), this, SLOT(showColorDialog()));
 
-	setColor(g_openorbiter->config().mapColor());
+	setColor(g_config.mapColor());
 	m_window->frameColor->setAutoFillBackground(true);
 }
 
@@ -54,7 +55,7 @@ void FormSettings::setColor(const QColor& color)
 
 void FormSettings::accept()
 {
-	g_openorbiter->config().setMapColor(m_window->frameColor->palette().color(QPalette::Window));
+	g_config.setMapColor(m_window->frameColor->palette().color(QPalette::Window));
 	QDialog::accept();
 }
 

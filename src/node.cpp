@@ -22,6 +22,9 @@
 #include "node.h"
 
 
+#include <QGraphicsScene>
+
+
 Node::Node(float x, float y) :
 	Vector(x, y),
 	m_mark(false)
@@ -48,4 +51,20 @@ QColor Node::getColor() const
 		return "red";
 
 	return "white";
+}
+
+
+void Node::connectScene(QGraphicsScene* scene)
+{
+	Q_ASSERT(scene != NULL);
+
+	scene->addItem(&m_item);
+}
+
+
+void Node::disconnectScene()
+{
+	Q_ASSERT(m_item.scene());
+
+	m_item.scene()->removeItem(&m_item);
 }

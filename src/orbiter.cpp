@@ -168,10 +168,9 @@ void Orbiter::collide(Orbiter& orb1, Orbiter& orb2)
 	vec12.normalize();
 	Vector vec21 = -vec12;
 
-	
 
 //	qDebug() << "collision" << distance;
-        
+
 	float rat12 = orb1.m_speed.dot(vec12);
 	float rat21 = orb2.m_speed.dot(vec21);
 

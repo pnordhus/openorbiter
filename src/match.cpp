@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 
+#include "game.h"
 #include "match.h"
 #include "openorbiter.h"
 #include "randomizer.h"
@@ -31,54 +32,43 @@ Match::Match(Map* map) :
 	m_lastWinner(NULL),
 	m_game(NULL)
 {
-	m_players = g_openorbiter->selectedPlayers();
-	foreach (Player* player, m_players) {
-		player->startMatch();
-	}
 
-	newGame();
 }
 
 
 Match::~Match()
 {
 	delete m_game;
-
-	foreach (Player* player, m_players) {
-		player->endMatch();
-	}
 }
 
 
-void Match::setPlayers(QList<Player*>& players)
+void Match::startGame()
 {
-	foreach (Player* player, m_players) {
-		if (!players.contains(player))
-			player->endMatch();
-	}
-
-	foreach (Player* player, players) {
-		if (!m_players.contains(player))
-			player->startMatch();
-	}
-
-	m_players = players;
-}
-
-
-void Match::newGame()
-{
-	delete m_game;
-	m_game = new Game(m_map, m_players);
+	Q_ASSERT(m_game == NULL);
+	m_game = new Game(m_map);
 }
 
 
 void Match::process(float time)
 {
-	m_time += time;
+//	Q_ASSERT(m_game);
 
+	m_time += time;
+	m_game->process(time);
+
+	if (m_game->isOver()) {
+		m_lastWinner = m_game->winner();
+
+		delete m_game;
+		m_game = NULL;
+
+		startGame();
+	}
+
+/*
 	if (!m_game->process(time)) { // game over
 		m_lastWinner = m_game->winner();
 		newGame();
 	}
+*/
 }

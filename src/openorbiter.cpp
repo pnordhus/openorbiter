@@ -19,18 +19,22 @@
  ***************************************************************************/
 
 
+#include "config.h"
+#include "map.h"
+#include "match.h"
 #include "openorbiter.h"
+#include "player.h"
 
 
 #include <QDebug>
-
-
-OpenOrbiter* g_openorbiter;
+#include <QGraphicsScene>
+#include <QRect>
 
 
 OpenOrbiter::OpenOrbiter() :
 	m_paused(true),
-	m_match(NULL)
+	m_match(NULL),
+	m_graphicsScene(NULL)
 {
 	m_time.start();
 }
@@ -40,13 +44,15 @@ OpenOrbiter::~OpenOrbiter()
 {
 	delete m_match;
 
-	m_config.save(m_config.userDir() + "config.xml");
+	g_config.save(g_config.userDir() + "config.xml");
 
 	for (int i = 0; i < MaxPlayers; i++)
 		delete m_players[i];
 
 	foreach (Map* map, m_maps)
 		delete map;
+
+	delete m_graphicsScene;
 }
 
 
@@ -60,14 +66,17 @@ QList<Player*> OpenOrbiter::selectedPlayers()
 }
 
 
-void OpenOrbiter::newMatch(int map)
+void OpenOrbiter::startMatch(const Match& match)
 {
+	Q_ASSERT(m_match == NULL);
 	m_paused = true;
 	delete m_match;
-	m_match = new Match(getMap(map));
+	m_match = new Match(match);
 
-	m_lastMap = map;
-	m_config.setLastMap(getMap(map)->name());
+	m_lastMap = m_match->map();
+	g_config.setLastMap(m_lastMap->name());
+
+	m_match->startGame();
 }
 
 
@@ -107,17 +116,19 @@ void OpenOrbiter::init(bool load)
 	loadMaps();
 
 	qDebug().nospace() << "Loading completed. " << m_maps.size() << ((m_maps.size() == 1) ? " map" : " maps") << " found.";
+
+	m_graphicsScene = new QGraphicsScene;
 }
 
 
 void OpenOrbiter::initPlayers()
 {
-	m_players[0] = new Player(0, "Player 1", "red");
-	m_players[1] = new Player(1, "Player 2", "green");
-	m_players[2] = new Player(2, "Player 3", "blue");
+	m_players[0] = new Player(0, "Player 1", Qt::red);
+	m_players[1] = new Player(1, "Player 2", Qt::green);
+	m_players[2] = new Player(2, "Player 3", Qt::blue);
 	m_players[3] = new Player(3, "Player 4", "fuchsia");
-	m_players[4] = new Player(4, "Player 5", "yellow");
-	m_players[5] = new Player(5, "Player 6", "cyan");
+	m_players[4] = new Player(4, "Player 5", Qt::yellow);
+	m_players[5] = new Player(5, "Player 6", Qt::cyan);
 	m_players[6] = new Player(6, "Player 7", "yellowgreen");
 	m_players[7] = new Player(7, "Player 8", "maroon");
 }
@@ -127,13 +138,13 @@ void OpenOrbiter::loadConfig()
 {
 	QString file;
 
-	file = m_config.dataDir() + "config.xml";
+	file = g_config.dataDir() + "config.xml";
 	if (QFileInfo(file).isReadable())
-		m_config.load(file);
+		g_config.load(file);
 
-	file = m_config.userDir() + "config.xml";
+	file = g_config.userDir() + "config.xml";
 	if (QFileInfo(file).isReadable())
-		m_config.load(file);
+		g_config.load(file);
 }
 
 
@@ -141,8 +152,8 @@ void OpenOrbiter::loadMaps()
 {
 	m_maps.clear();
 
-	loadMapsFromDir(m_config.dataDir() + "maps");
-	loadMapsFromDir(m_config.userDir() + "maps");
+	loadMapsFromDir(g_config.dataDir() + "maps");
+	loadMapsFromDir(g_config.userDir() + "maps");
 
 	qStableSort(m_maps);
 	
@@ -152,10 +163,11 @@ void OpenOrbiter::loadMaps()
 			delete m_maps.takeAt(i + 1);
 		}
 	}
-	m_lastMap = 0;
-	for (int i = 0; i < m_maps.size(); i++) {
-		if (m_maps.value(i)->name() == m_config.lastMap()) {
-			m_lastMap = i;
+
+	m_lastMap = NULL;
+	foreach (Map* map, m_maps) {
+		if (map->name() == g_config.lastMap()) {
+			m_lastMap = map;
 			break;
 		}
 	}	
@@ -180,17 +192,18 @@ void OpenOrbiter::loadMapsFromDir(const QDir& dir)
 ************************************************/
 
 
-bool OpenOrbiter::m_isCreated = false;
+OpenOrbiter* g_openorbiter = NULL;
 
 
 void OpenOrbiter::create()
 {
-	Q_ASSERT(m_isCreated == false);
+	Q_ASSERT(g_openorbiter == NULL);
 	g_openorbiter = new OpenOrbiter;
 }
 
 
 void OpenOrbiter::destroy()
 {
+	Q_ASSERT(g_openorbiter != NULL);
 	delete g_openorbiter;
 }

@@ -23,8 +23,8 @@
 #define OPENORBITER_MAP_H
 
 
-#include "node.h"
-#include "spawnpoint.h"
+#include "vector.h"
+#include "types.h"
 
 
 #include <QHash>
@@ -32,18 +32,18 @@
 #include <QString>
 
 
+class Node;
+class SpawnPoint;
 class QDomElement;
 
 
 class Map
 {
 public:
-	typedef QList<Node*>		NodeList;
-	typedef QList<SpawnPoint*>	SpawnPointList;
-
 	~Map();
 
 	void	start();
+	void	stop();
 
 	const QString&	name() const		{ return m_name; }
 	const QString&	description() const	{ return m_description; }
@@ -60,9 +60,7 @@ public:
 private:
 	// constructor is private, maps can only be created by static member fn
 	Map() {}
-	// copy constructor deactivated
-	Map(const Map&);
-	Map& operator = (const Map&);
+	Q_DISABLE_COPY(Map);
 
 private:
 	QString	m_name;

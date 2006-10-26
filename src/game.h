@@ -23,25 +23,36 @@
 #define OPENORBITER_GAME_H
 
 
-#include "map.h"
+#include "types.h"
 
 
+#include <QList>
+
+
+class Map;
 class Orbiter;
 class Player;
+class Vector;
+
+
+class QPoint;
+class QRect;
 
 
 class Game
 {
 public:
-	Game(Map* map, const QList<Player*>& p);
+	Game(Map* map);
+	~Game();
 
-	bool	process(float time);
+	void	process(float time);
+	bool	isOver() { return m_isOver; }
 
 	Player*	winner() { Q_ASSERT(m_players.size() == 1); return m_players.first(); }
 
 	const QList<Player*>	players() const { return m_players; }
 	const Map*				getMap() { return m_map; }
-	const Map::NodeList&	getNodes() { return m_nodes; }
+	const NodeList&			getNodes() { return m_nodes; }
 
 	QPoint	drawingPos(const Vector&, int width) const;
 	QRect	drawingRect(const Orbiter&, int width) const;
@@ -53,8 +64,9 @@ private:
 	QRect	drawingRect(const Vector&, float radius, int width) const;
 
 private:
+	bool			m_isOver;
 	Map*			m_map;
-	Map::NodeList	m_nodes;
+	NodeList		m_nodes;
 	float			m_nodeTimer;
 	double			m_time;
 	QList<Player*>	m_players;

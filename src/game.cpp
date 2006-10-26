@@ -19,24 +19,30 @@
  ***************************************************************************/
 
 
+#include "config.h"
 #include "game.h"
+#include "map.h"
+#include "node.h"
 #include "openorbiter.h"
 #include "player.h"
 #include "randomizer.h"
+#include "spawnpoint.h"
 
 
-Game::Game(Map* map, const QList<Player*>& p) :
+Game::Game(Map* map) :
+	m_isOver(false),
 	m_map(map),
 	m_time(0.0),
-	m_players(p),
 	m_gravityFactor(1.0f)
 {
-	m_nodeTimer = g_openorbiter->config().firstNodeTime();
+	m_players = g_openorbiter->selectedPlayers();
+
+	m_nodeTimer = g_config.firstNodeTime();
 
 	m_nodes = m_map->nodes();
 	randomize(m_nodes);
 
-	Map::SpawnPointList spawns = m_map->spawnPoints();
+	SpawnPointList spawns = m_map->spawnPoints();
 	randomize(spawns);
 	randomize(m_players);
 
@@ -49,8 +55,15 @@ Game::Game(Map* map, const QList<Player*>& p) :
 }
 
 
-bool Game::process(float time)
+Game::~Game()
 {
+	m_map->stop();
+}
+
+
+void Game::process(float time)
+{
+	Q_ASSERT(m_isOver == false);
 	m_time += time;
 
 	unsigned int iterations = 10;
@@ -61,7 +74,7 @@ bool Game::process(float time)
 			m_nodes.last()->setMark(int(m_nodeTimer * 2.0f) & 1);
 
 		if (m_nodeTimer <= 0.0f) {
-			m_nodeTimer = g_openorbiter->config().nextNodeTime();
+			m_nodeTimer = g_config.nextNodeTime();
 			foreach (Player* player, m_players) {
 				if (player->getOrbiter().node() == m_nodes.last())
 					player->getOrbiter().setNode(NULL);
@@ -94,7 +107,7 @@ bool Game::process(float time)
 	randomize(m_players);
 
 	for (unsigned int it = 0; it < iterations; it++) {
-		Vector v = m_map->gravity() * g_openorbiter->config().gravityFactor() * m_gravityFactor * time;
+		Vector v = m_map->gravity() * g_config.gravityFactor() * m_gravityFactor * time;
 		foreach (Player* player, m_players) {
 			player->getOrbiter().process(time, v);
 		}
@@ -118,10 +131,10 @@ bool Game::process(float time)
 		if (m_players.size() == 1) {
 			winner()->endGame(true);
 	
-			return false;
+			m_isOver = true;
+			break;
 		}
 	}
-	return true;
 }
 
 

@@ -5,7 +5,6 @@ OBJECTS_DIR = build
 TARGET = openorbiter
 DESTDIR = bin
 TEMPLATE = app
-CONFIG += debug
 
 
 FORMS += \
@@ -29,7 +28,6 @@ HEADERS +=	\
 	src/game.h \
 	src/gamestats.h \
 	src/map.h \
-	src/mapview.h \
 	src/match.h \
 	src/matchstats.h \
 	src/node.h \
@@ -53,7 +51,6 @@ SOURCES +=	\
 	src/gamestats.cpp \
 	src/main.cpp \
 	src/map.cpp \
-	src/mapview.cpp \
 	src/match.cpp \
 	src/matchstats.cpp \
 	src/node.cpp \

@@ -19,14 +19,18 @@
  ***************************************************************************/
 
 
+#include "../build/ui_form_creatematch.h"
+
+
 #include "form_creatematch.h"
 #include "form_selectmap.h"
+#include "map.h"
 #include "openorbiter.h"
-#include "../build/ui_form_creatematch.h"
+#include "player.h"
+
 
 #include <QDebug>
 #include <QMessageBox>
-
 
 
 FormCreateMatch::FormCreateMatch(QWidget* parent) :
@@ -39,11 +43,16 @@ FormCreateMatch::FormCreateMatch(QWidget* parent) :
 
 	connect(m_window->buttonMapSelect, SIGNAL(clicked()), this, SLOT(selectMap()));
 
+	int current = 0;
+	int x = 0;
 	foreach (const Map* map, g_openorbiter->getMaps()) {
 		m_window->comboMap->addItem(map->name());
+		if (map == g_openorbiter->lastMap())
+			current = x;
+		x++;
 	}
 
-	m_window->comboMap->setCurrentIndex(g_openorbiter->getLastMap());
+	m_window->comboMap->setCurrentIndex(current);
 
 	m_playerListModel.insertRows(0, OpenOrbiter::MaxPlayers);
 

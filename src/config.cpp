@@ -22,11 +22,15 @@
 #include "../build/configure.h"
 #include "config.h"
 #include "openorbiter.h"
+#include "player.h"
 
 #include <QDebug>
 #include <QDir>
 #include <QDomDocument>
 #include <QVariant>
+
+
+Config g_config;
 
 
 Config::Config()
@@ -41,10 +45,6 @@ Config::Config()
 
 	m_gravityFactor = 1.0f;
 
-	m_windowPosX = 0;
-	m_windowPosY = 0;
-	m_windowWidth = 0;
-	m_windowHeight = 0;
 	m_windowMaximized = false;
 	m_windowFullScreen = false;
 	m_windowShowStats = true;
@@ -53,40 +53,12 @@ Config::Config()
 	m_nextNodeTime = 10.0f;
 
 	m_mapColor = QColor(250,250,250);
-
-	m_statsVisibility.clear();
-	m_statsVisibility.append(false);
-	m_statsVisibility.append(true);
-	m_statsVisibility.append(true);
-	m_statsVisibility.append(true);
-	m_statsVisibility.append(false);
-	m_statsVisibility.append(false);
-	m_statsVisibility.append(false);
-	m_statsVisibility.append(true);
 }
 
 
-void Config::setWindowPosX(int x)
+void Config::setWindowGeometry(const QRect& g)
 {
-	m_windowPosX = x;
-}
-
-
-void Config::setWindowPosY(int y)
-{
-	m_windowPosY = y;
-}
-
-
-void Config::setWindowWidth(int w)
-{
-	m_windowWidth = w;
-}
-
-
-void Config::setWindowHeight(int h)
-{
-	m_windowHeight = h;
+	m_windowGeometry = g;
 }
 
 
@@ -114,10 +86,9 @@ void Config::setLastMap(const QString& map)
 }
 
 
-void Config::setStatsVisibility(const QList<bool>& list)
+void Config::setStatsShown(const StringBoolMap& map)
 {
-	Q_ASSERT(list.size() == 8);
-	m_statsVisibility = list;
+	m_statsShown = map;
 }
 
 
@@ -173,10 +144,10 @@ void Config::saveWindow(QDomDocument& doc, QDomElement& root)
 	QDomElement window = doc.createElement("window");
 	root.appendChild(window);
 
-	window.setAttribute("posX", m_windowPosX);
-	window.setAttribute("posY", m_windowPosY);
-	window.setAttribute("width", m_windowWidth);
-	window.setAttribute("height", m_windowHeight);
+	window.setAttribute("posX", m_windowGeometry.left());
+	window.setAttribute("posY", m_windowGeometry.top());
+	window.setAttribute("width", m_windowGeometry.width());
+	window.setAttribute("height", m_windowGeometry.height());
 	window.setAttribute("maximized", QVariant(m_windowMaximized).toString());
 	window.setAttribute("fullscreen", QVariant(m_windowFullScreen).toString());
 
@@ -185,14 +156,8 @@ void Config::saveWindow(QDomDocument& doc, QDomElement& root)
 		window.appendChild(stats);
 		stats.setAttribute("show", QVariant(m_windowShowStats).toString());
 
-		SET_TEXT(stats, "avgSpeed",	QVariant(m_statsVisibility[0]).toString());
-		SET_TEXT(stats, "frags",	QVariant(m_statsVisibility[1]).toString());
-		SET_TEXT(stats, "key",		QVariant(m_statsVisibility[2]).toString());
-		SET_TEXT(stats, "losses",	QVariant(m_statsVisibility[3]).toString());
-		SET_TEXT(stats, "playTime",	QVariant(m_statsVisibility[4]).toString());
-		SET_TEXT(stats, "topSpeed", QVariant(m_statsVisibility[5]).toString());
-		SET_TEXT(stats, "way",		QVariant(m_statsVisibility[6]).toString());
-		SET_TEXT(stats, "wins",		QVariant(m_statsVisibility[7]).toString());
+		for (StringBoolMap::const_iterator it = m_statsShown.begin(); it != m_statsShown.end(); it++)
+			SET_TEXT(stats, it.key(),	QVariant(it.value()).toString());
 	}
 }
 
@@ -239,6 +204,7 @@ void Config::load(const QString& filename)
 }
 
 
+#define READ_ATTR_INT_FN(base, name, _fn) { bool _b; int _ret = base.attribute(name).toInt(&_b); if(_b) _fn(_ret); }
 #define READ_ATTR_INT(base, name, var) { bool _b; int _ret = base.attribute(name).toInt(&_b); if(_b) var = _ret; }
 #define READ_ATTR_FLOAT(base, name, var) { bool _b; float _ret = base.attribute(name).toFloat(&_b); if(_b) var = _ret; }
 #define READ_ATTR_BOOL(base, name, var) var = QVariant(base.attribute(name)).toBool();
@@ -288,10 +254,10 @@ void Config::loadWindow(const QDomElement& elem)
 	if (child.isNull())
 		return;
 
-	READ_ATTR_INT(child, "posX", m_windowPosX);
-	READ_ATTR_INT(child, "posY", m_windowPosY);
-	READ_ATTR_INT(child, "width", m_windowWidth);
-	READ_ATTR_INT(child, "height", m_windowHeight);
+	READ_ATTR_INT_FN(child, "posX", m_windowGeometry.setLeft);
+	READ_ATTR_INT_FN(child, "posY", m_windowGeometry.setTop);
+	READ_ATTR_INT_FN(child, "width", m_windowGeometry.setWidth);
+	READ_ATTR_INT_FN(child, "height", m_windowGeometry.setHeight);
 
 	READ_ATTR_BOOL(child, "fullscreen", m_windowFullScreen);
 	READ_ATTR_BOOL(child, "maximized", m_windowMaximized);
@@ -300,15 +266,12 @@ void Config::loadWindow(const QDomElement& elem)
 		QDomElement tmp = child.firstChildElement("stats");
 		if (!tmp.isNull()) {
 			READ_ATTR_BOOL(tmp, "show", m_windowShowStats);
-			
-			READ_BOOL(tmp, "avgSpeed",	m_statsVisibility[0]);
-			READ_BOOL(tmp, "frags",		m_statsVisibility[1]);
-			READ_BOOL(tmp, "key",		m_statsVisibility[2]);
-			READ_BOOL(tmp, "losses",	m_statsVisibility[3]);
-			READ_BOOL(tmp, "playTime",	m_statsVisibility[4]);
-			READ_BOOL(tmp, "topSpeed",	m_statsVisibility[5]);
-			READ_BOOL(tmp, "way",		m_statsVisibility[6]);
-			READ_BOOL(tmp, "wins",		m_statsVisibility[7]);
+
+			QDomElement stat = tmp.firstChildElement();
+			while (!stat.isNull()) {
+				m_statsShown.insert(stat.tagName(), QVariant(stat.text()).toBool());
+				stat = stat.nextSiblingElement();
+			}
 		}
 	}
 }

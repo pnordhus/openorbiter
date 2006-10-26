@@ -19,9 +19,15 @@
  ***************************************************************************/
 
 
+#include "game.h"
 #include "frame_map.h"
+#include "map.h"
+#include "match.h"
+#include "node.h"
 #include "openorbiter.h"
 #include "orbiter.h"
+#include "player.h"
+
 
 #include <QPainter>
 #include <QDebug>
@@ -37,8 +43,8 @@ FrameMap::FrameMap(QWidget* parent) :
 void FrameMap::process()
 {
 	QRegion newRegion;
-	foreach (Player* player, g_openorbiter->game()->players()) {
-		QRect rect = g_openorbiter->game()->drawingRect(player->getOrbiter(), width());
+	foreach (Player* player, g_openorbiter->match()->game()->players()) {
+		QRect rect = g_openorbiter->match()->game()->drawingRect(player->getOrbiter(), width());
 		newRegion += rect.adjusted(-2, -2, 2, 2);
 	}
 
@@ -66,14 +72,14 @@ void FrameMap::paintEvent(QPaintEvent*)
 	pen.setJoinStyle(Qt::MiterJoin);
 	pen.setWidth(2);
 
-	foreach (Player* player, g_openorbiter->game()->players()) {
+	foreach (Player* player, g_openorbiter->match()->game()->players()) {
 		const Orbiter& orb = player->getOrbiter();
 		const Node* node = orb.node();
 		if (!node)
 			continue;
 
-		QPoint posOrb = g_openorbiter->game()->drawingPos(orb.getPosition(), width());
-		QPoint posNode = g_openorbiter->game()->drawingPos(*node, width());
+		QPoint posOrb = g_openorbiter->match()->game()->drawingPos(orb.getPosition(), width());
+		QPoint posNode = g_openorbiter->match()->game()->drawingPos(*node, width());
 
 		if (orb.isConnected())
 			pen.setColor("black");
@@ -95,17 +101,17 @@ void FrameMap::paintEvent(QPaintEvent*)
 	painter.setPen(oldPen);
 	painter.setPen(QColor("black"));
 
-	foreach (const Node* node, g_openorbiter->game()->getNodes()) {
-		QRect rect = g_openorbiter->game()->drawingRect(*node, width());
+	foreach (const Node* node, g_openorbiter->match()->game()->getNodes()) {
+		QRect rect = g_openorbiter->match()->game()->drawingRect(*node, width());
 		painter.setBrush(node->getColor());
 		painter.drawEllipse(rect);
 		m_updateRegion += rect.adjusted(-2, -2, 2, 2);
 	}
 
-	foreach (Player* player, g_openorbiter->game()->players()) {
+	foreach (Player* player, g_openorbiter->match()->game()->players()) {
 		const Orbiter& orb = player->getOrbiter();
 		painter.setBrush(player->getColor());
-		QRect rect = g_openorbiter->game()->drawingRect(orb, width());
+		QRect rect = g_openorbiter->match()->game()->drawingRect(orb, width());
 		painter.drawEllipse(rect);
 		m_updateRegion += rect.adjusted(-2, -2, 2, 2);
 	}
@@ -119,7 +125,7 @@ void FrameMap::recalcSize()
 
 	qreal ratio;
 	if (g_openorbiter->isRunning())
-		ratio = g_openorbiter->game()->getMap()->aspectRatio();
+		ratio = g_openorbiter->match()->game()->getMap()->aspectRatio();
 	else
 		ratio = 2.0 / 1.0;
 

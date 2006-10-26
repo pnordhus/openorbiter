@@ -20,6 +20,9 @@
 
 
 #include "map.h"
+#include "node.h"
+#include "openorbiter.h"
+#include "spawnpoint.h"
 
 
 #include <QFile>
@@ -38,7 +41,19 @@ Map::~Map()
 
 void Map::start()
 {
+	qDebug() << "Map::start()";
 
+	foreach (Node* node, m_nodes)
+		node->connectScene(g_openorbiter->graphicsScene());
+}
+
+
+void Map::stop()
+{
+	qDebug() << "Map::stop()";
+
+	foreach (Node* node, m_nodes)
+		node->disconnectScene();
 }
 
 

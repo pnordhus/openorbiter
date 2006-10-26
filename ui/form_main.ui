@@ -27,7 +27,7 @@
      <number>6</number>
     </property>
     <item>
-     <widget class="MapView" name="graphicsMap" >
+     <widget class="QGraphicsView" name="graphicsMap" >
       <property name="verticalScrollBarPolicy" >
        <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
@@ -446,11 +446,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MapView</class>
-   <extends>QGraphicsView</extends>
-   <header>../src/mapview.h</header>
-  </customwidget>
-  <customwidget>
    <class>FrameMap</class>
    <extends>QFrame</extends>
    <header>../src/frame_map.h</header>
@@ -476,6 +471,22 @@
     <hint type="destinationlabel" >
      <x>319</x>
      <y>239</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowStats</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frameStats</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>399</x>
+     <y>385</y>
     </hint>
    </hints>
   </connection>

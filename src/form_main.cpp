@@ -19,17 +19,27 @@
  ***************************************************************************/
 
 
+#include "../build/ui_form_main.h"
+
+
+#include "config.h"
 #include "defs.h"
+#include "game.h"
 #include "form_creatematch.h"
+#include "form_main.h"
 #include "form_selectkey.h"
 #include "form_settings.h"
-#include "form_main.h"
+#include "map.h"
+#include "match.h"
+#include "openorbiter.h"
 #include "orbiter.h"
-#include "../build/ui_form_main.h"
+#include "player.h"
+
 
 #include <cmath>
 #include <QHeaderView>
 #include <QShortcut>
+
 
 #ifdef QT_MODULE_OPENGL
 #  include <QGLWidget>
@@ -47,6 +57,8 @@ private:
 	Player*	m_player;
 };
 
+
+/****************************************************************************/
 
 
 FormMain::FormMain(bool showStats) :
@@ -67,12 +79,6 @@ FormMain::FormMain(bool showStats) :
 	connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
 	m_updateTimer.start(100);
 
-	connect(m_window->actionNewMatch, SIGNAL(activated()), this, SLOT(createMatch()));
-	connect(m_window->actionFullScreenMode, SIGNAL(activated()), this, SLOT(toggleFullscreen()));
-	connect(m_window->actionShowStats, SIGNAL(toggled(bool)), this, SLOT(toggleStats(bool)));
-	connect(m_window->actionPreferences, SIGNAL(activated()), this, SLOT(showPreferences()));
-
-	m_window->actionShowStats->setChecked(showStats);
 
 	connect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(createMatch()));
 
@@ -115,27 +121,10 @@ FormMain::FormMain(bool showStats) :
 
 	updatePlayers();
 
-	m_window->actionNewMatch->setShortcut(Qt::CTRL + Qt::Key_N);
-	m_window->actionQuit->setShortcut(Qt::CTRL + Qt::Key_Q);
-
-	m_window->actionFullScreenMode->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F);
-	m_window->actionShowStats->setShortcut(Qt::CTRL + Qt::Key_S);
-
-	m_window->actionShowStats->setShortcutContext(Qt::ApplicationShortcut);
-
 //	menuBar()->hide();
-
-	connect(m_window->actionShowAll, SIGNAL(activated()), this, SLOT(showAllStats()));
-	connect(m_window->actionShowNone, SIGNAL(activated()), this, SLOT(hideAllStats()));
-
-	connect(m_window->actionShowAverageSpeed, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
-	connect(m_window->actionShowFrags, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
-	connect(m_window->actionShowKey, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
-	connect(m_window->actionShowLosses, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
-	connect(m_window->actionShowPlayTime, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
-	connect(m_window->actionShowTopSpeed, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
-	connect(m_window->actionShowWay, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
-	connect(m_window->actionShowWins, SIGNAL(activated()), this, SLOT(changeVisibleStats()));
+	connectActions();
+	setShortcuts();
+	m_window->actionShowStats->setChecked(showStats);
 
 	connect(m_window->tableStats->horizontalHeader(), SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(statsContextMenu(const QPoint&)));
 	connect(m_window->tableStats->verticalHeader(), SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(statsContextMenu(const QPoint&)));
@@ -152,8 +141,11 @@ FormMain::FormMain(bool showStats) :
 	m_window->graphicsMap->setViewport(new QGLWidget);
 #endif
 
-	m_window->graphicsMap->setView(m_window->graphicsMap);
+	m_window->graphicsMap->setScene(g_openorbiter->graphicsScene());
 }
+
+
+/****************************************************************************/
 
 
 FormMain::~FormMain()
@@ -167,11 +159,53 @@ FormMain::~FormMain()
 }
 
 
+/****************************************************************************/
+
+
+void FormMain::connectActions()
+{
+	connect(m_window->actionNewMatch,			SIGNAL(activated()),	this,	SLOT(createMatch()));
+	connect(m_window->actionFullScreenMode,		SIGNAL(activated()),	this,	SLOT(toggleFullscreen()));
+	connect(m_window->actionPreferences,		SIGNAL(activated()),	this,	SLOT(showPreferences()));
+	connect(m_window->actionShowAll,			SIGNAL(activated()),	this,	SLOT(showAllStats()));
+	connect(m_window->actionShowNone,			SIGNAL(activated()),	this,	SLOT(hideAllStats()));
+
+	connect(m_window->actionShowAverageSpeed,	SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowFrags,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowKey,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowLosses,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowPlayTime,		SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowTopSpeed,		SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowWay,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowWins,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+}
+
+
+/****************************************************************************/
+
+
+void FormMain::setShortcuts()
+{
+	m_window->actionNewMatch->setShortcut(Qt::CTRL + Qt::Key_N);
+	m_window->actionQuit->setShortcut(Qt::CTRL + Qt::Key_Q);
+	m_window->actionFullScreenMode->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F);
+
+	m_window->actionShowStats->setShortcut(Qt::CTRL + Qt::Key_S);
+	m_window->actionShowStats->setShortcutContext(Qt::ApplicationShortcut);
+}
+
+
+/****************************************************************************/
+
+
 void FormMain::updateMapFrame()
 {
 	m_window->frameMap->recalcSize();
 	m_window->frameMapBack->update();
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::createMatch()
@@ -190,13 +224,17 @@ void FormMain::createMatch()
 			m_window->buttonResume->show();
 			m_window->frameMap->unsetCursor();
 
-			g_openorbiter->newMatch(dialog.getMap());
-			m_window->graphicsMap->setMap(g_openorbiter->getMap(dialog.getMap()));
+			Match match(g_openorbiter->getMap(dialog.getMap()));
+			g_openorbiter->startMatch(match);
+//			m_window->graphicsMap->setMap(g_openorbiter->getMap(dialog.getMap()));
 			setKeys();
 			updateMapFrame();
 		}
 	}
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::updatePlayers()
@@ -225,6 +263,9 @@ void FormMain::updatePlayers()
 }
 
 
+/****************************************************************************/
+
+
 void FormMain::resume()
 {
 	if (g_openorbiter->isRunning()) {
@@ -234,6 +275,9 @@ void FormMain::resume()
 		g_openorbiter->resume();
 	}
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::process()
@@ -249,9 +293,12 @@ void FormMain::process()
 	if (g_openorbiter->isPaused())
 		return;
 
-	m_window->graphicsMap->process();
+//	m_window->graphicsMap->process();
 	m_window->frameMap->process();
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::updateStat(int row, int col, const QVariant& value, Qt::ItemDataRole role)
@@ -260,6 +307,9 @@ void FormMain::updateStat(int row, int col, const QVariant& value, Qt::ItemDataR
 	if (m_modelStats.data(index, role) != value)
 		m_modelStats.setData(index, value, role);
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::updateStats()
@@ -299,7 +349,7 @@ void FormMain::updateStats()
 	}
 
 	m_window->labelMatchTime->setText(QString("%1s").arg(g_openorbiter->match()->time(), 0, 'f', 1));
-	m_window->labelGameTime->setText(QString("%1s").arg(g_openorbiter->game()->time(), 0, 'f', 1));
+	m_window->labelGameTime->setText(QString("%1s").arg(g_openorbiter->match()->game()->time(), 0, 'f', 1));
 
 	if (!g_openorbiter->isPaused() && !isActiveWindow()) {
 		g_openorbiter->pause();
@@ -307,6 +357,9 @@ void FormMain::updateStats()
 		m_window->frameMap->unsetCursor();
 	}
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::setKeys()
@@ -324,6 +377,9 @@ void FormMain::setKeys()
 }
 
 
+/****************************************************************************/
+
+
 void FormMain::input()
 {
 	PlayerShortcut* sc = dynamic_cast<PlayerShortcut*>(sender());
@@ -335,16 +391,16 @@ void FormMain::input()
 }
 
 
+/****************************************************************************/
+
+
 void FormMain::toggleFullscreen()
 {
 	setWindowState(windowState() ^ Qt::WindowFullScreen);
 }
 
 
-void FormMain::toggleStats(bool show)
-{
-	m_window->frameStats->setVisible(show);
-}
+/****************************************************************************/
 
 
 void FormMain::resizeEvent(QResizeEvent*)
@@ -353,10 +409,16 @@ void FormMain::resizeEvent(QResizeEvent*)
 }
 
 
-bool FormMain::statsShown() const
+/****************************************************************************/
+
+
+bool FormMain::isStatsShown() const
 {
 	return m_window->actionShowStats->isChecked();
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::menuAboutToShow()
@@ -369,10 +431,16 @@ void FormMain::menuAboutToShow()
 }
 
 
+/****************************************************************************/
+
+
 QRect FormMain::mapGeometry() const
 {
 	return m_window->frameMap->geometry();
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::changeVisibleStats()
@@ -393,6 +461,9 @@ void FormMain::changeVisibleStats()
 }
 
 
+/****************************************************************************/
+
+
 void FormMain::showAllStats()
 {
 	m_window->actionShowAverageSpeed->setChecked(true);
@@ -406,6 +477,9 @@ void FormMain::showAllStats()
 
 	changeVisibleStats();
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::hideAllStats()
@@ -423,37 +497,45 @@ void FormMain::hideAllStats()
 }
 
 
-void FormMain::setStatsVisibility(const QList<bool>& list)
-{
-	Q_ASSERT(list.size() == 8);
+/****************************************************************************/
 
-	m_window->actionShowAverageSpeed->setChecked(list.at(0));
-	m_window->actionShowFrags->setChecked(list.at(1));
-	m_window->actionShowKey->setChecked(list.at(2));
-	m_window->actionShowLosses->setChecked(list.at(3));
-	m_window->actionShowPlayTime->setChecked(list.at(4));
-	m_window->actionShowTopSpeed->setChecked(list.at(5));
-	m_window->actionShowWay->setChecked(list.at(6));
-	m_window->actionShowWins->setChecked(list.at(7));
+
+void FormMain::setStatsShown(const StringBoolMap& map)
+{
+	m_window->actionShowAverageSpeed->setChecked(map.value("avgSpeed"));
+	m_window->actionShowFrags->setChecked(map.value("frags"));
+	m_window->actionShowKey->setChecked(map.value("key"));
+	m_window->actionShowLosses->setChecked(map.value("losses"));
+	m_window->actionShowPlayTime->setChecked(map.value("playTime"));
+	m_window->actionShowTopSpeed->setChecked(map.value("topSpeed"));
+	m_window->actionShowWay->setChecked(map.value("way"));
+	m_window->actionShowWins->setChecked(map.value("wins"));
 
 	changeVisibleStats();
 }
 
 
-QList<bool> FormMain::getStatsVisibility() const
+/****************************************************************************/
+
+
+StringBoolMap FormMain::statsShown() const
 {
-	QList<bool> ret;
-	ret.append(m_window->actionShowAverageSpeed->isChecked());
-	ret.append(m_window->actionShowFrags->isChecked());
-	ret.append(m_window->actionShowKey->isChecked());
-	ret.append(m_window->actionShowLosses->isChecked());
-	ret.append(m_window->actionShowPlayTime->isChecked());
-	ret.append(m_window->actionShowTopSpeed->isChecked());
-	ret.append(m_window->actionShowWay->isChecked());
-	ret.append(m_window->actionShowWins->isChecked());
+	StringBoolMap ret;
+
+	ret.insert("avgSpeed", m_window->actionShowAverageSpeed->isChecked());
+	ret.insert("frags", m_window->actionShowFrags->isChecked());
+	ret.insert("key", m_window->actionShowKey->isChecked());
+	ret.insert("losses", m_window->actionShowLosses->isChecked());
+	ret.insert("playTime", m_window->actionShowPlayTime->isChecked());
+	ret.insert("topSpeed", m_window->actionShowTopSpeed->isChecked());
+	ret.insert("way", m_window->actionShowWay->isChecked());
+	ret.insert("wins", m_window->actionShowWins->isChecked());
 
 	return ret;
 }
+
+
+/****************************************************************************/
 
 
 void FormMain::statsContextMenu(const QPoint& p)
@@ -470,6 +552,9 @@ void FormMain::statsContextMenu(const QPoint& p)
 }
 
 
+/****************************************************************************/
+
+
 void FormMain::showPreferences()
 {
 	FormSettings dlg(this);
@@ -479,9 +564,12 @@ void FormMain::showPreferences()
 }
 
 
+/****************************************************************************/
+
+
 void FormMain::setMapColor()
 {
 	QPalette p = m_window->frameMap->palette();
-	p.setColor(QPalette::Background, g_openorbiter->config().mapColor());
+	p.setColor(QPalette::Background, g_config.mapColor());
 	m_window->frameMap->setPalette(p);
 }
