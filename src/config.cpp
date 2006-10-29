@@ -24,13 +24,16 @@
 #include "openorbiter.h"
 #include "player.h"
 
-#include <QDebug>
+
 #include <QDir>
 #include <QDomDocument>
 #include <QVariant>
 
 
 Config g_config;
+
+
+/****************************************************************************/
 
 
 Config::Config()
@@ -56,10 +59,16 @@ Config::Config()
 }
 
 
+/****************************************************************************/
+
+
 void Config::setWindowGeometry(const QRect& g)
 {
 	m_windowGeometry = g;
 }
+
+
+/****************************************************************************/
 
 
 void Config::setWindowMaximized(bool m)
@@ -68,10 +77,16 @@ void Config::setWindowMaximized(bool m)
 }
 
 
+/****************************************************************************/
+
+
 void Config::setWindowFullScreen(bool f)
 {
 	m_windowFullScreen = f;
 }
+
+
+/****************************************************************************/
 
 
 void Config::setWindowShowStats(bool s)
@@ -80,10 +95,16 @@ void Config::setWindowShowStats(bool s)
 }
 
 
+/****************************************************************************/
+
+
 void Config::setLastMap(const QString& map)
 {
 	m_lastMap = map;
 }
+
+
+/****************************************************************************/
 
 
 void Config::setStatsShown(const StringBoolMap& map)
@@ -92,14 +113,16 @@ void Config::setStatsShown(const StringBoolMap& map)
 }
 
 
+/****************************************************************************/
+
+
 void Config::setMapColor(const QColor& color)
 {
 	m_mapColor = color;
 }
 
 
-// ***************************************************************************
-// save configuration to xml file
+/****************************************************************************/
 
 
 void Config::save(const QString& filename)
@@ -120,12 +143,18 @@ void Config::save(const QString& filename)
 }
 
 
+/****************************************************************************/
+
+
 #define SET_TEXT(base, name, val) \
 { \
 	QDomElement tmp = doc.createElement(name); \
 	base.appendChild(tmp); \
 	tmp.appendChild(doc.createTextNode(val)); \
 }
+
+
+/****************************************************************************/
 
 
 void Config::saveGame(QDomDocument& doc, QDomElement& root)
@@ -137,6 +166,9 @@ void Config::saveGame(QDomDocument& doc, QDomElement& root)
 
 	SET_TEXT(game, "lastMap", m_lastMap);
 }
+
+
+/****************************************************************************/
 
 
 void Config::saveWindow(QDomDocument& doc, QDomElement& root)
@@ -162,6 +194,9 @@ void Config::saveWindow(QDomDocument& doc, QDomElement& root)
 }
 
 
+/****************************************************************************/
+
+
 void Config::savePlayers(QDomDocument& doc, QDomElement& root)
 {
 	QDomElement players = doc.createElement("players");
@@ -178,8 +213,7 @@ void Config::savePlayers(QDomDocument& doc, QDomElement& root)
 }
 
 
-// ***************************************************************************
-// load configuration from xml file
+/****************************************************************************/
 
 
 void Config::load(const QString& filename)
@@ -204,6 +238,9 @@ void Config::load(const QString& filename)
 }
 
 
+/****************************************************************************/
+
+
 #define READ_ATTR_INT_FN(base, name, _fn) { bool _b; int _ret = base.attribute(name).toInt(&_b); if(_b) _fn(_ret); }
 #define READ_ATTR_INT(base, name, var) { bool _b; int _ret = base.attribute(name).toInt(&_b); if(_b) var = _ret; }
 #define READ_ATTR_FLOAT(base, name, var) { bool _b; float _ret = base.attribute(name).toFloat(&_b); if(_b) var = _ret; }
@@ -211,6 +248,9 @@ void Config::load(const QString& filename)
 
 #define READ_BOOL(base, name, var) var = QVariant(base.firstChildElement(name).text()).toBool();
 #define READ_STRING(base, name, var) var = base.firstChildElement(name).text();
+
+
+/****************************************************************************/
 
 
 void Config::loadGame(const QDomElement& elem)
@@ -223,6 +263,9 @@ void Config::loadGame(const QDomElement& elem)
 	READ_ATTR_FLOAT(child, "gravity", m_gravityFactor);
 	READ_STRING(child, "lastMap", m_lastMap);
 }
+
+
+/****************************************************************************/
 
 
 void Config::loadPlayers(const QDomElement& elem)
@@ -245,6 +288,9 @@ void Config::loadPlayers(const QDomElement& elem)
 		child = child.nextSiblingElement("player");
 	}
 }
+
+
+/****************************************************************************/
 
 
 void Config::loadWindow(const QDomElement& elem)

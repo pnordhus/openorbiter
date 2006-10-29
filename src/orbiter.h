@@ -24,6 +24,8 @@
 
 
 #include "vector.h"
+
+
 #include <QRect>
 
 

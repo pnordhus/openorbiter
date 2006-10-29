@@ -61,4 +61,4 @@ inline void randomize(Container &c)
 }
 
 
-#endif
+#endif // OPENORBITER_RANDOMIZER_H

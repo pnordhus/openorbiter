@@ -118,6 +118,7 @@ void OpenOrbiter::init(bool load)
 	qDebug().nospace() << "Loading completed. " << m_maps.size() << ((m_maps.size() == 1) ? " map" : " maps") << " found.";
 
 	m_graphicsScene = new QGraphicsScene;
+	m_graphicsScene->setSceneRect(0.0f, 0.0f, 10.0f, 5.0f);
 }
 
 

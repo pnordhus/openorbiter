@@ -27,7 +27,6 @@
 
 
 #include <QColor>
-#include <QList>
 #include <QRect>
 #include <QString>
 
@@ -44,14 +43,16 @@ public:
 	const QString&	dataDir() const	{ return m_dataDir; }
 	const QString&	userDir() const	{ return m_userDir; }
 
-	const QRect&	windowGeometry() const		{ return m_windowGeometry; }
+public: /* get methods */
+	const QRect&	windowGeometry() const 		{ return m_windowGeometry; }
 	bool			windowMaximized() const 	{ return m_windowMaximized; }
 	bool			windowFullScreen() const	{ return m_windowFullScreen; }
 	bool			windowShowStats() const		{ return m_windowShowStats; }
 
 	float					gravityFactor() const	{ return m_gravityFactor; }
-	const StringBoolMap&	statsShown() const	{ return m_statsShown; }
+	const StringBoolMap&	statsShown() const		{ return m_statsShown; }
 
+public: /* set methods */
 	void	setWindowGeometry(const QRect& g);
 	void	setWindowMaximized(bool);
 	void	setWindowFullScreen(bool);
@@ -60,7 +61,7 @@ public:
 	void	setGravityFactor(float);
 	void	setStatsShown(const StringBoolMap&);
 
-
+public:
 	float	firstNodeTime() const { return m_firstNodeTime; }
 	float	nextNodeTime() const { return m_nextNodeTime; }
 
@@ -105,4 +106,4 @@ private:
 extern Config g_config;
 
 
-#endif
+#endif // OPENORBITER_CONFIG_H

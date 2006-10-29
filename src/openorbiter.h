@@ -22,11 +22,7 @@
 #ifndef OPENORBITER_OPENORBITER_H
 #define OPENORBITER_OPENORBITER_H
 
-/*
-#include "match.h"
-#include "map.h"
-#include "player.h"
-*/
+
 #include <QDir>
 #include <QTime>
 

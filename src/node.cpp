@@ -29,7 +29,7 @@ Node::Node(float x, float y) :
 	Vector(x, y),
 	m_mark(false)
 {
-
+	m_item.setRect(0.0f, 0.0f, 0.6f, 0.6f);
 }
 
 

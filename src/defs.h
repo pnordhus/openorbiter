@@ -29,6 +29,7 @@
 const int APP_VERSION_MAJOR = 0;
 const int APP_VERSION_MINOR = 3;
 const int APP_VERSION_MICRO = 0;
+const int APP_VERSION_REV   = QString("$Rev$").remove("$Rev$").toInt();
 
 const QString APP_BUILD_TIME = QString(__DATE__) + " (" + __TIME__ + ")";
 
