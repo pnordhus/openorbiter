@@ -26,20 +26,18 @@
 #include <QString>
 
 
-const int APP_VERSION_MAJOR = 0;
-const int APP_VERSION_MINOR = 3;
-const int APP_VERSION_MICRO = 0;
-const int APP_VERSION_REV   = QString("$Rev$").remove(0, 6).remove(" $").toInt();
+const unsigned int APP_VERSION_MAJOR = 0;
+const unsigned int APP_VERSION_MINOR = 3;
+const unsigned int APP_VERSION_MICRO = 0;
 
 const QString APP_BUILD_TIME = QString(__DATE__) + " (" + __TIME__ + ")";
 
 const QString APP_NAME = "OpenOrbiter";
 const QString APP_NAME_VERSION_SHORT = QString("%1 %2.%3.%4").arg(APP_NAME).arg(APP_VERSION_MAJOR).arg(APP_VERSION_MINOR).arg(APP_VERSION_MICRO);
-const QString APP_NAME_VERSION_LONG  = QString("%1.%2").arg(APP_NAME_VERSION_SHORT).arg(APP_VERSION_REV);
 const QString APP_NAME_VERSION_BUILD = APP_NAME_VERSION_SHORT + " - " + APP_BUILD_TIME;
 
 #ifndef QT_NO_DEBUG
-const QString APP_NAME_VERSION = APP_NAME_VERSION_LONG + " - " + APP_BUILD_TIME;
+const QString APP_NAME_VERSION = APP_NAME_VERSION_BUILD;
 #else
 const QString APP_NAME_VERSION = APP_NAME_VERSION_SHORT;
 #endif

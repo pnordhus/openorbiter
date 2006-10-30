@@ -19,81 +19,30 @@
  ***************************************************************************/
 
 
-#include "graphicsscene.h"
-#include "openorbiter.h"
-#include "player.h"
+#ifndef OPENORBITER_GRAPHICSSCENE_H
+#define OPENORBITER_GRAPHICSSCENE_H
 
 
-#include <QDebug>
+#include <QGraphicsRectItem>
+#include <QGraphicsScene>
 
 
-Player::Player(int id, const QString& name, const QColor& color) :
-	m_id(id),
-	m_name(name),
-	m_orbiter(*this),
-	m_color(color),
-	m_isSelected(false)
+class GraphicsScene : public QGraphicsScene
 {
+	Q_OBJECT
 
-}
+public:
+	GraphicsScene();
 
+	void	setBackgroundColor(const QColor& color);
+	void	setSize(float w, float h);
 
-void Player::setName(const QString& name)
-{
-	m_name = name;
-}
+signals:
+	void	sizeChanged();
 
-
-void Player::setSelected(bool selected)
-{
-	m_isSelected = selected;
-}
-
-
-void Player::setKey(const QKeySequence& k)
-{
-	m_key = k;
-}
+private:
+	QGraphicsRectItem	m_background;
+};
 
 
-void Player::startMatch()
-{
-	//qDebug() << "startMatch():" << m_name;
-
-	m_matchStats.reset();
-}
-
-
-void Player::endMatch()
-{
-	//qDebug() << "endMatch():" << m_name;
-}
-
-
-void Player::startGame()
-{
-	//qDebug() << "startGame():" << m_name;
-
-	m_orbiter.reset();
-	m_gameStats.reset();
-
-	m_orbiter.connectScene(g_openorbiter->graphicsScene());
-}
-
-
-void Player::endGame(bool won)
-{
-	m_orbiter.disconnectScene();
-
-	//qDebug() << "endGame():" << m_name;
-	if (won)
-		m_matchStats.incWins();
-	else
-		m_matchStats.incLosses();
-}
-
-
-void Player::toggle()
-{
-	m_orbiter.toggle();
-}
+#endif // OPENORBITER_GRAPHICSSCENE_H

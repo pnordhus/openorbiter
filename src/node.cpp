@@ -25,11 +25,16 @@
 #include <QGraphicsScene>
 
 
+const float Node::m_radius = 0.3f;
+
+
 Node::Node(float x, float y) :
 	Vector(x, y),
 	m_mark(false)
 {
-	m_item.setRect(0.0f, 0.0f, 0.6f, 0.6f);
+	m_item.setBrush(Qt::white);
+	m_item.setZValue(20.0f);
+	m_item.setRect(x - m_radius, y - m_radius, 2.0f * m_radius, 2.0f * m_radius);
 }
 
 

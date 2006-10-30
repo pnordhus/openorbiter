@@ -29,6 +29,7 @@
 #include "form_main.h"
 #include "form_selectkey.h"
 #include "form_settings.h"
+#include "graphicsscene.h"
 #include "map.h"
 #include "match.h"
 #include "openorbiter.h"
@@ -71,7 +72,6 @@ FormMain::FormMain(bool showStats) :
 	m_window = new Ui::FormMain;
 
 	m_window->setupUi(this);
-	m_window->frameMapBack->setFormMain(this);
 
 	connect(&m_processTimer, SIGNAL(timeout()), this, SLOT(process()));
 	m_processTimer.start(20);
@@ -85,8 +85,6 @@ FormMain::FormMain(bool showStats) :
 	connect(m_window->menuGame, SIGNAL(aboutToShow()), this, SLOT(menuAboutToShow()));
 	connect(m_window->menuSettings, SIGNAL(aboutToShow()), this, SLOT(menuAboutToShow()));
 	connect(m_window->menuHelp, SIGNAL(aboutToShow()), this, SLOT(menuAboutToShow()));
-
-	m_window->frameMap->setFocus(Qt::OtherFocusReason);
 
 	m_modelStats.setHeaderData(0, Qt::Vertical, "Avg. Speed", Qt::DisplayRole);
 	m_modelStats.setHeaderData(1, Qt::Vertical, "Frags", Qt::DisplayRole);
@@ -137,11 +135,13 @@ FormMain::FormMain(bool showStats) :
 	setWindowTitle(APP_NAME_VERSION);
 
 #ifdef QT_MODULE_OPENGL
-	qDebug() << "Using OpenGL";
-	m_window->graphicsMap->setViewport(new QGLWidget);
+	//qDebug() << "Using OpenGL";
+	//m_window->graphicsMap->setViewport(new QGLWidget);
 #endif
 
 	m_window->graphicsMap->setScene(g_openorbiter->graphicsScene());
+
+	connect(g_openorbiter->graphicsScene(), SIGNAL(sizeChanged()), m_window->graphicsMap, SLOT(resize()));
 }
 
 
@@ -198,16 +198,6 @@ void FormMain::setShortcuts()
 /****************************************************************************/
 
 
-void FormMain::updateMapFrame()
-{
-	m_window->frameMap->recalcSize();
-	m_window->frameMapBack->update();
-}
-
-
-/****************************************************************************/
-
-
 void FormMain::createMatch()
 {
 	FormCreateMatch dialog(this);
@@ -222,13 +212,12 @@ void FormMain::createMatch()
 			disconnect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(resume()));
 			connect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(resume()));
 			m_window->buttonResume->show();
-			m_window->frameMap->unsetCursor();
+//			m_window->frameMap->unsetCursor();
 
 			Match match(g_openorbiter->getMap(dialog.getMap()));
 			g_openorbiter->startMatch(match);
 //			m_window->graphicsMap->setMap(g_openorbiter->getMap(dialog.getMap()));
 			setKeys();
-			updateMapFrame();
 		}
 	}
 }
@@ -269,7 +258,7 @@ void FormMain::updatePlayers()
 void FormMain::resume()
 {
 	if (g_openorbiter->isRunning()) {
-		m_window->frameMap->setCursor(Qt::BlankCursor);
+		m_window->graphicsMap->setCursor(Qt::BlankCursor);
 		m_window->buttonResume->hide();
 		m_window->buttonResume->setText(QApplication::translate("FormMain", "Resume", 0, QApplication::UnicodeUTF8));
 		g_openorbiter->resume();
@@ -294,7 +283,7 @@ void FormMain::process()
 		return;
 
 //	m_window->graphicsMap->process();
-	m_window->frameMap->process();
+//	m_window->frameMap->process();
 }
 
 
@@ -345,7 +334,7 @@ void FormMain::updateStats()
 	const Player* last = g_openorbiter->match()->lastWinner();
 	if (last != m_lastWinner)	{
 		m_lastWinner = last;
-		m_window->frameMapBack->update();
+//		m_window->frameMapBack->update();
 	}
 
 	m_window->labelMatchTime->setText(QString("%1s").arg(g_openorbiter->match()->time(), 0, 'f', 1));
@@ -354,7 +343,7 @@ void FormMain::updateStats()
 	if (!g_openorbiter->isPaused() && !isActiveWindow()) {
 		g_openorbiter->pause();
 		m_window->buttonResume->show();
-		m_window->frameMap->unsetCursor();
+		m_window->graphicsMap->unsetCursor();
 	}
 }
 
@@ -426,7 +415,7 @@ void FormMain::menuAboutToShow()
 	if (g_openorbiter->isRunning() && !g_openorbiter->isPaused()) {
 		g_openorbiter->pause();
 		m_window->buttonResume->show();
-		m_window->frameMap->unsetCursor();
+		m_window->graphicsMap->unsetCursor();
 	}
 }
 
@@ -436,7 +425,7 @@ void FormMain::menuAboutToShow()
 
 QRect FormMain::mapGeometry() const
 {
-	return m_window->frameMap->geometry();
+	return m_window->graphicsMap->geometry();
 }
 
 
@@ -569,7 +558,9 @@ void FormMain::showPreferences()
 
 void FormMain::setMapColor()
 {
-	QPalette p = m_window->frameMap->palette();
-	p.setColor(QPalette::Background, g_config.mapColor());
-	m_window->frameMap->setPalette(p);
+//	QPalette p = m_window->frameMap->palette();
+//	p.setColor(QPalette::Background, g_config.mapColor());
+//	m_window->frameMap->setPalette(p);
+
+	g_openorbiter->graphicsScene()->setBackgroundColor(g_config.mapColor());
 }

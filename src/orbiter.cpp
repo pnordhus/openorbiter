@@ -24,10 +24,16 @@
 #include "player.h"
 
 
+#include <QGraphicsScene>
+
+
 Orbiter::Orbiter(Player& player) :
 	m_player(player)
 {
+	m_line.setPen(QPen(Qt::black, 0.2f));
+	m_line.setZValue(10.0f);
 
+	m_item.setZValue(30.0f);
 }
 
 
@@ -43,6 +49,11 @@ void Orbiter::reset()
 	m_collisionTimer = 0.0f;
 	m_position = Vector();
 	m_speed = Vector();
+
+	m_item.setRect(-m_radius, -m_radius, 2.0f * m_radius, 2.0f * m_radius);
+	m_item.setBrush(m_player.getColor());
+
+	m_line.hide();
 }
 
 
@@ -82,6 +93,10 @@ void Orbiter::process(float t, const Vector& gravity)
 
 	float way;
 	if (m_connected) {
+		QPen pen = m_line.pen();
+		pen.setColor("black");
+		m_line.setPen(pen);
+
 		//qDebug() << m_angleSpeed;
 		if (m_angleSpeed >= 0.0f)
 			m_angleSpeed += 0.0001f;
@@ -102,6 +117,10 @@ void Orbiter::process(float t, const Vector& gravity)
 		m_speed = (m_position - *m_connectionNode).vertical();
 		m_speed.setLength(m_angleSpeed * m_nodeRadius);
 	} else {
+		QPen pen = m_line.pen();
+		pen.setColor("maroon");
+		m_line.setPen(pen);
+
 		m_speed += gravity;
 		if (!gravity.isNull() && !m_speed.isNull()) {
 			Vector wind = gravity.vertical().normalized();
@@ -119,12 +138,23 @@ void Orbiter::process(float t, const Vector& gravity)
 	m_player.matchStats().incTime(t);
 	m_player.matchStats().incWay(way);
 	m_player.matchStats().checkTopSpeed(way / t);
+
+	QRectF rect = m_item.rect();
+	rect.moveTo(m_position.x - m_radius, m_position.y - m_radius);
+	m_item.setRect(rect);
+
+	m_line.setVisible(m_tryConnect);
+
+	if (m_connectionNode) {
+		m_line.setLine(m_position.x, m_position.y, m_connectionNode->x, m_connectionNode->y);
+	}
 }
 
 
 void Orbiter::setPosition(const Vector& pos)
 {
 	m_position = pos;
+	m_item.setRect(-m_radius, -m_radius, 2.0f * m_radius, 2.0f * m_radius);
 }
 
 
@@ -187,4 +217,22 @@ void Orbiter::collide(Orbiter& orb1, Orbiter& orb2)
 	orb2.m_collisionTimer = 0.75f;
 	orb1.setNode(NULL);
 	orb2.setNode(NULL);
+}
+
+
+void Orbiter::connectScene(QGraphicsScene* scene)
+{
+	Q_ASSERT(scene != NULL);
+
+	scene->addItem(&m_item);
+	scene->addItem(&m_line);
+}
+
+
+void Orbiter::disconnectScene()
+{
+	Q_ASSERT(m_item.scene());
+
+	m_item.scene()->removeItem(&m_item);
+	m_line.scene()->removeItem(&m_line);
 }

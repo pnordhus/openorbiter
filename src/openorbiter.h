@@ -28,10 +28,10 @@
 
 
 class Game;
+class GraphicsScene;
 class Map;
 class Match;
 class Player;
-class QGraphicsScene;
 
 
 class OpenOrbiter
@@ -71,7 +71,7 @@ public:
 
 	Map*	lastMap() { return m_lastMap; }
 
-	QGraphicsScene*		graphicsScene() { Q_ASSERT(m_graphicsScene != NULL); return m_graphicsScene; }
+	GraphicsScene*	graphicsScene() { Q_ASSERT(m_graphicsScene != NULL); return m_graphicsScene; }
 
 private:
 	void	initPlayers();
@@ -91,7 +91,7 @@ private:
 	Player*	m_players[MaxPlayers];
 
 	Map*	m_lastMap;
-	QGraphicsScene*	m_graphicsScene;
+	GraphicsScene*	m_graphicsScene;
 };
 
 

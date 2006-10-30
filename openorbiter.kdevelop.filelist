@@ -59,3 +59,11 @@ src/mapview.cpp
 src/mapparser.h
 src/mapparser.cpp
 src/types.h
+src/scene.h
+src/scene.cpp
+src/view.h
+src/view.cpp
+src/graphicsscene.cpp
+src/graphicsscene.h
+src/graphicsview.cpp
+src/graphicsview.h

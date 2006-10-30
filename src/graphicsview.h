@@ -19,30 +19,26 @@
  ***************************************************************************/
 
 
-#ifndef OPENORBITER_FRAME_MAPBACK_H
-#define OPENORBITER_FRAME_MAPBACK_H
+#ifndef OPENORBITER_GRAPHICSVIEW_H
+#define OPENORBITER_GRAPHICSVIEW_H
 
 
-#include <QWidget>
+#include <QGraphicsView>
 
 
-class FormMain;
-
-
-class FrameMapBack : public QWidget
+class GraphicsView : public QGraphicsView
 {
+	Q_OBJECT
+
 public:
-	FrameMapBack(QWidget* parent = 0);
+	GraphicsView(QWidget* parent);
 
-	void	setFormMain(FormMain* form);
-
-protected:
-	void	resizeEvent(QResizeEvent*);
-	void	paintEvent(QPaintEvent*);
+public slots:
+	void	resize();
 
 private:
-	FormMain*	m_formMain;
+	void	resizeEvent(QResizeEvent*);
 };
 
 
-#endif
+#endif // OPENORBITER_GRAPHICSVIEW_H

@@ -19,64 +19,45 @@
  ***************************************************************************/
 
 
-#include "form_main.h"
-#include "frame_mapback.h"
-#include "match.h"
-#include "openorbiter.h"
-#include "player.h"
+#include "graphicsview.h"
 
 
-#include <QPainter>
+#include <QDebug>
+#include <QGraphicsScene>
 
 
-FrameMapBack::FrameMapBack(QWidget* parent) :
-	QWidget(parent),
-	m_formMain(NULL)
+/****************************************************************************/
+
+
+GraphicsView::GraphicsView(QWidget* parent) :
+	QGraphicsView(parent)
 {
-	setAutoFillBackground(true);
-	QPalette p = palette();
-	p.setColor(QPalette::Window, QColor(0,0,0));
-	setPalette(p);
+
 }
 
 
-void FrameMapBack::setFormMain(FormMain* form)
+/****************************************************************************/
+
+
+void GraphicsView::resize()
 {
-	m_formMain = form;
+	Q_ASSERT(scene());
+
+	QRectF rect = scene()->sceneRect();
+
+	float w = float(width() - 40) / rect.width();
+	float h = float(height() - 40) / rect.height();
+
+	float r = qMin(w, h);
+
+	QMatrix mat;
+	mat.scale(r, r);
+	setMatrix(mat);
 }
 
 
-
-void FrameMapBack::resizeEvent(QResizeEvent*)
+void GraphicsView::resizeEvent(QResizeEvent* e)
 {
-	Q_ASSERT(m_formMain);
-	m_formMain->updateMapFrame();
-}
-
-
-void FrameMapBack::paintEvent(QPaintEvent*)
-{
-	QPainter painter(this);
-	painter.setBrush(Qt::NoBrush);
-
-	const Player* last = NULL;
-	if (g_openorbiter->isRunning())
-		last = g_openorbiter->match()->lastWinner();
-
-	QColor color("black");
-	if (last) {
-		color = last->getColor();
-	}
-
-	QPen pen = painter.pen();
-	pen.setStyle(Qt::SolidLine);
-	pen.setCapStyle(Qt::SquareCap);
-	pen.setJoinStyle(Qt::MiterJoin);
-	pen.setColor(color);
-	pen.setWidth(5);
-	painter.setPen(pen);
-
-	QRect rect = m_formMain->mapGeometry();
-	rect.adjust(-10, -10, 10, 10);
-	painter.drawRect(rect);
+	resize();
+	QGraphicsView::resizeEvent(e);
 }

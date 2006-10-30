@@ -46,6 +46,8 @@ private:
 	bool					m_mark;
 	QGraphicsEllipseItem	m_item;
 
+	static const float		m_radius;
+
 private:
 	Q_DISABLE_COPY(Node);
 };

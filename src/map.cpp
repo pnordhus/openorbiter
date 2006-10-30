@@ -22,6 +22,7 @@
 #include "map.h"
 #include "node.h"
 #include "openorbiter.h"
+#include "graphicsscene.h"
 #include "spawnpoint.h"
 
 
@@ -43,8 +44,11 @@ void Map::start()
 {
 	qDebug() << "Map::start()";
 
+	GraphicsScene* scene = g_openorbiter->graphicsScene();
+	scene->setSize(m_width, m_height);
+
 	foreach (Node* node, m_nodes)
-		node->connectScene(g_openorbiter->graphicsScene());
+		node->connectScene(scene);
 }
 
 

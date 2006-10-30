@@ -23,10 +23,10 @@ HEADERS +=	\
 	src/form_selectkey.h \
 	src/form_selectmap.h \
 	src/form_settings.h \
-	src/frame_map.h \
-	src/frame_mapback.h \
 	src/game.h \
 	src/gamestats.h \
+	src/graphicsscene.h \
+	src/graphicsview.h \
 	src/map.h \
 	src/match.h \
 	src/matchstats.h \
@@ -45,10 +45,10 @@ SOURCES +=	\
 	src/form_selectkey.cpp \
 	src/form_selectmap.cpp \
 	src/form_settings.cpp \
-	src/frame_map.cpp \
-	src/frame_mapback.cpp \
 	src/game.cpp \
 	src/gamestats.cpp \
+	src/graphicsscene.cpp \
+	src/graphicsview.cpp \
 	src/main.cpp \
 	src/map.cpp \
 	src/match.cpp \
@@ -75,6 +75,7 @@ target.path = $${BINDIR}/
 
 datamaps.path = $${DATADIR}/maps/
 datamaps.files = \
-	data/maps/classic.xml
+	data/maps/classic.xml \
+	data/maps/oomap.dtd
 
 INSTALLS += target datamaps

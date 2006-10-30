@@ -26,6 +26,7 @@
 #include "vector.h"
 
 
+#include <QGraphicsEllipseItem>
 #include <QRect>
 
 
@@ -56,6 +57,11 @@ public:
 
 	void	toggle();
 
+	QGraphicsEllipseItem&	item() { return m_item; }
+
+	void	connectScene(QGraphicsScene*);
+	void	disconnectScene();
+
 private:
 	Player&	m_player;
 
@@ -71,6 +77,9 @@ private:
 	bool	m_tryConnect;
 	bool	m_connected;
 	const Node*	m_connectionNode;
+
+	QGraphicsEllipseItem	m_item;
+	QGraphicsLineItem		m_line;
 };
 
 

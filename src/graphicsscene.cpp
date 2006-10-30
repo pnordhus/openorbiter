@@ -19,31 +19,37 @@
  ***************************************************************************/
 
 
-#ifndef OPENORBITER_FRAME_MAP_H
-#define OPENORBITER_FRAME_MAP_H
+#include "graphicsscene.h"
 
 
-#include <QFocusEvent>
-#include <QWidget>
+/****************************************************************************/
 
 
-class FrameMap : public QWidget
+GraphicsScene::GraphicsScene()
 {
-public:
-	FrameMap(QWidget* parent = 0);
-
-	void	process();
-	void	recalcSize();
-
-protected:
-	void	showEvent(QShowEvent *);
-	void	paintEvent(QPaintEvent *);
-//	void	focusInEvent(QFocusEvent*);
-	void	focusOutEvent(QFocusEvent*);
-
-private:
-	QRegion	m_updateRegion;
-};
+	setBackgroundBrush(Qt::black);
+	m_background.setPen(Qt::NoPen);
+	m_background.setZValue(0.0f);
+	addItem(&m_background);
+}
 
 
-#endif
+/****************************************************************************/
+
+
+void GraphicsScene::setBackgroundColor(const QColor& color)
+{
+	m_background.setBrush(color);
+}
+
+
+/****************************************************************************/
+
+
+void GraphicsScene::setSize(float w, float h)
+{
+	m_background.setRect(0.0f, 0.0f, w, h);
+	setSceneRect(0.0f, 0.0f, w, h);
+
+	emit sizeChanged();
+}

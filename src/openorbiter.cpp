@@ -24,6 +24,7 @@
 #include "match.h"
 #include "openorbiter.h"
 #include "player.h"
+#include "graphicsscene.h"
 
 
 #include <QDebug>
@@ -117,8 +118,9 @@ void OpenOrbiter::init(bool load)
 
 	qDebug().nospace() << "Loading completed. " << m_maps.size() << ((m_maps.size() == 1) ? " map" : " maps") << " found.";
 
-	m_graphicsScene = new QGraphicsScene;
-	m_graphicsScene->setSceneRect(0.0f, 0.0f, 10.0f, 5.0f);
+	m_graphicsScene = new GraphicsScene;
+	m_graphicsScene->setSize(10.0f, 5.0f);
+	m_graphicsScene->setBackgroundColor(g_config.mapColor());
 }
 
 
