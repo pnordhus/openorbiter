@@ -34,8 +34,10 @@ class Match;
 class Player;
 
 
-class OpenOrbiter
+class OpenOrbiter : public QObject
 {
+	Q_OBJECT
+
 public:
 	enum {
 		MaxPlayers = 8
@@ -56,7 +58,6 @@ public:
 
 	void	startMatch(const Match& match);
 
-	bool	process();
 	void	init(bool loadConfig);
 
 	Match*	match() { Q_ASSERT(m_match); return m_match; }
@@ -72,6 +73,9 @@ public:
 	Map*	lastMap() { return m_lastMap; }
 
 	GraphicsScene*	graphicsScene() { Q_ASSERT(m_graphicsScene != NULL); return m_graphicsScene; }
+
+public slots:
+	void	process();
 
 private:
 	void	initPlayers();

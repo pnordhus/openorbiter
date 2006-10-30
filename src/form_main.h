@@ -67,7 +67,6 @@ public slots:
 
 private slots:
 	void	resume();
-	void	process();
 	void	updateStats();
 	void	input();
 	void	toggleFullscreen();

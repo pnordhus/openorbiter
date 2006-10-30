@@ -73,7 +73,7 @@ FormMain::FormMain(bool showStats) :
 
 	m_window->setupUi(this);
 
-	connect(&m_processTimer, SIGNAL(timeout()), this, SLOT(process()));
+	connect(&m_processTimer, SIGNAL(timeout()), g_openorbiter, SLOT(process()));
 	m_processTimer.start(20);
 
 	connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
@@ -212,11 +212,10 @@ void FormMain::createMatch()
 			disconnect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(resume()));
 			connect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(resume()));
 			m_window->buttonResume->show();
-//			m_window->frameMap->unsetCursor();
+			m_window->graphicsMap->unsetCursor();
 
 			Match match(g_openorbiter->getMap(dialog.getMap()));
 			g_openorbiter->startMatch(match);
-//			m_window->graphicsMap->setMap(g_openorbiter->getMap(dialog.getMap()));
 			setKeys();
 		}
 	}
@@ -263,27 +262,6 @@ void FormMain::resume()
 		m_window->buttonResume->setText(QApplication::translate("FormMain", "Resume", 0, QApplication::UnicodeUTF8));
 		g_openorbiter->resume();
 	}
-}
-
-
-/****************************************************************************/
-
-
-void FormMain::process()
-{
-
-	//qDebug() << m_model->headerData(0, Qt::Vertical, Qt::SizeHintRole);
-
-	if (!g_openorbiter->isRunning())
-		return;
-
-	g_openorbiter->process();
-
-	if (g_openorbiter->isPaused())
-		return;
-
-//	m_window->graphicsMap->process();
-//	m_window->frameMap->process();
 }
 
 

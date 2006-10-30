@@ -56,6 +56,9 @@ void GraphicsView::resize()
 }
 
 
+/****************************************************************************/
+
+
 void GraphicsView::resizeEvent(QResizeEvent* e)
 {
 	resize();

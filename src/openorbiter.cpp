@@ -69,7 +69,7 @@ QList<Player*> OpenOrbiter::selectedPlayers()
 
 void OpenOrbiter::startMatch(const Match& match)
 {
-	Q_ASSERT(m_match == NULL);
+	//Q_ASSERT(m_match == NULL);
 	m_paused = true;
 	delete m_match;
 	m_match = new Match(match);
@@ -95,15 +95,16 @@ void OpenOrbiter::resume()
 }
 
 
-bool OpenOrbiter::process()
+void OpenOrbiter::process()
 {
+	if (!g_openorbiter->isRunning())
+		return;
+
 	m_frameTime = float(m_time.restart()) / 1000.0f;
 	Q_ASSERT(m_match);
 
 	if (!m_paused)
 		m_match->process(m_frameTime);
-
-	return true;
 }
 
 

@@ -165,6 +165,7 @@ void Config::saveGame(QDomDocument& doc, QDomElement& root)
 	game.setAttribute("gravity", m_gravityFactor);
 
 	SET_TEXT(game, "lastMap", m_lastMap);
+	SET_TEXT(game, "mapColor", QString::number(m_mapColor.rgb() & RGB_MASK, 16).toUpper().rightJustified(6, '0'));
 }
 
 
@@ -262,6 +263,13 @@ void Config::loadGame(const QDomElement& elem)
 
 	READ_ATTR_FLOAT(child, "gravity", m_gravityFactor);
 	READ_STRING(child, "lastMap", m_lastMap);
+
+	QString mapColor;
+	bool b;
+	READ_STRING(child, "mapColor", mapColor);
+	QRgb rgb = mapColor.toUInt(&b, 16);
+	if (b)
+		m_mapColor.setRgb(rgb);
 }
 
 
