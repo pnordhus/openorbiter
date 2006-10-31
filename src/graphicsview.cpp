@@ -39,14 +39,10 @@ GraphicsView::GraphicsView(QWidget* parent) :
 /****************************************************************************/
 
 
-void GraphicsView::resize()
+void GraphicsView::resize(float w, float h)
 {
-	Q_ASSERT(scene());
-
-	QRectF rect = scene()->sceneRect();
-
-	float w = float(width() - 40) / rect.width();
-	float h = float(height() - 40) / rect.height();
+	w = float(width() - 20) / w;
+	h = float(height() - 20) / h;
 
 	float r = qMin(w, h);
 
@@ -61,6 +57,9 @@ void GraphicsView::resize()
 
 void GraphicsView::resizeEvent(QResizeEvent* e)
 {
-	resize();
+	Q_ASSERT(scene());
+
+	const QRectF& rect = scene()->sceneRect();
+	resize(rect.width(), rect.height());
 	QGraphicsView::resizeEvent(e);
 }

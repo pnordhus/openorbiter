@@ -34,14 +34,18 @@ class GraphicsScene : public QGraphicsScene
 public:
 	GraphicsScene();
 
-	void	setBackgroundColor(const QColor& color);
+	void	setMapColor(const QColor& color);
 	void	setSize(float w, float h);
 
 signals:
-	void	sizeChanged();
+	void	sizeChanged(float w, float h);
 
 private:
-	QGraphicsRectItem	m_background;
+	QGraphicsRectItem	m_backgroundLeft;
+	QGraphicsRectItem	m_backgroundRight;
+	QGraphicsRectItem	m_backgroundBottom;
+	QGraphicsRectItem	m_backgroundTop;
+	QGraphicsRectItem	m_map;
 };
 
 

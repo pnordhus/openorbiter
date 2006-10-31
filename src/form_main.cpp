@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 
+#include "../build/configure.h"
 #include "../build/ui_form_main.h"
 
 
@@ -42,7 +43,7 @@
 #include <QShortcut>
 
 
-#ifdef QT_MODULE_OPENGL
+#ifdef USE_OPENGL
 #  include <QGLWidget>
 #endif
 
@@ -134,14 +135,14 @@ FormMain::FormMain(bool showStats) :
 
 	setWindowTitle(APP_NAME_VERSION);
 
-#ifdef QT_MODULE_OPENGL
-	//qDebug() << "Using OpenGL";
-	//m_window->graphicsMap->setViewport(new QGLWidget);
+#ifdef USE_OPENGL
+//	qDebug() << "Using OpenGL";
+//	m_window->graphicsMap->setViewport(new QGLWidget);
 #endif
 
 	m_window->graphicsMap->setScene(g_openorbiter->graphicsScene());
 
-	connect(g_openorbiter->graphicsScene(), SIGNAL(sizeChanged()), m_window->graphicsMap, SLOT(resize()));
+	connect(g_openorbiter->graphicsScene(), SIGNAL(sizeChanged(float, float)), m_window->graphicsMap, SLOT(resize(float, float)));
 }
 
 
@@ -536,9 +537,5 @@ void FormMain::showPreferences()
 
 void FormMain::setMapColor()
 {
-//	QPalette p = m_window->frameMap->palette();
-//	p.setColor(QPalette::Background, g_config.mapColor());
-//	m_window->frameMap->setPalette(p);
-
-	g_openorbiter->graphicsScene()->setBackgroundColor(g_config.mapColor());
+	g_openorbiter->graphicsScene()->setMapColor(g_config.mapColor());
 }

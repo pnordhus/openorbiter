@@ -34,7 +34,7 @@ public:
 	GraphicsView(QWidget* parent);
 
 public slots:
-	void	resize();
+	void	resize(float w, float h);
 
 private:
 	void	resizeEvent(QResizeEvent*);

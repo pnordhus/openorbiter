@@ -23,20 +23,26 @@
 #include "defs.h"
 #include "form_main.h"
 #include "openorbiter.h"
-#include "randomizer.h"
+
 
 #include <QApplication>
 #include <QMessageBox>
 #include <QDebug>
 
 
-void printVersion()
+/****************************************************************************/
+
+
+static void printVersion()
 {
 	qWarning().nospace() << APP_NAME_VERSION_BUILD;
 }
 
 
-void printHelp(char* arg)
+/****************************************************************************/
+
+
+static void printHelp(char* arg)
 {
 	qWarning() << "Usage:" << arg << "[OPTION]...";
 	qWarning();
@@ -46,6 +52,9 @@ void printHelp(char* arg)
 	qWarning() << "  --help      print this help and exit";
 	qWarning() << "  --version   output version information and exit";
 }
+
+
+/****************************************************************************/
 
 
 int main(int argc, char* argv[])
@@ -70,7 +79,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	initRandom();
+	qsrand(time(NULL));
 
 	OpenOrbiter::create();
 

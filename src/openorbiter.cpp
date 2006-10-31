@@ -120,8 +120,8 @@ void OpenOrbiter::init(bool load)
 	qDebug().nospace() << "Loading completed. " << m_maps.size() << ((m_maps.size() == 1) ? " map" : " maps") << " found.";
 
 	m_graphicsScene = new GraphicsScene;
-	m_graphicsScene->setSize(10.0f, 5.0f);
-	m_graphicsScene->setBackgroundColor(g_config.mapColor());
+	m_graphicsScene->setSize(50.0f, 25.0f);
+	m_graphicsScene->setMapColor(g_config.mapColor());
 }
 
 
@@ -163,7 +163,7 @@ void OpenOrbiter::loadMaps()
 	
 	// remove duplicate maps
 	for (int i = m_maps.size() - 2; i >= 0; i--) {
-		if (m_maps.value(i) == m_maps.value(i + 1)) {
+		if (*m_maps.value(i) == *m_maps.value(i + 1)) {
 			delete m_maps.takeAt(i + 1);
 		}
 	}

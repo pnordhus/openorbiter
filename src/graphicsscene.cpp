@@ -27,19 +27,42 @@
 
 GraphicsScene::GraphicsScene()
 {
+	setItemIndexMethod(NoIndex);
 	setBackgroundBrush(Qt::black);
-	m_background.setPen(Qt::NoPen);
-	m_background.setZValue(0.0f);
-	addItem(&m_background);
+
+	m_backgroundLeft.setBrush(Qt::white);
+	m_backgroundLeft.setPen(Qt::NoPen);
+	m_backgroundLeft.setZValue(100.0f);
+
+	m_backgroundRight.setBrush(Qt::white);
+	m_backgroundRight.setPen(Qt::NoPen);
+	m_backgroundRight.setZValue(100.0f);
+
+	m_backgroundBottom.setBrush(Qt::white);
+	m_backgroundBottom.setPen(Qt::NoPen);
+	m_backgroundBottom.setZValue(100.0f);
+
+	m_backgroundTop.setBrush(Qt::white);
+	m_backgroundTop.setPen(Qt::NoPen);
+	m_backgroundTop.setZValue(100.0f);
+
+	addItem(&m_backgroundLeft);
+	addItem(&m_backgroundRight);
+	addItem(&m_backgroundBottom);
+	addItem(&m_backgroundTop);
+
+	m_map.setPen(Qt::NoPen);
+	m_map.setZValue(0.0f);
+	addItem(&m_map);
 }
 
 
 /****************************************************************************/
 
 
-void GraphicsScene::setBackgroundColor(const QColor& color)
+void GraphicsScene::setMapColor(const QColor& color)
 {
-	m_background.setBrush(color);
+	m_map.setBrush(color);
 }
 
 
@@ -48,8 +71,15 @@ void GraphicsScene::setBackgroundColor(const QColor& color)
 
 void GraphicsScene::setSize(float w, float h)
 {
-	m_background.setRect(0.0f, 0.0f, w, h);
-	setSceneRect(0.0f, 0.0f, w, h);
+	const QRectF rect(0.0f, 0.0f, w, h);
+	m_map.setRect(rect);
 
-	emit sizeChanged();
+	m_backgroundLeft.setRect(QRectF(-1.0f, -1.0f, 1.0f, h + 2.0f));
+	m_backgroundRight.setRect(QRectF(w, -1.0f, 1.0f, h + 2.0f));
+	m_backgroundTop.setRect(QRectF(-1.0f, -1.0f, w + 2.0f, 1.0f));
+	m_backgroundBottom.setRect(QRectF(-1.0f, h, w + 2.0f, 1.0f));
+
+	setSceneRect(rect.adjusted(-1.0f, -1.0f, 1.0f, 1.0f));
+
+	emit sizeChanged(w + 2.0f, h + 2.0f);
 }

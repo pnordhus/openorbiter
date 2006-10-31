@@ -112,6 +112,7 @@ echo "#ifndef CONFIG_H"              > build/configure.h
 echo "#define CONFIG_H"             >> build/configure.h
 
 echo "#define DATADIR \"$DATADIR\"" >> build/configure.h
+[ -n "$OPENGL" ] && echo "#define USE_OPENGL" >> build/configure.h
 
 echo "#endif"                       >> build/configure.h
 

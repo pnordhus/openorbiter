@@ -54,14 +54,7 @@ public:
 	const Map*				getMap() { return m_map; }
 	const NodeList&			getNodes() { return m_nodes; }
 
-	QPoint	drawingPos(const Vector&, int width) const;
-	QRect	drawingRect(const Orbiter&, int width) const;
-	QRect	drawingRect(const Node&, int width) const;
-
 	double	time() const { return m_time; }
-
-private:
-	QRect	drawingRect(const Vector&, float radius, int width) const;
 
 private:
 	bool			m_isOver;

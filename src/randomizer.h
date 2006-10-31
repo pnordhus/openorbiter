@@ -23,24 +23,6 @@
 #define OPENORBITER_RANDOMIZER_H
 
 
-#include <cmath>
-
-
-#ifdef WIN32
-#	define RANDOM		rand
-#	define SEED_RANDOM	srand
-#else
-#	define RANDOM		random
-#	define SEED_RANDOM	srandom
-#endif
-
-
-inline void initRandom()
-{
-	SEED_RANDOM(time(NULL));
-}
-
-
 template<typename Container>
 inline void randomize(Container &c)
 {
@@ -50,10 +32,7 @@ inline void randomize(Container &c)
 	Container ret;
 
 	while (!c.empty()) {
-		//int num = c.size() - 1;
-		//int index = lrint(float(num) * float(random()) / float(RAND_MAX));
-
-		int index = RANDOM() % c.size();
+		int index = qrand() % c.size();
 		ret.append(c.takeAt(index));
 	}
 

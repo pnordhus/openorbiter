@@ -136,30 +136,3 @@ void Game::process(float time)
 		}
 	}
 }
-
-
-QPoint Game::drawingPos(const Vector& v, int width) const
-{
-	float factor = float(width) / m_map->width();
-	return QPoint(int(v.x * factor), int(v.y * factor));
-}
-
-
-QRect Game::drawingRect(const Orbiter& o, int width) const
-{
-	return drawingRect(o.getPosition(), o.getRadius(), width);
-}
-
-
-QRect Game::drawingRect(const Node& n, int width) const
-{
-	return drawingRect(n, 0.3f, width);
-}
-
-
-QRect Game::drawingRect(const Vector& pos, float radius, int width) const
-{
-	float factor = float(width) / m_map->width();
-
-	return QRect(int((pos.x - radius) * factor), int((pos.y - radius) * factor), int(2.0f * radius * factor), int(2.0f * radius * factor));
-}
