@@ -45,6 +45,7 @@ public:
 	void	start();
 	void	stop();
 
+	const QString&	filename() const	{ return m_filename; }
 	const QString&	name() const		{ return m_name; }
 	const QString&	description() const	{ return m_description; }
 	const QString&	author() const		{ return m_author; }
@@ -63,6 +64,7 @@ private:
 	Q_DISABLE_COPY(Map);
 
 private:
+	QString	m_filename;
 	QString	m_name;
 	QString	m_author;
 	QString	m_description;
@@ -80,19 +82,15 @@ public:
 
 private:
 	static Map*	parse(QDomElement&);
+
+public:
+	struct Less
+	{
+		bool operator () (const Map* map1, const Map* map2)
+			{ return map1->name().toLower() < map2->name().toLower(); }
+	};
+
 };
-
-
-inline bool operator < (const Map& m1, const Map& m2)
-{
-	return m1.name().toLower() < m2.name().toLower();
-}
-
-
-inline bool operator == (const Map& m1, const Map& m2)
-{
-	return m1.name().toLower() == m2.name().toLower();
-}
 
 
 #endif

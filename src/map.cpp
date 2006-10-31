@@ -84,6 +84,7 @@ Map* Map::load(const QString& filename)
 		return NULL;
 	}
 
+	map->m_filename = filename;
 	qDebug().nospace() << "Map " << map->name() << " (" << filename << ") loaded";
 
 	return map;
