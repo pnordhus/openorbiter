@@ -75,7 +75,7 @@ FormMain::FormMain(bool showStats) :
 	m_window->setupUi(this);
 
 	connect(&m_processTimer, SIGNAL(timeout()), g_openorbiter, SLOT(process()));
-	m_processTimer.start(20);
+	m_processTimer.start(10);
 
 	connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
 	m_updateTimer.start(100);

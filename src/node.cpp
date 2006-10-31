@@ -32,6 +32,7 @@ Node::Node(float x, float y) :
 	Vector(x, y),
 	m_mark(false)
 {
+	m_item.setPen(Qt::NoPen);
 	m_item.setBrush(Qt::white);
 	m_item.setZValue(20.0f);
 	m_item.setRect(x - m_radius, y - m_radius, 2.0f * m_radius, 2.0f * m_radius);

@@ -27,15 +27,30 @@
 
 
 #include <QGraphicsEllipseItem>
+#include <QGraphicsLineItem>
 #include <QRect>
 
 
 class Node;
+class Orbiter;
 class Player;
 
 
 class Orbiter
 {
+private:
+	template <typename T>
+	class Graphic : public T
+	{
+	public:
+		Graphic(Orbiter*, int id);
+		void	advance(int phase);
+	
+	private:
+		Orbiter*	m_orbiter;
+		int			m_id;
+	};
+
 public:
 	Orbiter(Player& player);
 
@@ -62,6 +77,9 @@ public:
 	void	connectScene(QGraphicsScene*);
 	void	disconnectScene();
 
+public:
+	void	update(int id);
+
 private:
 	Player&	m_player;
 
@@ -78,8 +96,8 @@ private:
 	bool	m_connected;
 	const Node*	m_connectionNode;
 
-	QGraphicsEllipseItem	m_item;
-	QGraphicsLineItem		m_line;
+	Graphic<QGraphicsEllipseItem>	m_item;
+	Graphic<QGraphicsLineItem>		m_line;
 };
 
 

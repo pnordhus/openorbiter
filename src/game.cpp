@@ -57,6 +57,11 @@ Game::Game(Map* map) :
 
 Game::~Game()
 {
+	/* if there is more than 1 player left the game has been aborted */
+	if (m_players.size() > 1)
+		foreach (Player* player, m_players)
+			player->endGame(false);
+
 	m_map->stop();
 }
 

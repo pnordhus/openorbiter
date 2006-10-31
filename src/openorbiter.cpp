@@ -29,6 +29,7 @@
 
 #include <QDebug>
 #include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QRect>
 
 
@@ -103,8 +104,11 @@ void OpenOrbiter::process()
 	m_frameTime = float(m_time.restart()) / 1000.0f;
 	Q_ASSERT(m_match);
 
-	if (!m_paused)
+	if (!m_paused) {
 		m_match->process(m_frameTime);
+	}
+
+	graphicsScene()->advance();
 }
 
 

@@ -47,9 +47,6 @@
       <property name="renderHints" >
        <set>QPainter::Antialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
       </property>
-      <property name="cacheMode" >
-       <set>QGraphicsView::CacheBackground</set>
-      </property>
      </widget>
     </item>
     <item>

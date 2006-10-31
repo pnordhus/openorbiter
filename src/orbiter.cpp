@@ -28,11 +28,14 @@
 
 
 Orbiter::Orbiter(Player& player) :
-	m_player(player)
+	m_player(player),
+	m_item(this, 0),
+	m_line(this, 1)
 {
-	m_line.setPen(QPen(Qt::black, 0.2f));
+	m_line.setPen(QPen(Qt::white, 0.05f));
 	m_line.setZValue(10.0f);
 
+	m_item.setPen(Qt::NoPen);
 	m_item.setZValue(30.0f);
 }
 
@@ -93,10 +96,6 @@ void Orbiter::process(float t, const Vector& gravity)
 
 	float way;
 	if (m_connected) {
-		QPen pen = m_line.pen();
-		pen.setColor("black");
-		m_line.setPen(pen);
-
 		//qDebug() << m_angleSpeed;
 		if (m_angleSpeed >= 0.0f)
 			m_angleSpeed += 0.0001f;
@@ -117,10 +116,6 @@ void Orbiter::process(float t, const Vector& gravity)
 		m_speed = (m_position - *m_connectionNode).vertical();
 		m_speed.setLength(m_angleSpeed * m_nodeRadius);
 	} else {
-		QPen pen = m_line.pen();
-		pen.setColor("maroon");
-		m_line.setPen(pen);
-
 		m_speed += gravity;
 		if (!gravity.isNull() && !m_speed.isNull()) {
 			Vector wind = gravity.vertical().normalized();
@@ -138,16 +133,6 @@ void Orbiter::process(float t, const Vector& gravity)
 	m_player.matchStats().incTime(t);
 	m_player.matchStats().incWay(way);
 	m_player.matchStats().checkTopSpeed(way / t);
-
-	QRectF rect = m_item.rect();
-	rect.moveTo(m_position.x - m_radius, m_position.y - m_radius);
-	m_item.setRect(rect);
-
-	m_line.setVisible(m_tryConnect);
-
-	if (m_connectionNode) {
-		m_line.setLine(m_position.x, m_position.y, m_connectionNode->x, m_connectionNode->y);
-	}
 }
 
 
@@ -232,7 +217,54 @@ void Orbiter::connectScene(QGraphicsScene* scene)
 void Orbiter::disconnectScene()
 {
 	Q_ASSERT(m_item.scene());
+	Q_ASSERT(m_line.scene());
 
 	m_item.scene()->removeItem(&m_item);
 	m_line.scene()->removeItem(&m_line);
+}
+
+
+void Orbiter::update(int id)
+{
+	switch (id) {
+	case 0:
+		{
+			QRectF rect = m_item.rect();
+			rect.moveTo(m_position.x - m_radius, m_position.y - m_radius);
+			m_item.setRect(rect);
+		}
+		break;
+
+	case 1:
+		if (m_connectionNode) {
+			QPen pen = m_line.pen();
+			if (m_connected)
+				pen.setColor(Qt::white);
+			else
+				pen.setColor(Qt::red);
+			m_line.setPen(pen);
+			m_line.setLine(m_position.x, m_position.y, m_connectionNode->x, m_connectionNode->y);
+			m_line.show();
+		} else {
+			m_line.hide();
+		}
+		break;
+	}
+}
+
+
+template <typename T>
+Orbiter::Graphic<T>::Graphic(Orbiter* orb, int id) :
+	m_orbiter(orb),
+	m_id(id)
+{
+
+}
+
+
+template <typename T>
+void Orbiter::Graphic<T>::advance(int phase)
+{
+	if (phase == 1)
+		m_orbiter->update(m_id);
 }

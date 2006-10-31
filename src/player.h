@@ -77,8 +77,7 @@ private:
 	GameStats		m_gameStats;
 
 private:
-	Player(const Player&);
-	Player& operator = (const Player&);
+	Q_DISABLE_COPY(Player);
 };
 
 
