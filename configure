@@ -12,8 +12,8 @@ function printhelp() {
 	echo "  --bindir=BINDIR        user executables [EPREFIX/bin]"
 	echo "  --datadir=DATADIR      read-only data [PREFIX/share/openorbiter]"
 	echo ""
-	echo "  --enable-opengl        build with OpenGL support"
 	echo "  --enable-debug         build with debug output"
+	echo "  --disable-svg          build without SVG support"
 	echo ""
 	echo "  --help                 display this help and exit"
 	echo ""
@@ -36,8 +36,8 @@ function test_qt() {
 }
 
 
-OPENGL=""
 DEBUG=""
+NO_SVG=""
 
 
 for arg do
@@ -59,11 +59,11 @@ for arg do
 	--datadir=*)
 		DATADIR=$opt
 		;;
-	--enable-opengl)
-		OPENGL=1
-		;;
 	--enable-debug)
 		DEBUG=1
+		;;
+	--disable-svg)
+		NO_SVG=1
 		;;
 	*)
 		printinvalid $arg
@@ -99,20 +99,16 @@ mkdir -p build
 
 echo "BINDIR  = $BINDIR"  >  build/configure.pri
 echo "DATADIR = $DATADIR" >> build/configure.pri
-if [ -n "$OPENGL" ]; then
-	echo "QT += opengl" >> build/configure.pri
-fi
 
-if [ -n "$DEBUG" ]; then
-	echo "CONFIG += debug" >> build/configure.pri
-fi
+[ -n "$DEBUG" ] && echo "CONFIG += debug" >> build/configure.pri
+[ -z "$NO_SVG" ] && echo "QT += svg" >> build/configure.pri
 
 
 echo "#ifndef CONFIG_H"              > build/configure.h
 echo "#define CONFIG_H"             >> build/configure.h
 
 echo "#define DATADIR \"$DATADIR\"" >> build/configure.h
-[ -n "$OPENGL" ] && echo "#define USE_OPENGL" >> build/configure.h
+[ -z "$NO_SVG" ] && echo "#define USE_SVG" >> build/configure.h
 
 echo "#endif"                       >> build/configure.h
 
@@ -123,16 +119,17 @@ echo
 echo "  BINDIR  = $BINDIR"
 echo "  DATADIR = $DATADIR"
 
-if [ -n "$OPENGL" ]; then
-	echo "  Building with OpenGL support"
-else
-	echo "  Building without OpenGL support"
-fi
-
 if [ -n "$DEBUG" ]; then
 	echo "  Building with debug output"
 else
 	echo "  Building without debug output"
 fi
+if [ -n "$NO_SVG" ]; then
+	echo "  Building without SVG support"
+else
+	echo "  Building with SVG support"
+fi
+
+touch src/defs.h
 
 echo

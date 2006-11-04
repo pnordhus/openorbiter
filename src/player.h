@@ -35,7 +35,7 @@
 class Player
 {
 public:
-	Player(int id, const QString& name, const QColor& color);
+	Player(int id, const QString& name, const QColor& color, const QString& filename);
 
 	void			setName(const QString& name);
 	void			setSelected(bool selected);
@@ -66,8 +66,8 @@ public:
 private:
 	int				m_id;
 	QString			m_name;
-	Orbiter			m_orbiter;
 	QColor			m_color;
+	Orbiter			m_orbiter;
 	QKeySequence	m_key;
 	bool			m_isSelected;
 	bool			m_lost;

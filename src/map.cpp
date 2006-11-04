@@ -85,7 +85,7 @@ Map* Map::load(const QString& filename)
 	}
 
 	map->m_filename = filename;
-	qDebug().nospace() << "Map " << map->name() << " (" << filename << ") loaded";
+	//qDebug().nospace() << "Map " << map->name() << " (" << filename << ") loaded";
 
 	return map;
 }
@@ -152,4 +152,10 @@ Map* Map::parse(QDomElement& root)
 	}
 
 	return map;
+}
+
+
+bool Map::operator == (const Map& m) const
+{
+	return m_name.toLower() == m.m_name.toLower();
 }

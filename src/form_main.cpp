@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 
-#include "../build/configure.h"
 #include "../build/ui_form_main.h"
 
 
@@ -41,11 +40,6 @@
 #include <cmath>
 #include <QHeaderView>
 #include <QShortcut>
-
-
-#ifdef USE_OPENGL
-#  include <QGLWidget>
-#endif
 
 
 class PlayerShortcut : public QShortcut
@@ -134,11 +128,6 @@ FormMain::FormMain(bool showStats) :
 	setMapColor();
 
 	setWindowTitle(APP_NAME_VERSION);
-
-#ifdef USE_OPENGL
-//	qDebug() << "Using OpenGL";
-//	m_window->graphicsMap->setViewport(new QGLWidget);
-#endif
 
 	m_window->graphicsMap->setScene(g_openorbiter->graphicsScene());
 
@@ -537,5 +526,5 @@ void FormMain::showPreferences()
 
 void FormMain::setMapColor()
 {
-	g_openorbiter->graphicsScene()->setMapColor(g_config.mapColor());
+	g_openorbiter->graphicsScene()->setMapColor(g_config->mapColor());
 }

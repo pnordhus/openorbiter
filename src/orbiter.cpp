@@ -19,24 +19,46 @@
  ***************************************************************************/
 
 
+#include "../build/configure.h"
+
+
+#include "config.h"
 #include "node.h"
 #include "orbiter.h"
 #include "player.h"
 
 
+#include <QGraphicsEllipseItem>
 #include <QGraphicsScene>
 
 
-Orbiter::Orbiter(Player& player) :
+#ifdef USE_SVG
+#  include <QGraphicsSvgItem>
+#endif
+
+
+Orbiter::Orbiter(Player& player, const QString& filename) :
 	m_player(player),
-	m_item(this, 0),
-	m_line(this, 1)
+	m_line(this, 0),
+	m_svgFilename(filename),
+	m_isSvg(false)
 {
 	m_line.setPen(QPen(Qt::white, 0.05f));
 	m_line.setZValue(10.0f);
 
-	m_item.setPen(Qt::NoPen);
-	m_item.setZValue(30.0f);
+	m_item = new Graphic<QGraphicsEllipseItem>(this, 1);
+	toggleSvg(g_config->svgEnabled());
+	updateItem();
+
+#ifdef USE_SVG
+	connect(g_config, SIGNAL(svgChanged(bool)), this, SLOT(toggleSvg(bool)));
+#endif
+}
+
+
+Orbiter::~Orbiter()
+{
+	delete m_item;
 }
 
 
@@ -53,8 +75,7 @@ void Orbiter::reset()
 	m_position = Vector();
 	m_speed = Vector();
 
-	m_item.setRect(-m_radius, -m_radius, 2.0f * m_radius, 2.0f * m_radius);
-	m_item.setBrush(m_player.getColor());
+	updateItem();
 
 	m_line.hide();
 }
@@ -66,7 +87,7 @@ void Orbiter::process(float t, const Vector& gravity)
 		m_collisionTimer -= t;
 
 	if (m_tryConnect && m_connectionNode) {
-		if (!m_connected && (m_collisionTimer <= 0.0f)) {
+		if (!m_connected && (m_collisionTimer <= 0.0f) && ((m_position - *m_connectionNode).length() > 1.5f * m_radius)) {
 			m_nodeRadius = m_connectionNode->distance(m_position);
 			if (m_nodeRadius > 0.0f) {
 				Vector p = m_position - *m_connectionNode;
@@ -139,7 +160,7 @@ void Orbiter::process(float t, const Vector& gravity)
 void Orbiter::setPosition(const Vector& pos)
 {
 	m_position = pos;
-	m_item.setRect(-m_radius, -m_radius, 2.0f * m_radius, 2.0f * m_radius);
+//	m_item.setRect(-m_radius, -m_radius, 2.0f * m_radius, 2.0f * m_radius);
 }
 
 
@@ -209,18 +230,40 @@ void Orbiter::connectScene(QGraphicsScene* scene)
 {
 	Q_ASSERT(scene != NULL);
 
-	scene->addItem(&m_item);
+	scene->addItem(m_item);
 	scene->addItem(&m_line);
 }
 
 
 void Orbiter::disconnectScene()
 {
-	Q_ASSERT(m_item.scene());
+	Q_ASSERT(m_item->scene());
 	Q_ASSERT(m_line.scene());
 
-	m_item.scene()->removeItem(&m_item);
+	m_item->scene()->removeItem(m_item);
 	m_line.scene()->removeItem(&m_line);
+}
+
+
+void Orbiter::updateItem()
+{
+#ifdef USE_SVG
+	if (m_isSvg) {
+		Graphic<QGraphicsSvgItem>* item = static_cast<Graphic<QGraphicsSvgItem>*>(m_item);
+		item->setZValue(30.0f);
+		item->setMatrix(QMatrix());
+		item->setPos(-m_radius, -m_radius);
+		item->scale(0.01 * 2.0f * m_radius, 0.01 * 2.0f * m_radius);
+		m_lightAngle = 0.0f;
+		return;
+	}
+#endif
+
+	Graphic<QGraphicsEllipseItem>* item = static_cast<Graphic<QGraphicsEllipseItem>*>(m_item);
+	item->setPen(Qt::NoPen);
+	item->setZValue(30.0f);
+	item->setRect(-m_radius, -m_radius, 2.0f * m_radius, 2.0f * m_radius);
+	item->setBrush(m_player.getColor());
 }
 
 
@@ -228,14 +271,6 @@ void Orbiter::update(int id)
 {
 	switch (id) {
 	case 0:
-		{
-			QRectF rect = m_item.rect();
-			rect.moveTo(m_position.x - m_radius, m_position.y - m_radius);
-			m_item.setRect(rect);
-		}
-		break;
-
-	case 1:
 		if (m_connectionNode) {
 			QPen pen = m_line.pen();
 			if (m_connected)
@@ -249,12 +284,71 @@ void Orbiter::update(int id)
 			m_line.hide();
 		}
 		break;
+
+	case 1:
+		{
+			Graphic<QGraphicsEllipseItem>* item = static_cast<Graphic<QGraphicsEllipseItem>*>(m_item);
+			QRectF rect = item->rect();
+			rect.moveTo(m_position.x - m_radius, m_position.y - m_radius);
+			item->setRect(rect);
+		}
+		break;
+#ifdef USE_SVG
+	case 2:
+		{
+			Graphic<QGraphicsSvgItem>* item = static_cast<Graphic<QGraphicsSvgItem>*>(m_item);
+
+			float angle = 360.0f * asin(m_position.y / m_position.length()) / (2.0f * M_PI);
+			item->rotate(angle - m_lightAngle);
+			m_lightAngle = angle;
+
+			QPointF p = item->mapToScene(50.0f, 50.0f);
+			QPointF off = QPointF(m_position.x, m_position.y) - p;
+			item->moveBy(off.x(), off.y());
+		}
+		break;
+#endif
 	}
 }
 
 
+#ifndef USE_SVG
+void Orbiter::toggleSvg(bool) {}
+#else
+void Orbiter::toggleSvg(bool enable)
+{
+	QGraphicsScene* scene = m_item->scene();
+	if (scene)
+		scene->removeItem(m_item);
+
+	delete m_item;
+
+	if (enable)
+		m_item = new Graphic<QGraphicsSvgItem>(this, 2, g_config->dataDir() + "gfx/" + m_svgFilename);
+	else
+		m_item = new Graphic<QGraphicsEllipseItem>(this, 1);
+
+	m_isSvg = enable;
+	updateItem();
+
+	if (scene)
+		scene->addItem(m_item);
+}
+#endif
+
+
 template <typename T>
 Orbiter::Graphic<T>::Graphic(Orbiter* orb, int id) :
+	m_orbiter(orb),
+	m_id(id)
+{
+
+}
+
+
+template <typename T>
+Orbiter::Graphic<T>::Graphic(Orbiter* orb, int id, const QString& filename) :
+	T(filename),
 	m_orbiter(orb),
 	m_id(id)
 {

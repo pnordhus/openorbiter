@@ -27,11 +27,11 @@
 #include <QDebug>
 
 
-Player::Player(int id, const QString& name, const QColor& color) :
+Player::Player(int id, const QString& name, const QColor& color, const QString& filename) :
 	m_id(id),
 	m_name(name),
-	m_orbiter(*this),
 	m_color(color),
+	m_orbiter(*this, filename),
 	m_isSelected(false)
 {
 

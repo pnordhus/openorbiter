@@ -30,9 +30,6 @@
 #include <QVariant>
 
 
-Config g_config;
-
-
 /****************************************************************************/
 
 
@@ -54,6 +51,8 @@ Config::Config()
 
 	m_firstNodeTime = 60.0f;
 	m_nextNodeTime = 10.0f;
+	
+	m_svgEnabled = true;
 
 	m_mapColor = QColor(250,250,250);
 }
@@ -125,6 +124,18 @@ void Config::setMapColor(const QColor& color)
 /****************************************************************************/
 
 
+void Config::setSvgEnabled(bool enabled)
+{
+	bool changed = m_svgEnabled ^ enabled;
+	m_svgEnabled = enabled;
+	if (changed)
+		emit svgChanged(enabled);
+}
+
+
+/****************************************************************************/
+
+
 void Config::save(const QString& filename)
 {
 	QDomDocument doc;
@@ -165,7 +176,8 @@ void Config::saveGame(QDomDocument& doc, QDomElement& root)
 	game.setAttribute("gravity", m_gravityFactor);
 
 	SET_TEXT(game, "lastMap", m_lastMap);
-	SET_TEXT(game, "mapColor", QString::number(m_mapColor.rgb() & RGB_MASK, 16).toUpper().rightJustified(6, '0'));
+	SET_TEXT(game, "mapColor", m_mapColor.name());
+	SET_TEXT(game, "useSVG", QVariant(m_svgEnabled).toString());
 }
 
 
@@ -264,12 +276,16 @@ void Config::loadGame(const QDomElement& elem)
 	READ_ATTR_FLOAT(child, "gravity", m_gravityFactor);
 	READ_STRING(child, "lastMap", m_lastMap);
 
-	QString mapColor;
-	bool b;
-	READ_STRING(child, "mapColor", mapColor);
-	QRgb rgb = mapColor.toUInt(&b, 16);
-	if (b)
-		m_mapColor.setRgb(rgb);
+	QString tmp;
+
+	READ_STRING(child, "mapColor", tmp);
+	QColor color = tmp;
+	if (color.isValid())
+		m_mapColor = color;
+
+//	READ_STRING(child, "useSVG", tmp);
+//	if (tmp.length() > 0)
+//		m_svgEnabled = QVariant(tmp).toBool();
 }
 
 
@@ -328,4 +344,24 @@ void Config::loadWindow(const QDomElement& elem)
 			}
 		}
 	}
+}
+
+
+/****************************************************************************/
+
+
+Config* g_config = NULL;
+
+
+void Config::create()
+{
+	Q_ASSERT(g_config == NULL);
+	g_config = new Config;
+}
+
+
+void Config::destroy()
+{
+	Q_ASSERT(g_config != NULL);
+	delete g_config;
 }

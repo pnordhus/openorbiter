@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.0"
+   width="100"
+   height="100"
+   id="svg21662">
+  <defs
+     id="defs21664">
+    <linearGradient
+       id="linearGradient22545">
+      <stop
+         style="stop-color:#3838f0;stop-opacity:1"
+         offset="0"
+         id="stop22553" />
+      <stop
+         style="stop-color:#3838f0;stop-opacity:1"
+         offset="0.15000001"
+         id="stop33080" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0.30000001"
+         id="stop29586" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0.38"
+         id="stop29584" />
+      <stop
+         style="stop-color:#cbcbfc;stop-opacity:1"
+         offset="0.5"
+         id="stop28697" />
+      <stop
+         style="stop-color:#cfd6f7;stop-opacity:1"
+         offset="0.75"
+         id="stop33082" />
+      <stop
+         style="stop-color:#d4e1f2;stop-opacity:0"
+         offset="1"
+         id="stop22549" />
+    </linearGradient>
+    <radialGradient
+       cx="37.691319"
+       cy="42.929054"
+       r="40.161785"
+       fx="37.691319"
+       fy="42.929054"
+       id="radialGradient22551"
+       xlink:href="#linearGradient22545"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,1.000067,0,-2.859459e-3)" />
+  </defs>
+  <g
+     id="layer1">
+    <path
+       d="M 27.298812,81.711745 C 6.036266,76.014462 -6.6753766,54.260388 -1.2004633,32.939501 C 4.2744501,11.618614 25.894581,-1.3195285 47.271484,3.9324176 C 68.648386,9.1843638 81.811617,30.668194 76.783211,52.09878 C 71.754805,73.529367 50.409619,86.91625 28.927686,82.111932"
+       transform="matrix(1.244965,0,0,1.244882,3.075645,-3.441595)"
+       style="opacity:1;fill:url(#radialGradient22551);fill-opacity:1;fill-rule:evenodd;stroke:#5f0000;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path21670" />
+  </g>
+</svg>

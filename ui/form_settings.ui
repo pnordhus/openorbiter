@@ -1,15 +1,12 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>FormSettings</class>
  <widget class="QDialog" name="FormSettings" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>398</width>
-    <height>223</height>
+    <width>395</width>
+    <height>336</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -74,6 +71,28 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Rendering:</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="checkSvgEnabled" >
+        <property name="text" >
+         <string>Use SVGs</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -125,7 +144,6 @@
    </item>
   </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
  <resources/>
  <connections>
   <connection>

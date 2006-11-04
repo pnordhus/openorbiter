@@ -37,7 +37,7 @@ Game::Game(Map* map) :
 {
 	m_players = g_openorbiter->selectedPlayers();
 
-	m_nodeTimer = g_config.firstNodeTime();
+	m_nodeTimer = g_config->firstNodeTime();
 
 	m_nodes = m_map->nodes();
 	randomize(m_nodes);
@@ -79,7 +79,7 @@ void Game::process(float time)
 			m_nodes.last()->setMark(int(m_nodeTimer * 2.0f) & 1);
 
 		if (m_nodeTimer <= 0.0f) {
-			m_nodeTimer = g_config.nextNodeTime();
+			m_nodeTimer = g_config->nextNodeTime();
 			foreach (Player* player, m_players) {
 				if (player->getOrbiter().node() == m_nodes.last())
 					player->getOrbiter().setNode(NULL);
@@ -112,7 +112,7 @@ void Game::process(float time)
 	randomize(m_players);
 
 	for (unsigned int it = 0; it < iterations; it++) {
-		Vector v = m_map->gravity() * g_config.gravityFactor() * m_gravityFactor * time;
+		Vector v = m_map->gravity() * g_config->gravityFactor() * m_gravityFactor * time;
 		foreach (Player* player, m_players) {
 			player->getOrbiter().process(time, v);
 		}

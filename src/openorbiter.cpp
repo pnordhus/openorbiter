@@ -46,13 +46,12 @@ OpenOrbiter::~OpenOrbiter()
 {
 	delete m_match;
 
-	g_config.save(g_config.userDir() + "config.xml");
+	g_config->save(g_config->userDir() + "config.xml");
 
 	for (int i = 0; i < MaxPlayers; i++)
 		delete m_players[i];
 
-	foreach (Map* map, m_maps)
-		delete map;
+	qDeleteAll(m_maps);
 
 	delete m_graphicsScene;
 }
@@ -76,7 +75,7 @@ void OpenOrbiter::startMatch(const Match& match)
 	m_match = new Match(match);
 
 	m_lastMap = m_match->map();
-	g_config.setLastMap(m_lastMap->name());
+	g_config->setLastMap(m_lastMap->name());
 
 	m_match->startGame();
 }
@@ -128,20 +127,20 @@ void OpenOrbiter::init(bool load)
 
 	m_graphicsScene = new GraphicsScene;
 	m_graphicsScene->setSize(50.0f, 25.0f);
-	m_graphicsScene->setMapColor(g_config.mapColor());
+	m_graphicsScene->setMapColor(g_config->mapColor());
 }
 
 
 void OpenOrbiter::initPlayers()
 {
-	m_players[0] = new Player(0, "Player 1", Qt::red);
-	m_players[1] = new Player(1, "Player 2", Qt::green);
-	m_players[2] = new Player(2, "Player 3", Qt::blue);
-	m_players[3] = new Player(3, "Player 4", "fuchsia");
-	m_players[4] = new Player(4, "Player 5", Qt::yellow);
-	m_players[5] = new Player(5, "Player 6", Qt::cyan);
-	m_players[6] = new Player(6, "Player 7", "yellowgreen");
-	m_players[7] = new Player(7, "Player 8", "maroon");
+	m_players[0] = new Player(0, "Player 1", Qt::red, "red.svg");
+	m_players[1] = new Player(1, "Player 2", Qt::green, "green.svg");
+	m_players[2] = new Player(2, "Player 3", Qt::blue, "blue.svg");
+	m_players[3] = new Player(3, "Player 4", "fuchsia", "fuchsia.svg");
+	m_players[4] = new Player(4, "Player 5", Qt::yellow, "yellow.svg");
+	m_players[5] = new Player(5, "Player 6", Qt::cyan, "cyan.svg");
+	m_players[6] = new Player(6, "Player 7", "yellowgreen", "red.svg");
+	m_players[7] = new Player(7, "Player 8", "maroon", "red.svg");
 }
 
 
@@ -149,39 +148,24 @@ void OpenOrbiter::loadConfig()
 {
 	QString file;
 
-	file = g_config.dataDir() + "config.xml";
+	file = g_config->dataDir() + "config.xml";
 	if (QFileInfo(file).isReadable())
-		g_config.load(file);
+		g_config->load(file);
 
-	file = g_config.userDir() + "config.xml";
+	file = g_config->userDir() + "config.xml";
 	if (QFileInfo(file).isReadable())
-		g_config.load(file);
+		g_config->load(file);
 }
 
 
 void OpenOrbiter::loadMaps()
 {
+	qDeleteAll(m_maps);
 	m_maps.clear();
-
-	loadMapsFromDir(g_config.dataDir() + "maps");
-	loadMapsFromDir(g_config.userDir() + "maps");
-
-	qStableSort(m_maps.begin(), m_maps.end(), Map::Less());
-
-	// remove duplicate maps
-	for (int i = m_maps.size() - 2; i >= 0; i--) {
-		if (m_maps.value(i)->name() == m_maps.value(i + 1)->name()) {
-			delete m_maps.takeAt(i);
-		}
-	}
-
 	m_lastMap = NULL;
-	foreach (Map* map, m_maps) {
-		if (map->name() == g_config.lastMap()) {
-			m_lastMap = map;
-			break;
-		}
-	}	
+
+	loadMapsFromDir(g_config->userDir() + "maps");
+	loadMapsFromDir(g_config->dataDir() + "maps");
 }
 
 
@@ -192,8 +176,16 @@ void OpenOrbiter::loadMapsFromDir(const QDir& dir)
 	QStringList cfgFiles = dir.entryList(QStringList("*.xml"), QDir::Files | QDir::Readable, QDir::Name);
 	foreach (QString file, cfgFiles) {
 		Map* map = Map::load(dir.path() + QDir::separator() + file);
-		if (map)
-			m_maps.append(map);
+		if (map) {
+			MapList::iterator it = qLowerBound(m_maps.begin(), m_maps.end(), map, Map::Less());
+			if ((it != m_maps.end()) && (**it == *map)) {
+				delete map;
+				continue;
+			}
+			m_maps.insert(it, map);
+			if (map->name() == g_config->lastMap())
+				m_lastMap = map;
+		}
 	}
 }
 

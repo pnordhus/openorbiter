@@ -26,7 +26,6 @@
 #include "vector.h"
 
 
-#include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
 #include <QRect>
 
@@ -36,14 +35,17 @@ class Orbiter;
 class Player;
 
 
-class Orbiter
+class Orbiter : public QObject
 {
+	Q_OBJECT
+
 private:
 	template <typename T>
 	class Graphic : public T
 	{
 	public:
 		Graphic(Orbiter*, int id);
+		Graphic(Orbiter*, int id, const QString& filename);
 		void	advance(int phase);
 	
 	private:
@@ -52,7 +54,8 @@ private:
 	};
 
 public:
-	Orbiter(Player& player);
+	Orbiter(Player& player, const QString& filename);
+	~Orbiter();
 
 	void	reset();
 
@@ -72,13 +75,17 @@ public:
 
 	void	toggle();
 
-	QGraphicsEllipseItem&	item() { return m_item; }
-
 	void	connectScene(QGraphicsScene*);
 	void	disconnectScene();
 
 public:
 	void	update(int id);
+
+private:
+	void	updateItem();
+
+private slots:
+	void	toggleSvg(bool enable);
 
 private:
 	Player&	m_player;
@@ -96,8 +103,13 @@ private:
 	bool	m_connected;
 	const Node*	m_connectionNode;
 
-	Graphic<QGraphicsEllipseItem>	m_item;
-	Graphic<QGraphicsLineItem>		m_line;
+	QGraphicsItem*				m_item;
+	Graphic<QGraphicsLineItem>	m_line;
+
+	float	m_lightAngle;
+
+	QString	m_svgFilename;
+	bool	m_isSvg;
 };
 
 

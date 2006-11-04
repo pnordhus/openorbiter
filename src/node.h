@@ -25,11 +25,16 @@
 
 #include "vector.h"
 #include <QColor>
-#include <QGraphicsEllipseItem>
 
 
-class Node : public Vector
+class QGraphicsItem;
+class QGraphicsScene;
+
+
+class Node : public QObject, public Vector
 {
+	Q_OBJECT
+
 public:
 	Node(float x, float y);
 	~Node();
@@ -37,14 +42,19 @@ public:
 	void	setMark(bool b);
 	QColor	getColor() const;
 	
-	QGraphicsEllipseItem&	item() { return m_item; }
-
 	void	connectScene(QGraphicsScene*);
 	void	disconnectScene();
 
 private:
-	bool					m_mark;
-	QGraphicsEllipseItem	m_item;
+	void	updateItem();
+
+private slots:
+	void	toggleSvg(bool enabled);
+
+private:
+	bool			m_mark;
+	QGraphicsItem*	m_item;
+	bool			m_isSvg;
 
 	static const float		m_radius;
 

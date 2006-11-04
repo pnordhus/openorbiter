@@ -58,6 +58,8 @@ public:
 	const NodeList&			nodes() const		{ return m_nodes; }
 	const SpawnPointList&	spawnPoints() const	{ return m_spawnPoints; }
 
+	bool	operator == (const Map&) const;
+
 private:
 	// constructor is private, maps can only be created by static member fn
 	Map() {}

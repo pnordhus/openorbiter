@@ -35,8 +35,10 @@ class QDomDocument;
 class QDomElement;
 
 
-class Config
+class Config : public QObject
 {
+	Q_OBJECT
+
 public:
 	Config();
 
@@ -51,6 +53,7 @@ public: /* get methods */
 
 	float					gravityFactor() const	{ return m_gravityFactor; }
 	const StringBoolMap&	statsShown() const		{ return m_statsShown; }
+	bool	svgEnabled() const { return m_svgEnabled; }
 
 public: /* set methods */
 	void	setWindowGeometry(const QRect& g);
@@ -60,6 +63,7 @@ public: /* set methods */
 
 	void	setGravityFactor(float);
 	void	setStatsShown(const StringBoolMap&);
+	void	setSvgEnabled(bool);
 
 public:
 	float	firstNodeTime() const { return m_firstNodeTime; }
@@ -100,10 +104,19 @@ private:
 	QColor	m_mapColor;
 	
 	QString	m_lastMap;
+
+	bool	m_svgEnabled;
+
+signals:
+	void	svgChanged(bool enabled);
+
+public:
+	static	void	create();
+	static	void	destroy();
 };
 
 
-extern Config g_config;
+extern Config* g_config;
 
 
 #endif // OPENORBITER_CONFIG_H

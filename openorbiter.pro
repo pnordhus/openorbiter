@@ -78,4 +78,14 @@ datamaps.files = \
 	data/maps/classic.xml \
 	data/maps/oomap.dtd
 
-INSTALLS += target datamaps
+datagfx.path = $${DATADIR}/gfx/
+datagfx.files = \
+	data/gfx/blue.svg \
+	data/gfx/cyan.svg \
+	data/gfx/fuchsia.svg \
+	data/gfx/green.svg \
+	data/gfx/node.svg \
+	data/gfx/red.svg \
+	data/gfx/yellow.svg
+
+INSTALLS += target datamaps datagfx

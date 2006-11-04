@@ -26,16 +26,11 @@
 template<typename Container>
 inline void randomize(Container &c)
 {
-    if (c.size() < 2)
-		return;
-
 	Container ret;
-
 	while (!c.empty()) {
 		int index = qrand() % c.size();
 		ret.append(c.takeAt(index));
 	}
-
 	c = ret;
 }
 

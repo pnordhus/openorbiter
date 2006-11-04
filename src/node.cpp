@@ -19,10 +19,20 @@
  ***************************************************************************/
 
 
+#include "../build/configure.h"
+
+
+#include "config.h"
 #include "node.h"
 
 
+#include <QGraphicsEllipseItem>
 #include <QGraphicsScene>
+
+
+#ifdef USE_SVG
+#  include <QGraphicsSvgItem>
+#endif
 
 
 const float Node::m_radius = 0.3f;
@@ -30,18 +40,22 @@ const float Node::m_radius = 0.3f;
 
 Node::Node(float x, float y) :
 	Vector(x, y),
-	m_mark(false)
+	m_mark(false),
+	m_isSvg(false)
 {
-	m_item.setPen(Qt::NoPen);
-	m_item.setBrush(Qt::white);
-	m_item.setZValue(20.0f);
-	m_item.setRect(x - m_radius, y - m_radius, 2.0f * m_radius, 2.0f * m_radius);
+	m_item = new QGraphicsEllipseItem;
+	toggleSvg(g_config->svgEnabled());
+	updateItem();
+
+#ifdef USE_SVG
+	connect(g_config, SIGNAL(svgChanged(bool)), this, SLOT(toggleSvg(bool)));
+#endif
 }
 
 
 Node::~Node()
 {
-
+	delete m_item;
 }
 
 
@@ -64,13 +78,56 @@ void Node::connectScene(QGraphicsScene* scene)
 {
 	Q_ASSERT(scene != NULL);
 
-	scene->addItem(&m_item);
+	scene->addItem(m_item);
 }
 
 
 void Node::disconnectScene()
 {
-	Q_ASSERT(m_item.scene());
+	Q_ASSERT(m_item->scene());
 
-	m_item.scene()->removeItem(&m_item);
+	m_item->scene()->removeItem(m_item);
+}
+
+
+#ifndef USE_SVG
+void Node::toggleSvg(bool) {}
+#else
+void Node::toggleSvg(bool enable)
+{
+	QGraphicsScene* scene = m_item->scene();
+	delete m_item;
+
+	if (enable)
+		m_item = new QGraphicsSvgItem(g_config->dataDir() + "gfx/node.svg");
+	else
+		m_item = new QGraphicsEllipseItem;
+
+	m_isSvg = enable;
+	updateItem();
+
+	if (scene)
+		scene->addItem(m_item);
+}
+#endif
+
+
+void Node::updateItem()
+{
+#ifdef USE_SVG
+	if (m_isSvg) {
+		QGraphicsSvgItem* item = static_cast<QGraphicsSvgItem*>(m_item);
+		item->setMatrix(QMatrix());
+		item->scale(0.01 * 2.0f * m_radius, 0.01 * 2.0f * m_radius);
+		item->setZValue(20.0f);
+		item->setPos(x - m_radius, y - m_radius);
+		return;
+	}
+#endif
+
+	QGraphicsEllipseItem* item = static_cast<QGraphicsEllipseItem*>(m_item);
+	item->setPen(Qt::NoPen);
+	item->setBrush(Qt::white);
+	item->setZValue(20.0f);
+	item->setRect(x - m_radius, y - m_radius, 2.0f * m_radius, 2.0f * m_radius);
 }
