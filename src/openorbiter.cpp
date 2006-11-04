@@ -19,6 +19,9 @@
  ***************************************************************************/
 
 
+#include "../build/configure.h"
+
+
 #include "config.h"
 #include "map.h"
 #include "match.h"
@@ -33,10 +36,16 @@
 #include <QRect>
 
 
+#ifdef USE_SVG
+#  include <QSvgRenderer>
+#endif
+
+
 OpenOrbiter::OpenOrbiter() :
 	m_paused(true),
 	m_match(NULL),
-	m_graphicsScene(NULL)
+	m_graphicsScene(NULL),
+	m_nodeRenderer(NULL)
 {
 	m_time.start();
 }
@@ -52,6 +61,10 @@ OpenOrbiter::~OpenOrbiter()
 		delete m_players[i];
 
 	qDeleteAll(m_maps);
+
+#ifdef USE_SVG
+	delete m_nodeRenderer;
+#endif
 
 	delete m_graphicsScene;
 }
@@ -113,6 +126,10 @@ void OpenOrbiter::process()
 
 void OpenOrbiter::init(bool load)
 {
+#ifdef USE_SVG
+	m_nodeRenderer = new QSvgRenderer(g_config->dataDir() + "gfx/node.svg");
+#endif
+
 	initPlayers();
 
 	if (load)
@@ -139,8 +156,8 @@ void OpenOrbiter::initPlayers()
 	m_players[3] = new Player(3, "Player 4", "fuchsia", "fuchsia.svg");
 	m_players[4] = new Player(4, "Player 5", Qt::yellow, "yellow.svg");
 	m_players[5] = new Player(5, "Player 6", Qt::cyan, "cyan.svg");
-	m_players[6] = new Player(6, "Player 7", "yellowgreen", "red.svg");
-	m_players[7] = new Player(7, "Player 8", "maroon", "red.svg");
+	m_players[6] = new Player(6, "Player 7", "yellowgreen", "yellowgreen.svg");
+	m_players[7] = new Player(7, "Player 8", "maroon", "maroon.svg");
 }
 
 

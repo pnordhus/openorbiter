@@ -24,6 +24,7 @@
 
 #include "config.h"
 #include "node.h"
+#include "openorbiter.h"
 
 
 #include <QGraphicsEllipseItem>
@@ -32,6 +33,7 @@
 
 #ifdef USE_SVG
 #  include <QGraphicsSvgItem>
+#  include <QSvgRenderer>
 #endif
 
 
@@ -96,14 +98,25 @@ void Node::toggleSvg(bool) {}
 void Node::toggleSvg(bool enable)
 {
 	QGraphicsScene* scene = m_item->scene();
+
 	delete m_item;
+	m_item = NULL;
 
-	if (enable)
-		m_item = new QGraphicsSvgItem(g_config->dataDir() + "gfx/node.svg");
-	else
+	if (enable) {
+		QSvgRenderer* renderer = g_openorbiter->nodeRenderer();
+		if (renderer->isValid()) {
+			QGraphicsSvgItem* item = new QGraphicsSvgItem;
+			item->setSharedRenderer(renderer);
+			m_item = item;
+			m_isSvg = true;
+		}
+	}
+
+	if (m_item == NULL) {
 		m_item = new QGraphicsEllipseItem;
+		m_isSvg = false;
+	}
 
-	m_isSvg = enable;
 	updateItem();
 
 	if (scene)

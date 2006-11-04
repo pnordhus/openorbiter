@@ -34,6 +34,7 @@
 
 #ifdef USE_SVG
 #  include <QGraphicsSvgItem>
+#  include <QSvgRenderer>
 #endif
 
 
@@ -296,15 +297,13 @@ void Orbiter::update(int id)
 #ifdef USE_SVG
 	case 2:
 		{
-			Graphic<QGraphicsSvgItem>* item = static_cast<Graphic<QGraphicsSvgItem>*>(m_item);
-
 			float angle = 360.0f * asin(m_position.y / m_position.length()) / (2.0f * M_PI);
-			item->rotate(angle - m_lightAngle);
+			m_item->rotate(angle - m_lightAngle);
 			m_lightAngle = angle;
 
-			QPointF p = item->mapToScene(50.0f, 50.0f);
+			QPointF p = m_item->mapToScene(50.0f, 50.0f);
 			QPointF off = QPointF(m_position.x, m_position.y) - p;
-			item->moveBy(off.x(), off.y());
+			m_item->moveBy(off.x(), off.y());
 		}
 		break;
 #endif
@@ -322,13 +321,23 @@ void Orbiter::toggleSvg(bool enable)
 		scene->removeItem(m_item);
 
 	delete m_item;
+	m_item = NULL;
 
-	if (enable)
-		m_item = new Graphic<QGraphicsSvgItem>(this, 2, g_config->dataDir() + "gfx/" + m_svgFilename);
-	else
+	if (enable) {
+		Graphic<QGraphicsSvgItem>* item = new Graphic<QGraphicsSvgItem>(this, 2, g_config->dataDir() + "gfx/" + m_svgFilename);
+		if (item->renderer()->isValid()) {
+			m_item = item;
+			m_isSvg = true;
+		} else {
+			delete item;
+		}
+	}
+
+	if (m_item == NULL) {
 		m_item = new Graphic<QGraphicsEllipseItem>(this, 1);
+		m_isSvg = false;
+	}
 
-	m_isSvg = enable;
 	updateItem();
 
 	if (scene)

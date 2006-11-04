@@ -34,6 +34,9 @@ class Match;
 class Player;
 
 
+class QSvgRenderer;
+
+
 class OpenOrbiter : public QObject
 {
 	Q_OBJECT
@@ -61,6 +64,8 @@ public:
 	void	init(bool loadConfig);
 
 	Match*	match() { Q_ASSERT(m_match); return m_match; }
+
+	QSvgRenderer*	nodeRenderer() { Q_ASSERT(m_nodeRenderer); return m_nodeRenderer; }
 
 	static	void	create();
 	static	void	destroy();
@@ -96,6 +101,7 @@ private:
 
 	Map*	m_lastMap;
 	GraphicsScene*	m_graphicsScene;
+	QSvgRenderer*	m_nodeRenderer;
 };
 
 
