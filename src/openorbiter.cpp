@@ -42,7 +42,7 @@
 
 
 OpenOrbiter::OpenOrbiter() :
-	m_paused(true),
+	m_paused(false),
 	m_match(NULL),
 	m_graphicsScene(NULL),
 	m_nodeRenderer(NULL)
@@ -83,7 +83,6 @@ QList<Player*> OpenOrbiter::selectedPlayers()
 void OpenOrbiter::startMatch(const Match& match)
 {
 	//Q_ASSERT(m_match == NULL);
-	m_paused = true;
 	delete m_match;
 	m_match = new Match(match);
 
@@ -91,20 +90,36 @@ void OpenOrbiter::startMatch(const Match& match)
 	g_config->setLastMap(m_lastMap->name());
 
 	m_match->startGame();
+
+	if (isPaused())
+		resume();
+
+	pause();
 }
 
 
 void OpenOrbiter::pause()
 {
-//	qDebug("paused");
+	Q_ASSERT(m_paused == false);
+
 	m_paused = true;
+	emit pauseToggled(m_paused);
 }
 
 
 void OpenOrbiter::resume()
 {
-//	qDebug("resumed");
+	Q_ASSERT(m_paused == true);
+
 	m_paused = false;
+	emit pauseToggled(m_paused);
+}
+
+
+void OpenOrbiter::togglePause()
+{
+	m_paused = !m_paused;
+	emit pauseToggled(m_paused);
 }
 
 
@@ -116,7 +131,7 @@ void OpenOrbiter::process()
 	m_frameTime = float(m_time.restart()) / 1000.0f;
 	Q_ASSERT(m_match);
 
-	if (!m_paused) {
+	if (!isPaused()) {
 		m_match->process(m_frameTime);
 	}
 

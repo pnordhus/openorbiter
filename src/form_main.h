@@ -28,6 +28,7 @@
 
 #include <QEvent>
 #include <QMainWindow>
+#include <QShortcut>
 #include <QStandardItemModel>
 #include <QTimer>
 
@@ -66,7 +67,6 @@ public slots:
 	void	createMatch();
 
 private slots:
-	void	resume();
 	void	updateStats();
 	void	input();
 	void	toggleFullscreen();
@@ -80,6 +80,8 @@ private slots:
 
 	void	showPreferences();
 	void	setMapColor();
+
+	void	shortcutPlay();
 
 private:
 	void	updateStat(int row, int col, const QVariant& value, Qt::ItemDataRole role);
@@ -95,6 +97,8 @@ private:
 
 	const Player*	m_lastWinner;
 	QStandardItemModel	m_modelStats;
+
+	QShortcut		m_shortcutPlay;
 };
 
 

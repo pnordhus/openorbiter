@@ -39,7 +39,6 @@
 
 #include <cmath>
 #include <QHeaderView>
-#include <QShortcut>
 
 
 class PlayerShortcut : public QShortcut
@@ -62,7 +61,8 @@ FormMain::FormMain(bool showStats) :
 	m_processTimer(this),
 	m_updateTimer(this),
 	m_lastWinner(NULL),
-	m_modelStats(8, 0)
+	m_modelStats(8, 0),
+	m_shortcutPlay(Qt::Key_Space, this)
 {
 	m_window = new Ui::FormMain;
 
@@ -73,9 +73,6 @@ FormMain::FormMain(bool showStats) :
 
 	connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
 	m_updateTimer.start(100);
-
-
-	connect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(createMatch()));
 
 	connect(m_window->menuGame, SIGNAL(aboutToShow()), this, SLOT(menuAboutToShow()));
 	connect(m_window->menuSettings, SIGNAL(aboutToShow()), this, SLOT(menuAboutToShow()));
@@ -168,6 +165,8 @@ void FormMain::connectActions()
 	connect(m_window->actionShowTopSpeed,		SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
 	connect(m_window->actionShowWay,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
 	connect(m_window->actionShowWins,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+
+	connect(&m_shortcutPlay,					SIGNAL(activated()),	this,	SLOT(shortcutPlay()));
 }
 
 
@@ -197,11 +196,6 @@ void FormMain::createMatch()
 		FormSelectKey keySelect(this);
 		if (keySelect.exec()) {
 			m_window->labelMapName->setText(g_openorbiter->getMap(dialog.getMap())->name());
-			m_window->buttonResume->setText(QApplication::translate("FormMain", "Start", 0, QApplication::UnicodeUTF8));
-			disconnect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(createMatch()));
-			disconnect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(resume()));
-			connect(m_window->buttonResume, SIGNAL(clicked()), this, SLOT(resume()));
-			m_window->buttonResume->show();
 			m_window->graphicsMap->unsetCursor();
 
 			Match match(g_openorbiter->getMap(dialog.getMap()));
@@ -238,20 +232,6 @@ void FormMain::updatePlayers()
 	}
 
 	m_window->tableStats->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-}
-
-
-/****************************************************************************/
-
-
-void FormMain::resume()
-{
-	if (g_openorbiter->isRunning()) {
-		m_window->graphicsMap->setCursor(Qt::BlankCursor);
-		m_window->buttonResume->hide();
-		m_window->buttonResume->setText(QApplication::translate("FormMain", "Resume", 0, QApplication::UnicodeUTF8));
-		g_openorbiter->resume();
-	}
 }
 
 
@@ -310,7 +290,6 @@ void FormMain::updateStats()
 
 	if (!g_openorbiter->isPaused() && !isActiveWindow()) {
 		g_openorbiter->pause();
-		m_window->buttonResume->show();
 		m_window->graphicsMap->unsetCursor();
 	}
 }
@@ -382,7 +361,6 @@ void FormMain::menuAboutToShow()
 {
 	if (g_openorbiter->isRunning() && !g_openorbiter->isPaused()) {
 		g_openorbiter->pause();
-		m_window->buttonResume->show();
 		m_window->graphicsMap->unsetCursor();
 	}
 }
@@ -527,4 +505,17 @@ void FormMain::showPreferences()
 void FormMain::setMapColor()
 {
 	g_openorbiter->graphicsScene()->setMapColor(g_config->mapColor());
+}
+
+
+/****************************************************************************/
+
+
+void FormMain::shortcutPlay()
+{
+	if (g_openorbiter->isRunning()) {
+		g_openorbiter->togglePause();
+	} else {
+		createMatch();
+	}
 }

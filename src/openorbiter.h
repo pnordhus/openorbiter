@@ -58,6 +58,7 @@ public:
 
 	void	pause();
 	void	resume();
+	void	togglePause();
 
 	void	startMatch(const Match& match);
 
@@ -81,6 +82,9 @@ public:
 
 public slots:
 	void	process();
+
+signals:
+	void	pauseToggled(bool);
 
 private:
 	void	initPlayers();

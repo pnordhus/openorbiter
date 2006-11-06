@@ -85,7 +85,7 @@ void FormSelectKey::keyPressEvent(QKeyEvent* k)
 		}
 	}
 
-	if (k->modifiers() == Qt::NoModifier) {
+	if ((k->modifiers() == Qt::NoModifier) && (key != Qt::Key_Space)) {
 		m_keys.append(key);
 		m_window->labelText->setText(tr("Key set to: ") + QKeySequence(key).toString());
 		m_timer.start(1000);

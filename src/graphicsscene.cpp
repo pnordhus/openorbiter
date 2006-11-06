@@ -20,6 +20,10 @@
 
 
 #include "graphicsscene.h"
+#include "openorbiter.h"
+
+
+#include <QDebug>
 
 
 /****************************************************************************/
@@ -54,6 +58,19 @@ GraphicsScene::GraphicsScene()
 	m_map.setPen(Qt::NoPen);
 	m_map.setZValue(0.0f);
 	addItem(&m_map);
+
+	m_pauseTextBackground.setPen(Qt::NoPen);
+	m_pauseTextBackground.setBrush(QColor(0, 0, 30, 150));
+	m_pauseTextBackground.setZValue(10000.0f);
+
+	m_pauseText.setDefaultTextColor(Qt::white);
+	m_pauseText.setZValue(10010.0f);
+	m_pauseText.setPlainText("Press Space to start a new game");
+
+	addItem(&m_pauseText);
+	addItem(&m_pauseTextBackground);
+
+	connect(g_openorbiter, SIGNAL(pauseToggled(bool)), this, SLOT(togglePaused(bool)));
 }
 
 
@@ -81,5 +98,43 @@ void GraphicsScene::setSize(float w, float h)
 
 	setSceneRect(rect.adjusted(-1.0f, -1.0f, 1.0f, 1.0f));
 
+	updatePauseText();
+
 	emit sizeChanged(w + 2.0f, h + 2.0f);
+}
+
+
+/****************************************************************************/
+
+
+void GraphicsScene::updatePauseText()
+{
+	const float w = m_map.rect().width();
+	const float h = m_map.rect().height();
+
+	const float tw = m_pauseText.boundingRect().width();
+	const float th = m_pauseText.boundingRect().height();
+	const float scaleF = w / (tw + 20.0f);
+
+	m_pauseText.setMatrix(QMatrix());
+	m_pauseText.scale(scaleF, scaleF);
+	m_pauseText.setPos(0.5f * (w - tw * scaleF), 0.5f * (h - th * scaleF));
+
+	m_pauseTextBackground.setMatrix(m_pauseText.matrix());
+	m_pauseTextBackground.setRect(m_pauseText.boundingRect());
+	m_pauseTextBackground.setPos(m_pauseText.pos());
+}
+
+
+/****************************************************************************/
+
+
+void GraphicsScene::togglePaused(bool paused)
+{
+	m_pauseText.setPlainText("Press Space to resume");
+
+	m_pauseText.setVisible(paused);
+	m_pauseTextBackground.setVisible(paused);
+
+	updatePauseText();
 }
