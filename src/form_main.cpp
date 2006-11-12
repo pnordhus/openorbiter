@@ -177,7 +177,7 @@ void FormMain::setShortcuts()
 {
 	m_window->actionNewMatch->setShortcut(Qt::CTRL + Qt::Key_N);
 	m_window->actionQuit->setShortcut(Qt::CTRL + Qt::Key_Q);
-	m_window->actionFullScreenMode->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F);
+	m_window->actionFullScreenMode->setShortcut(Qt::CTRL + Qt::Key_F);
 
 	m_window->actionShowStats->setShortcut(Qt::CTRL + Qt::Key_S);
 	m_window->actionShowStats->setShortcutContext(Qt::ApplicationShortcut);

@@ -35,11 +35,12 @@
 
 Config::Config()
 {
-	m_dataDir = QDir(DATADIR).path() + QDir::separator();
 	m_userDir = QDir::homePath() + QDir::separator();
 #ifdef WIN32
+	m_dataDir = "";
 	m_userDir += "OpenOrbiter\\";
 #else
+	m_dataDir = QDir(DATADIR).path() + QDir::separator();
 	m_userDir += ".openorbiter/";
 #endif
 

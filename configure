@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 
 function printhelp() {
@@ -33,6 +33,79 @@ function test_qt() {
 	else
 		return 1
 	fi
+}
+
+
+function check_qt_version_internal()
+{
+	local q
+	local QTDIR_QMAKE
+	[ -n "$QTDIR" ] && QTDIR_QMAKE="$QTDIR/bin/qmake"
+
+	for q in $QTDIR_QMAKE "$(type -p qmake)"; do
+		if "$q" > /dev/null 2>&1; then
+			echo "found ($q)"
+			QM="$q"
+			break
+		fi
+	done
+
+	if [ -z "$QM" ]; then
+		echo "not found!"
+		rm -rf $TEMPDIR
+		return 1
+	fi
+	
+	echo -n "Checking Qt..."
+	if ! gmake > /dev/null 2>&1; then
+		echo "failed!"
+		return 1
+	fi
+
+	local QTVERSION
+	if QTVERSION=$(./qtcheck); then
+		echo "$QTVERSION - ok"
+	else
+		echo "$QTVERSION - failed!"
+		return 1
+	fi
+
+	return 0
+}
+
+
+function check_qt_version()
+{
+	echo -n "Checking qmake..."
+	local TEMPDIR=$(mktemp -d)
+	local OLD_DIR=$(pwd)
+	cd $TEMPDIR
+	cat > qtcheck.pro << EOF
+QT += xml $QT_FEATURES
+TEMPLATE = app
+SOURCES = qtcheck.cpp
+EOF
+	cat > qtcheck.cpp << EOF
+#include <iostream>
+#include <qglobal.h>
+int main()
+{
+	std::cout << QT_VERSION_STR << std::endl;
+	if (QT_VERSION >= 0x040200)
+		return EXIT_SUCCESS;
+	return EXIT_FAILURE;
+}
+EOF
+	check_qt_version_internal
+	local RET=$?
+	cd $OLD_DIR
+	rm -rf $TEMPDIR
+
+	if [ "$RET" -ne "0" ]; then
+		echo " *** You need at least Qt 4.2 in order to build OpenOrbiter! ***"
+		return 1
+	fi
+	return 0
 }
 
 
@@ -71,23 +144,11 @@ for arg do
 	esac
 done
 
-QM_FOUND=""
-QM="$QTDIR/bin/qmake"
-if test_qt $QM; then
-	QM_FOUND="1"
-fi
 
-if [ -z "$QM_FOUND" ]; then
-	QM=$(type -p qmake)
-	if test_qt $QM; then
-		QM_FOUND="1"
-	fi
-fi
+QT_FEATURES=""
+[ -z "$NO_SVG" ] && QT_FEATURES="$QT_FEATURES svg"
 
-if [ -z "$QM_FOUND" ]; then
-	echo "Qmake not found, or wrong version. You need Qt 4.0 or above."
-	exit 1
-fi
+check_qt_version || exit 1
 
 [ -z $PREFIX ] && PREFIX=/usr/local
 [ -z $EPREFIX ] && EPREFIX=$PREFIX
@@ -112,7 +173,10 @@ echo "#define DATADIR \"$DATADIR\"" >> build/configure.h
 
 echo "#endif"                       >> build/configure.h
 
-"$QM"
+if ! "$QM" openorbiter.pro; then
+	echo " *** qmake failed ***"
+	exit 1
+fi
 
 echo Configuration complete
 echo
