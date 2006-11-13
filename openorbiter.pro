@@ -10,10 +10,16 @@ TARGET = openorbiter
 DESTDIR = bin
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -fno-exceptions -fno-rtti
+!win32 {
+	QMAKE_CXXFLAGS += -fno-exceptions
+}
 
 release {
 	CONFIG += silent
+}
+
+win32 {
+	CONFIG += rtti
 }
 
 FORMS += \
