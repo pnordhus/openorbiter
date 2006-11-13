@@ -28,6 +28,7 @@
 
 #include <QColor>
 #include <QRect>
+#include <QSettings>
 #include <QString>
 
 
@@ -106,6 +107,8 @@ private:
 	QString	m_lastMap;
 
 	bool	m_svgEnabled;
+
+	QSettings	m_settings;
 
 signals:
 	void	svgChanged(bool enabled);

@@ -87,46 +87,41 @@ int main(int argc, char* argv[])
 	Config::create();
 	OpenOrbiter::create();
 
-	try {
-		g_openorbiter->init(loadConfig);
+	g_openorbiter->init(loadConfig);
 
-		if (g_openorbiter->getMaps().size() == 0) {
-			QMessageBox::critical(NULL, "No maps found", "Could not find any maps, this won't work, sorry!");
-			OpenOrbiter::destroy();
-			return EXIT_FAILURE;
-		}
-
-		const QRect& g = g_config->windowGeometry();
-
-		FormMain form(g_config->windowShowStats());
-		form.resize(g.width(), g.height());
-		
-		if (g_config->windowMaximized())
-			form.setWindowState(form.windowState() | Qt::WindowMaximized);
-			
-		if (g_config->windowFullScreen())
-			form.setWindowState(form.windowState() | Qt::WindowFullScreen);
-
-		form.setStatsShown(g_config->statsShown());
-
-		form.show();
-
-		// this causese some troubles with fullscreen
-		//form.createMatch();
-
-		ret = app.exec();
-
-		g_config->setStatsShown(form.statsShown());
-
-		g_config->setWindowMaximized(form.isMaximized());
-		g_config->setWindowFullScreen(form.isFullScreen());
-		g_config->setWindowShowStats(form.isStatsShown());
-
-		g_config->setWindowGeometry(form.normalGeometry());
-	} catch (...) {
-	
+	if (g_openorbiter->getMaps().size() == 0) {
+		QMessageBox::critical(NULL, "No maps found", "Could not find any maps, this won't work, sorry!");
+		OpenOrbiter::destroy();
+		return EXIT_FAILURE;
 	}
 
+	const QRect& g = g_config->windowGeometry();
+
+	FormMain form(g_config->windowShowStats());
+	form.resize(g.width(), g.height());
+	
+	if (g_config->windowMaximized())
+		form.setWindowState(form.windowState() | Qt::WindowMaximized);
+		
+	if (g_config->windowFullScreen())
+		form.setWindowState(form.windowState() | Qt::WindowFullScreen);
+
+	form.setStatsShown(g_config->statsShown());
+
+	form.show();
+
+	// this causese some troubles with fullscreen
+	//form.createMatch();
+
+	ret = app.exec();
+
+	g_config->setStatsShown(form.statsShown());
+
+	g_config->setWindowMaximized(form.isMaximized());
+	g_config->setWindowFullScreen(form.isFullScreen());
+	g_config->setWindowShowStats(form.isStatsShown());
+
+	g_config->setWindowGeometry(form.normalGeometry());
 
 	OpenOrbiter::destroy();
 	Config::destroy();

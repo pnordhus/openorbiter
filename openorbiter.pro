@@ -1,3 +1,7 @@
+!include(build/configure.pri) {
+	error("Please run ./configure first!")
+}
+
 QT += xml
 MOC_DIR = build
 UI_DIR = build
@@ -6,6 +10,11 @@ TARGET = openorbiter
 DESTDIR = bin
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -fno-exceptions -fno-rtti
+
+release {
+	CONFIG += silent
+}
 
 FORMS += \
 	ui/form_creatematch.ui \
@@ -59,12 +68,6 @@ SOURCES +=	\
 	src/player.cpp \
 	src/spawnpoint.cpp \
 	src/vector.cpp
-
-
-!include(build/configure.pri) {
-	error("Please run ./configure first!")
-}
-
 
 !exists(build/configure.h) {
 	error("Please run ./configure again!")

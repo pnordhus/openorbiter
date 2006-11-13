@@ -181,14 +181,6 @@
      <height>27</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuHelp" >
-    <property name="enabled" >
-     <bool>false</bool>
-    </property>
-    <property name="title" >
-     <string>Help</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuGame" >
     <property name="title" >
      <string>&amp;Game</string>
@@ -223,6 +215,12 @@
     <addaction name="menuStatistics" />
     <addaction name="separator" />
     <addaction name="actionPreferences" />
+   </widget>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="actionAboutQt" />
    </widget>
    <addaction name="menuGame" />
    <addaction name="menuSettings" />
@@ -337,6 +335,11 @@
    </property>
    <property name="text" >
     <string>&amp;Key</string>
+   </property>
+  </action>
+  <action name="actionAboutQt" >
+   <property name="text" >
+    <string>About &amp;Qt</string>
    </property>
   </action>
  </widget>

@@ -166,6 +166,8 @@ void FormMain::connectActions()
 	connect(m_window->actionShowWay,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
 	connect(m_window->actionShowWins,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
 
+	connect(m_window->actionAboutQt,			SIGNAL(activated()),	qApp,	SLOT(aboutQt()));
+
 	connect(&m_shortcutPlay,					SIGNAL(activated()),	this,	SLOT(shortcutPlay()));
 }
 

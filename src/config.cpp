@@ -33,16 +33,17 @@
 /****************************************************************************/
 
 
-Config::Config()
+Config::Config() :
+	m_settings(QSettings::IniFormat, QSettings::UserScope, "openorbiter")
 {
-	m_userDir = QDir::homePath() + QDir::separator();
 #ifdef WIN32
+	m_userDir = QDir(QString(getenv("APPDATA")) + QDir::separator() + "OpenOrbiter").path() + QDir::separator();
 	m_dataDir = "";
-	m_userDir += "OpenOrbiter\\";
 #else
+	m_userDir = QDir(QDir::homePath() + QDir::separator() + ".openorbiter").path() + QDir::separator();
 	m_dataDir = QDir(DATADIR).path() + QDir::separator();
-	m_userDir += ".openorbiter/";
 #endif
+	QDir().mkpath(m_userDir);
 
 	m_gravityFactor = 1.0f;
 

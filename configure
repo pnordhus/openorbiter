@@ -161,7 +161,14 @@ mkdir -p build
 echo "BINDIR  = $BINDIR"  >  build/configure.pri
 echo "DATADIR = $DATADIR" >> build/configure.pri
 
-[ -n "$DEBUG" ] && echo "CONFIG += debug" >> build/configure.pri
+if [ -n "$DEBUG" ]; then
+	echo "CONFIG += debug" >> build/configure.pri
+	echo "CONFIG -= release" >> build/configure.pri
+else
+	echo "CONFIG -= debug" >> build/configure.pri
+	echo "CONFIG += release" >> build/configure.pri
+fi
+
 [ -z "$NO_SVG" ] && echo "QT += svg" >> build/configure.pri
 
 
