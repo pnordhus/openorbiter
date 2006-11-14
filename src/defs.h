@@ -26,14 +26,26 @@
 #include <QString>
 
 
-const unsigned int APP_VERSION_MAJOR = 0;
-const unsigned int APP_VERSION_MINOR = 3;
-const unsigned int APP_VERSION_MICRO = 0;
+const quint8	APP_VERSION_MAJOR = 0;
+const quint8	APP_VERSION_MINOR = 3;
+const quint8	APP_VERSION_MICRO = 0;
+
+/* set this to true for final release builds */
+const bool		APP_VERSION_FINAL = false;
+
+
+/****************************************************************************/
+
 
 const QString APP_BUILD_TIME = QString(__DATE__) + " (" + __TIME__ + ")";
 
 const QString APP_NAME = "OpenOrbiter";
-const QString APP_NAME_VERSION_SHORT = QString("%1 %2.%3.%4").arg(APP_NAME).arg(APP_VERSION_MAJOR).arg(APP_VERSION_MINOR).arg(APP_VERSION_MICRO);
+const QString APP_NAME_VERSION_SHORT = QString("%1 %2.%3.%4%5")
+	.arg(APP_NAME)
+	.arg(APP_VERSION_MAJOR)
+	.arg(APP_VERSION_MINOR)
+	.arg(APP_VERSION_MICRO)
+	.arg(APP_VERSION_FINAL ? "" : "-pre");
 const QString APP_NAME_VERSION_BUILD = APP_NAME_VERSION_SHORT + " - " + APP_BUILD_TIME;
 
 #ifndef QT_NO_DEBUG
@@ -43,4 +55,4 @@ const QString APP_NAME_VERSION = APP_NAME_VERSION_SHORT;
 #endif
 
 
-#endif
+#endif // OPENORBITER_DEFS_H
