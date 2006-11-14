@@ -151,22 +151,22 @@ FormMain::~FormMain()
 
 void FormMain::connectActions()
 {
-	connect(m_window->actionNewMatch,			SIGNAL(activated()),	this,	SLOT(createMatch()));
-	connect(m_window->actionFullScreenMode,		SIGNAL(activated()),	this,	SLOT(toggleFullscreen()));
-	connect(m_window->actionPreferences,		SIGNAL(activated()),	this,	SLOT(showPreferences()));
-	connect(m_window->actionShowAll,			SIGNAL(activated()),	this,	SLOT(showAllStats()));
-	connect(m_window->actionShowNone,			SIGNAL(activated()),	this,	SLOT(hideAllStats()));
+	connect(m_window->actionNewMatch,			SIGNAL(triggered()),	this,	SLOT(createMatch()));
+	connect(m_window->actionFullScreenMode,		SIGNAL(triggered()),	this,	SLOT(toggleFullscreen()));
+	connect(m_window->actionPreferences,		SIGNAL(triggered()),	this,	SLOT(showPreferences()));
+	connect(m_window->actionShowAll,			SIGNAL(triggered()),	this,	SLOT(showAllStats()));
+	connect(m_window->actionShowNone,			SIGNAL(triggered()),	this,	SLOT(hideAllStats()));
 
-	connect(m_window->actionShowAverageSpeed,	SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
-	connect(m_window->actionShowFrags,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
-	connect(m_window->actionShowKey,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
-	connect(m_window->actionShowLosses,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
-	connect(m_window->actionShowPlayTime,		SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
-	connect(m_window->actionShowTopSpeed,		SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
-	connect(m_window->actionShowWay,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
-	connect(m_window->actionShowWins,			SIGNAL(activated()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowAverageSpeed,	SIGNAL(triggered()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowFrags,			SIGNAL(triggered()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowKey,			SIGNAL(triggered()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowLosses,			SIGNAL(triggered()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowPlayTime,		SIGNAL(triggered()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowTopSpeed,		SIGNAL(triggered()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowWay,			SIGNAL(triggered()),	this,	SLOT(changeVisibleStats()));
+	connect(m_window->actionShowWins,			SIGNAL(triggered()),	this,	SLOT(changeVisibleStats()));
 
-	connect(m_window->actionAboutQt,			SIGNAL(activated()),	qApp,	SLOT(aboutQt()));
+	connect(m_window->actionAboutQt,			SIGNAL(triggered()),	qApp,	SLOT(aboutQt()));
 
 	connect(&m_shortcutPlay,					SIGNAL(activated()),	this,	SLOT(shortcutPlay()));
 }
