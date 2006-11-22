@@ -41,42 +41,35 @@ function check_qt_version_internal()
 	local q
 	local QTDIR_QMAKE
 	[ -n "$QTDIR" ] && QTDIR_QMAKE="$QTDIR/bin/qmake"
-
-	for q in $QTDIR_QMAKE "$(type -p qmake)"; do
+	
+	for q in "$QTDIR_QMAKE" "$(type -p qmake)"; do
 		if "$q" > /dev/null 2>&1; then
-			echo "found ($q)"
-			QM="$q"
-			break
+			echo "Testing $q..."
+
+			if ! gmake clean all > /dev/null 2>&1; then
+				echo "  failed!"
+				continue
+			fi
+
+			if ./qtcheck; then
+				echo " - ok"
+				QM="$q"
+				return 0
+			else
+				echo " - not supported!"
+				rm -rf qtcheck
+				continue
+			fi
 		fi
 	done
 
-	if [ -z "$QM" ]; then
-		echo "not found!"
-		rm -rf $TEMPDIR
-		return 1
-	fi
-	
-	echo -n "Checking Qt..."
-	if ! gmake > /dev/null 2>&1; then
-		echo "failed!"
-		return 1
-	fi
-
-	local QTVERSION
-	if QTVERSION=$(./qtcheck); then
-		echo "$QTVERSION - ok"
-	else
-		echo "$QTVERSION - failed!"
-		return 1
-	fi
-
-	return 0
+	echo "Qt not found!"
+	return 1
 }
 
 
 function check_qt_version()
 {
-	echo -n "Checking qmake..."
 	local TEMPDIR=$(mktemp -d)
 	local OLD_DIR=$(pwd)
 	cd $TEMPDIR
@@ -90,7 +83,7 @@ EOF
 #include <qglobal.h>
 int main()
 {
-	std::cout << QT_VERSION_STR << std::endl;
+	std::cout << "  "  << QT_VERSION_STR;
 	if (QT_VERSION >= 0x040200)
 		return EXIT_SUCCESS;
 	return EXIT_FAILURE;
@@ -105,6 +98,8 @@ EOF
 		echo " *** You need at least Qt 4.2 in order to build OpenOrbiter! ***"
 		return 1
 	fi
+
+	echo
 	return 0
 }
 

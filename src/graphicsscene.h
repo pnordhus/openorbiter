@@ -41,6 +41,9 @@ public:
 signals:
 	void	sizeChanged(float w, float h);
 
+public slots:
+	void	setStatusColor(const QColor& color);
+
 private slots:
 	void	togglePaused(bool);
 
@@ -48,10 +51,8 @@ private:
 	void	updatePauseText();
 
 private:
-	QGraphicsRectItem	m_backgroundLeft;
-	QGraphicsRectItem	m_backgroundRight;
-	QGraphicsRectItem	m_backgroundBottom;
-	QGraphicsRectItem	m_backgroundTop;
+	QGraphicsRectItem	m_background;
+	QGraphicsRectItem	m_backgroundStatus;
 	QGraphicsRectItem	m_map;
 	QGraphicsTextItem	m_pauseText;
 	QGraphicsRectItem	m_pauseTextBackground;

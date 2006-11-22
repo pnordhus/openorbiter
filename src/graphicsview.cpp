@@ -41,8 +41,8 @@ GraphicsView::GraphicsView(QWidget* parent) :
 
 void GraphicsView::resize(float w, float h)
 {
-	w = float(width() - 20) / w;
-	h = float(height() - 20) / h;
+	w = float(width() - 10) / w;
+	h = float(height() - 10) / h;
 
 	float r = qMin(w, h);
 

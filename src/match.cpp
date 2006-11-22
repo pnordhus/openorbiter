@@ -20,9 +20,13 @@
 
 
 #include "game.h"
+#include "graphicsscene.h"
 #include "match.h"
 #include "openorbiter.h"
+#include "player.h"
 #include "randomizer.h"
+
+
 #include <QDebug>
 
 
@@ -58,6 +62,7 @@ void Match::process(float time)
 
 	if (m_game->isOver()) {
 		m_lastWinner = m_game->winner();
+		g_openorbiter->graphicsScene()->setStatusColor(m_lastWinner->getColor());
 
 		delete m_game;
 		m_game = NULL;

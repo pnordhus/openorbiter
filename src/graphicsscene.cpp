@@ -34,26 +34,28 @@ GraphicsScene::GraphicsScene()
 	setItemIndexMethod(NoIndex);
 	setBackgroundBrush(Qt::black);
 
-	m_backgroundLeft.setBrush(Qt::white);
-	m_backgroundLeft.setPen(Qt::NoPen);
-	m_backgroundLeft.setZValue(100.0f);
+	{
+		QPen pen(Qt::white);
+		pen.setWidthF(0.5f);
+		pen.setJoinStyle(Qt::RoundJoin);
 
-	m_backgroundRight.setBrush(Qt::white);
-	m_backgroundRight.setPen(Qt::NoPen);
-	m_backgroundRight.setZValue(100.0f);
+		m_background.setBrush(Qt::NoBrush);
+		m_background.setPen(pen);
+		m_background.setZValue(100.0f);
+		addItem(&m_background);
+	}
 
-	m_backgroundBottom.setBrush(Qt::white);
-	m_backgroundBottom.setPen(Qt::NoPen);
-	m_backgroundBottom.setZValue(100.0f);
+	{
+		QPen pen(Qt::red);
+		pen.setWidthF(0.75f);
+		pen.setJoinStyle(Qt::RoundJoin);
 
-	m_backgroundTop.setBrush(Qt::white);
-	m_backgroundTop.setPen(Qt::NoPen);
-	m_backgroundTop.setZValue(100.0f);
+		m_backgroundStatus.setBrush(Qt::NoBrush);
+		m_backgroundStatus.setPen(pen);
+		m_backgroundStatus.setZValue(0.0f);
+		addItem(&m_backgroundStatus);
+	}
 
-	addItem(&m_backgroundLeft);
-	addItem(&m_backgroundRight);
-	addItem(&m_backgroundBottom);
-	addItem(&m_backgroundTop);
 
 	m_map.setPen(Qt::NoPen);
 	m_map.setZValue(0.0f);
@@ -89,15 +91,12 @@ void GraphicsScene::setMapColor(const QColor& color)
 void GraphicsScene::setSize(float w, float h)
 {
 	const QRectF rect(0.0f, 0.0f, w, h);
-	m_map.setRect(rect);
+	m_map.setRect(rect.adjusted(-0.1f, -0.1f, 0.2f, 0.2f));
 
-	m_backgroundLeft.setRect(QRectF(-1.0f, -1.0f, 1.0f, h + 2.0f));
-	m_backgroundRight.setRect(QRectF(w, -1.0f, 1.0f, h + 2.0f));
-	m_backgroundTop.setRect(QRectF(-1.0f, -1.0f, w + 2.0f, 1.0f));
-	m_backgroundBottom.setRect(QRectF(-1.0f, h, w + 2.0f, 1.0f));
+	m_background.setRect(QRectF(-0.25f, -0.25f, w + 0.5f, h + 0.5f));
+	m_backgroundStatus.setRect(QRectF(-0.5f, -0.5f, w + 1.0f, h + 1.0f));
 
 	setSceneRect(rect.adjusted(-1.0f, -1.0f, 1.0f, 1.0f));
-
 	updatePauseText();
 
 	emit sizeChanged(w + 2.0f, h + 2.0f);
@@ -123,6 +122,17 @@ void GraphicsScene::updatePauseText()
 	m_pauseTextBackground.setMatrix(m_pauseText.matrix());
 	m_pauseTextBackground.setRect(m_pauseText.boundingRect());
 	m_pauseTextBackground.setPos(m_pauseText.pos());
+}
+
+
+/****************************************************************************/
+
+
+void GraphicsScene::setStatusColor(const QColor& color)
+{
+	QPen pen = m_backgroundStatus.pen();
+	pen.setColor(color);
+	m_backgroundStatus.setPen(pen);
 }
 
 
