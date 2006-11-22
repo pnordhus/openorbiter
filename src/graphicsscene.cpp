@@ -46,7 +46,7 @@ GraphicsScene::GraphicsScene()
 	}
 
 	{
-		QPen pen(Qt::red);
+		QPen pen(Qt::black);
 		pen.setWidthF(0.75f);
 		pen.setJoinStyle(Qt::RoundJoin);
 

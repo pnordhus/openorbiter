@@ -14,6 +14,7 @@ function printhelp() {
 	echo ""
 	echo "  --enable-debug         build with debug output"
 	echo "  --disable-svg          build without SVG support"
+	echo "  --disable-opengl       build without OpenGL support"
 	echo ""
 	echo "  --help                 display this help and exit"
 	echo ""
@@ -106,6 +107,7 @@ EOF
 
 DEBUG=""
 NO_SVG=""
+NO_OPENGL=""
 
 
 for arg do
@@ -133,6 +135,9 @@ for arg do
 	--disable-svg)
 		NO_SVG=1
 		;;
+	--disable-opengl)
+		NO_OPENGL=1
+		;;
 	*)
 		printinvalid $arg
 		;;
@@ -142,6 +147,7 @@ done
 
 QT_FEATURES=""
 [ -z "$NO_SVG" ] && QT_FEATURES="$QT_FEATURES svg"
+[ -z "$NO_OPENGL" ] && QT_FEATURES="$QT_FEATURES opengl"
 
 check_qt_version || exit 1
 
@@ -165,6 +171,7 @@ else
 fi
 
 [ -z "$NO_SVG" ] && echo "QT += svg" >> build/configure.pri
+[ -z "$NO_OPENGL" ] && echo "QT += svg opengl" >> build/configure.pri
 
 
 echo "#ifndef CONFIG_H"              > build/configure.h
@@ -172,6 +179,7 @@ echo "#define CONFIG_H"             >> build/configure.h
 
 echo "#define DATADIR \"$DATADIR\"" >> build/configure.h
 [ -z "$NO_SVG" ] && echo "#define USE_SVG" >> build/configure.h
+[ -z "$NO_OPENGL" ] && echo "#define USE_OPENGL" >> build/configure.h
 
 echo "#endif"                       >> build/configure.h
 
@@ -194,6 +202,11 @@ if [ -n "$NO_SVG" ]; then
 	echo "  Building without SVG support"
 else
 	echo "  Building with SVG support"
+fi
+if [ -n "$NO_OPENGL" ]; then
+	echo "  Building without OpenGL support"
+else
+	echo "  Building with OpenGL support"
 fi
 
 touch src/defs.h

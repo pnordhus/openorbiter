@@ -55,7 +55,7 @@ OpenOrbiter::~OpenOrbiter()
 {
 	delete m_match;
 
-	g_config->save(g_config->userDir() + "config.xml");
+	g_config->save(g_config->getString("userDir") + "config.xml");
 
 	for (int i = 0; i < MaxPlayers; i++)
 		delete m_players[i];
@@ -87,7 +87,7 @@ void OpenOrbiter::startMatch(const Match& match)
 	m_match = new Match(match);
 
 	m_lastMap = m_match->map();
-	g_config->setLastMap(m_lastMap->name());
+	g_config->set("lastMap", m_lastMap->name());
 
 	m_match->startGame();
 
@@ -133,16 +133,16 @@ void OpenOrbiter::process()
 
 	if (!isPaused()) {
 		m_match->process(m_frameTime);
-	}
 
-	graphicsScene()->advance();
+		graphicsScene()->advance();
+	}
 }
 
 
 void OpenOrbiter::init(bool load)
 {
 #ifdef USE_SVG
-	m_nodeRenderer = new QSvgRenderer(g_config->dataDir() + "gfx/node.svg");
+	m_nodeRenderer = new QSvgRenderer(g_config->getString("dataDir") + "gfx/node.svg");
 #endif
 
 	initPlayers();
@@ -159,7 +159,7 @@ void OpenOrbiter::init(bool load)
 
 	m_graphicsScene = new GraphicsScene;
 	m_graphicsScene->setSize(50.0f, 25.0f);
-	m_graphicsScene->setMapColor(g_config->mapColor());
+	m_graphicsScene->setMapColor(g_config->getColor("mapColor"));
 }
 
 
@@ -180,11 +180,11 @@ void OpenOrbiter::loadConfig()
 {
 	QString file;
 
-	file = g_config->dataDir() + "config.xml";
+	file = g_config->getString("dataDir") + "config.xml";
 	if (QFileInfo(file).isReadable())
 		g_config->load(file);
 
-	file = g_config->userDir() + "config.xml";
+	file = g_config->getString("userDir") + "config.xml";
 	if (QFileInfo(file).isReadable())
 		g_config->load(file);
 }
@@ -196,8 +196,8 @@ void OpenOrbiter::loadMaps()
 	m_maps.clear();
 	m_lastMap = NULL;
 
-	loadMapsFromDir(g_config->userDir() + "maps");
-	loadMapsFromDir(g_config->dataDir() + "maps");
+	loadMapsFromDir(g_config->getString("userDir") + "maps");
+	loadMapsFromDir(g_config->getString("dataDir") + "maps");
 }
 
 
@@ -215,7 +215,7 @@ void OpenOrbiter::loadMapsFromDir(const QDir& dir)
 				continue;
 			}
 			m_maps.insert(it, map);
-			if (map->name() == g_config->lastMap())
+			if (map->name() == g_config->getString("lastMap"))
 				m_lastMap = map;
 		}
 	}

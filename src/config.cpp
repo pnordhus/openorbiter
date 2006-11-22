@@ -33,75 +33,103 @@
 /****************************************************************************/
 
 
-Config::Config() :
-	m_settings(QSettings::IniFormat, QSettings::UserScope, "openorbiter")
+Config::Config()
 {
+	QString userDir, dataDir;
+
 #ifdef WIN32
-	m_userDir = QDir(QString(getenv("APPDATA")) + QDir::separator() + "OpenOrbiter").path() + QDir::separator();
-	m_dataDir = "";
+	userDir = QDir(QString(getenv("APPDATA")) + QDir::separator() + "OpenOrbiter").path() + QDir::separator();
+	dataDir = "";
 #else
-	m_userDir = QDir(QDir::homePath() + QDir::separator() + ".openorbiter").path() + QDir::separator();
-	m_dataDir = QDir(DATADIR).path() + QDir::separator();
+	userDir = QDir(QDir::homePath() + QDir::separator() + ".openorbiter").path() + QDir::separator();
+	dataDir = QDir(DATADIR).path() + QDir::separator();
 #endif
-	QDir().mkpath(m_userDir);
+	QDir().mkpath(userDir);
 
-	m_gravityFactor = 1.0f;
+	m_values.insert("userDir",			userDir);
+	m_values.insert("dataDir",			dataDir);
+	m_values.insert("lastMap",			QString());
+	m_values.insert("mapColor",			QColor(0, 0, 10));
 
-	m_windowMaximized = false;
-	m_windowFullScreen = false;
-	m_windowShowStats = true;
+	m_values.insert("useSVG",			true);
+	m_values.insert("useOpenGL",		true);
 
-	m_firstNodeTime = 60.0f;
-	m_nextNodeTime = 10.0f;
-	
-	m_svgEnabled = true;
+	m_values.insert("windowMaximized",	false);
+	m_values.insert("windowFullScreen",	false);
+	m_values.insert("windowShowStats",	true);
 
-	m_mapColor = QColor(250,250,250);
+	m_values.insert("firstNodeTime",	60.0f);
+	m_values.insert("nextNodeTime",		10.0f);
+	m_values.insert("gravityFactor",	1.0f);
+
+	m_values.insert("windowGeometry",	QRect());
 }
 
 
 /****************************************************************************/
 
 
-void Config::setWindowGeometry(const QRect& g)
+QVariant Config::get(const QString& name) const
 {
-	m_windowGeometry = g;
+	ValueMap::const_iterator it = m_values.find(name);
+	Q_ASSERT_X(it != m_values.end(),
+		"get()",
+		qPrintable(QString("Option '") + name + "' is invalid!"));
+
+	return *it;
 }
 
 
 /****************************************************************************/
 
 
-void Config::setWindowMaximized(bool m)
+#define GET_FN_GEN(_type, _name) \
+_type Config::get ## _name(const QString& name) const \
+{ \
+	return getType<_type>(name); \
+}
+
+
+GET_FN_GEN(bool,	Bool)
+GET_FN_GEN(QColor,	Color)
+GET_FN_GEN(float,	Float)
+GET_FN_GEN(QRect,	Rect)
+GET_FN_GEN(QString,	String)
+
+
+/****************************************************************************/
+
+
+template <typename T>
+T Config::getType(const QString& name) const
 {
-	m_windowMaximized = m;
+	QVariant t;
+	t.setValue(T());
+
+	QVariant v = get(name);
+	Q_ASSERT_X(v.canConvert<T>(),
+		"get()",
+		qPrintable(QString("Option '") + name + "' is not " + t.typeName() + ", but " + v.typeName()));
+
+	return v.value<T>();
 }
 
 
 /****************************************************************************/
 
 
-void Config::setWindowFullScreen(bool f)
+void Config::set(const QString& name, const QVariant& value)
 {
-	m_windowFullScreen = f;
-}
+	ValueMap::iterator it = m_values.find(name);
+	Q_ASSERT_X(it != m_values.end(),
+		"set()", qPrintable(QString("Option '") + name + "' is invalid!"));
+	Q_ASSERT_X(value.canConvert(it->type()),
+		"set()", qPrintable(QString("Option '") + name + "' is not " + it->typeName() + ", but " + value.typeName() + "!"));
 
-
-/****************************************************************************/
-
-
-void Config::setWindowShowStats(bool s)
-{
-	m_windowShowStats = s;
-}
-
-
-/****************************************************************************/
-
-
-void Config::setLastMap(const QString& map)
-{
-	m_lastMap = map;
+	if (*it != value) {
+		*it = value;
+		emit changed(name);
+	}
 }
 
 
@@ -111,27 +139,6 @@ void Config::setLastMap(const QString& map)
 void Config::setStatsShown(const StringBoolMap& map)
 {
 	m_statsShown = map;
-}
-
-
-/****************************************************************************/
-
-
-void Config::setMapColor(const QColor& color)
-{
-	m_mapColor = color;
-}
-
-
-/****************************************************************************/
-
-
-void Config::setSvgEnabled(bool enabled)
-{
-	bool changed = m_svgEnabled ^ enabled;
-	m_svgEnabled = enabled;
-	if (changed)
-		emit svgChanged(enabled);
 }
 
 
@@ -175,11 +182,11 @@ void Config::saveGame(QDomDocument& doc, QDomElement& root)
 	QDomElement game = doc.createElement("game");
 	root.appendChild(game);
 
-	game.setAttribute("gravity", m_gravityFactor);
+	game.setAttribute("gravity", get("gravityFactor").toString());
 
-	SET_TEXT(game, "lastMap", m_lastMap);
-	SET_TEXT(game, "mapColor", m_mapColor.name());
-	SET_TEXT(game, "useSVG", QVariant(m_svgEnabled).toString());
+	SET_TEXT(game, "lastMap", getString("lastMap"));
+//	SET_TEXT(game, "mapColor", m_mapColor.name());
+	SET_TEXT(game, "useSVG", get("useSVG").toString());
 }
 
 
@@ -191,17 +198,19 @@ void Config::saveWindow(QDomDocument& doc, QDomElement& root)
 	QDomElement window = doc.createElement("window");
 	root.appendChild(window);
 
-	window.setAttribute("posX", m_windowGeometry.left());
-	window.setAttribute("posY", m_windowGeometry.top());
-	window.setAttribute("width", m_windowGeometry.width());
-	window.setAttribute("height", m_windowGeometry.height());
-	window.setAttribute("maximized", QVariant(m_windowMaximized).toString());
-	window.setAttribute("fullscreen", QVariant(m_windowFullScreen).toString());
+	QRect g = getRect("windowGeometry");
+
+	window.setAttribute("posX", g.left());
+	window.setAttribute("posY", g.top());
+	window.setAttribute("width", g.width());
+	window.setAttribute("height", g.height());
+	window.setAttribute("maximized", get("windowMaximized").toString());
+	window.setAttribute("fullscreen", get("windowFullScreen").toString());
 
 	{
 		QDomElement stats = doc.createElement("stats");
 		window.appendChild(stats);
-		stats.setAttribute("show", QVariant(m_windowShowStats).toString());
+		stats.setAttribute("show", get("windowShowStats").toString());
 
 		for (StringBoolMap::const_iterator it = m_statsShown.begin(); it != m_statsShown.end(); it++)
 			SET_TEXT(stats, it.key(),	QVariant(it.value()).toString());
@@ -258,10 +267,10 @@ void Config::load(const QString& filename)
 
 #define READ_ATTR_INT_FN(base, name, _fn) { bool _b; int _ret = base.attribute(name).toInt(&_b); if(_b) _fn(_ret); }
 #define READ_ATTR_INT(base, name, var) { bool _b; int _ret = base.attribute(name).toInt(&_b); if(_b) var = _ret; }
-#define READ_ATTR_FLOAT(base, name, var) { bool _b; float _ret = base.attribute(name).toFloat(&_b); if(_b) var = _ret; }
-#define READ_ATTR_BOOL(base, name, var) var = QVariant(base.attribute(name)).toBool();
+#define READ_ATTR_FLOAT(base, name, var) { bool _b; float _ret = base.attribute(name).toFloat(&_b); if(_b) set(var, _ret); }
+#define READ_ATTR_BOOL(base, name, var) set(var, base.attribute(name));
 
-#define READ_BOOL(base, name, var) var = QVariant(base.firstChildElement(name).text()).toBool();
+//#define READ_BOOL(base, name, var) set(var, base.firstChildElement(name).text());
 #define READ_STRING(base, name, var) var = base.firstChildElement(name).text();
 
 
@@ -275,19 +284,20 @@ void Config::loadGame(const QDomElement& elem)
 	if (child.isNull())
 		return;
 
-	READ_ATTR_FLOAT(child, "gravity", m_gravityFactor);
-	READ_STRING(child, "lastMap", m_lastMap);
+	READ_ATTR_FLOAT(child, "gravity", "gravityFactor");
 
 	QString tmp;
+	READ_STRING(child, "lastMap", tmp);
+	set("lastMap", tmp);
 
-	READ_STRING(child, "mapColor", tmp);
-	QColor color = tmp;
-	if (color.isValid())
-		m_mapColor = color;
+//	READ_STRING(child, "mapColor", tmp);
+//	QColor color = tmp;
+//	if (color.isValid())
+//		m_mapColor = color;
 
-//	READ_STRING(child, "useSVG", tmp);
-//	if (tmp.length() > 0)
-//		m_svgEnabled = QVariant(tmp).toBool();
+	READ_STRING(child, "useSVG", tmp);
+	if (tmp.length() > 0)
+		set("useSVG", tmp);
 }
 
 
@@ -326,18 +336,20 @@ void Config::loadWindow(const QDomElement& elem)
 	if (child.isNull())
 		return;
 
-	READ_ATTR_INT_FN(child, "posX", m_windowGeometry.setLeft);
-	READ_ATTR_INT_FN(child, "posY", m_windowGeometry.setTop);
-	READ_ATTR_INT_FN(child, "width", m_windowGeometry.setWidth);
-	READ_ATTR_INT_FN(child, "height", m_windowGeometry.setHeight);
+	QRect g = getRect("windowGeometry");
+	READ_ATTR_INT_FN(child, "posX", g.setLeft);
+	READ_ATTR_INT_FN(child, "posY", g.setTop);
+	READ_ATTR_INT_FN(child, "width", g.setWidth);
+	READ_ATTR_INT_FN(child, "height", g.setHeight);
+	set("windowGeometry", g);
 
-	READ_ATTR_BOOL(child, "fullscreen", m_windowFullScreen);
-	READ_ATTR_BOOL(child, "maximized", m_windowMaximized);
+	READ_ATTR_BOOL(child, "fullscreen", "windowFullScreen");
+	READ_ATTR_BOOL(child, "maximized", "windowMaximized");
 
 	{
 		QDomElement tmp = child.firstChildElement("stats");
 		if (!tmp.isNull()) {
-			READ_ATTR_BOOL(tmp, "show", m_windowShowStats);
+			READ_ATTR_BOOL(tmp, "show", "windowShowStats");
 
 			QDomElement stat = tmp.firstChildElement();
 			while (!stat.isNull()) {

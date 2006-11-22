@@ -48,11 +48,11 @@ Orbiter::Orbiter(Player& player, const QString& filename) :
 	m_line.setZValue(10.0f);
 
 	m_item = new Graphic<QGraphicsEllipseItem>(this, 1);
-	toggleSvg(g_config->svgEnabled());
+	setSvg("useSVG");
 	updateItem();
 
 #ifdef USE_SVG
-	connect(g_config, SIGNAL(svgChanged(bool)), this, SLOT(toggleSvg(bool)));
+	connect(g_config, SIGNAL(changed(const QString&)), this, SLOT(setSvg(const QString&)));
 #endif
 }
 
@@ -74,7 +74,7 @@ void Orbiter::reset()
 	m_angleSpeed = 0.0;
 	m_collisionTimer = 0.0f;
 	m_position = Vector();
-	m_speed = Vector();
+	m_impulse = Vector();
 
 	updateItem();
 
@@ -105,10 +105,10 @@ void Orbiter::process(float t, const Vector& gravity)
 				p = (m_position - *m_connectionNode).vertical();
 
 				float directionFactor = 0.0f;
-				if (!m_speed.isNull()) // if speed is 0 we would have null division
-					directionFactor = m_speed.normalized().dot(p.normalized());
+				if (!m_impulse.isNull()) // if speed is 0 we would have null division
+					directionFactor = m_impulse.normalized().dot(p.normalized());
 
-				m_angleSpeed = directionFactor * m_speed.length() / m_nodeRadius;
+				m_angleSpeed = directionFactor * m_impulse.length() / m_nodeRadius;
 				m_connected = true;
 			}
 		}
@@ -135,19 +135,19 @@ void Orbiter::process(float t, const Vector& gravity)
 		way = fabsf(angleDiff) * m_nodeRadius;
 
 		m_position = *m_connectionNode + Vector(m_nodeRadius * cosf(m_angle), m_nodeRadius * sinf(m_angle));
-		m_speed = (m_position - *m_connectionNode).vertical();
-		m_speed.setLength(m_angleSpeed * m_nodeRadius);
+		m_impulse = (m_position - *m_connectionNode).vertical();
+		m_impulse.setLength(m_angleSpeed * m_nodeRadius);
 	} else {
-		m_speed += gravity;
-		if (!gravity.isNull() && !m_speed.isNull()) {
+		m_impulse += gravity;
+		if (!gravity.isNull() && !m_impulse.isNull()) {
 			Vector wind = gravity.vertical().normalized();
-			float l = wind.dot(m_speed);
+			float l = wind.dot(m_impulse);
 			if (fabsf(l) > t * 0.3f)
 				l = copysign(t * 0.3f, l);
-			m_speed = m_speed - wind * l;
+			m_impulse = m_impulse - wind * l;
 		}
 
-		Vector v = m_speed * t;
+		Vector v = m_impulse * (t / m_mass);
 		way = v.length();
 		m_position += v;
 	}
@@ -208,11 +208,11 @@ void Orbiter::collide(Orbiter& orb1, Orbiter& orb2)
 
 //	qDebug() << "collision" << distance;
 
-	float rat12 = orb1.m_speed.dot(vec12);
-	float rat21 = orb2.m_speed.dot(vec21);
+	float rat12 = orb1.m_impulse.dot(vec12);
+	float rat21 = orb2.m_impulse.dot(vec21);
 
-	orb1.m_speed += (vec21 * rat21) - (vec12 * rat12);
-	orb2.m_speed += (vec12 * rat12) - (vec21 * rat21);
+	orb1.m_impulse += (vec21 * rat21) - (vec12 * rat12);
+	orb2.m_impulse += (vec12 * rat12) - (vec21 * rat21);
 
 	vec21 = vec21 * (((orb1.m_radius * 1.0) + (orb2.m_radius * 1.0) - distance) / 2.0 + 0.00001);
 	vec12 = vec12 * (((orb1.m_radius * 1.0) + (orb2.m_radius * 1.0) - distance) / 2.0 + 0.00001);
@@ -312,10 +312,15 @@ void Orbiter::update(int id)
 
 
 #ifndef USE_SVG
-void Orbiter::toggleSvg(bool) {}
+void Orbiter::setSvg(const QString&) {}
 #else
-void Orbiter::toggleSvg(bool enable)
+void Orbiter::setSvg(const QString& name)
 {
+	if (name != "useSVG")
+		return;
+
+	bool enable = g_config->getBool("useSVG");
+
 	QGraphicsScene* scene = m_item->scene();
 	if (scene)
 		scene->removeItem(m_item);
@@ -324,7 +329,7 @@ void Orbiter::toggleSvg(bool enable)
 	m_item = NULL;
 
 	if (enable) {
-		Graphic<QGraphicsSvgItem>* item = new Graphic<QGraphicsSvgItem>(this, 2, g_config->dataDir() + "gfx/" + m_svgFilename);
+		Graphic<QGraphicsSvgItem>* item = new Graphic<QGraphicsSvgItem>(this, 2, g_config->getString("dataDir") + "gfx/" + m_svgFilename);
 		if (item->renderer()->isValid()) {
 			m_item = item;
 			m_isSvg = true;

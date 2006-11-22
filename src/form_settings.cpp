@@ -32,12 +32,7 @@ FormSettings::FormSettings(QWidget* parent) :
 	m_window = new Ui::FormSettings;
 	m_window->setupUi(this);
 
-	connect(m_window->buttonSelectColor, SIGNAL(clicked()), this, SLOT(showColorDialog()));
-
-	m_window->checkSvgEnabled->setChecked(g_config->svgEnabled());
-
-	setColor(g_config->mapColor());
-	m_window->frameColor->setAutoFillBackground(true);
+	m_window->checkSvgEnabled->setChecked(g_config->getBool("useSVG"));
 }
 
 
@@ -47,25 +42,8 @@ FormSettings::~FormSettings()
 }
 
 
-void FormSettings::setColor(const QColor& color)
-{
-	QPalette p = m_window->frameColor->palette();
-	p.setColor(QPalette::Window, color);
-	m_window->frameColor->setPalette(p);
-}
-
-
 void FormSettings::accept()
 {
-	g_config->setSvgEnabled(m_window->checkSvgEnabled->isChecked());
-	g_config->setMapColor(m_window->frameColor->palette().color(QPalette::Window));
+	g_config->set("useSVG", m_window->checkSvgEnabled->isChecked());
 	QDialog::accept();
-}
-
-
-void FormSettings::showColorDialog()
-{
-	QColor ret = QColorDialog::getColor(m_window->frameColor->palette().color(QPalette::Window));
-	if (ret.isValid())
-		setColor(ret);
 }

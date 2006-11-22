@@ -69,7 +69,7 @@ FormMain::FormMain(bool showStats) :
 	m_window->setupUi(this);
 
 	connect(&m_processTimer, SIGNAL(timeout()), g_openorbiter, SLOT(process()));
-	m_processTimer.start(10);
+	m_processTimer.start(20);
 
 	connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
 	m_updateTimer.start(100);
@@ -122,7 +122,6 @@ FormMain::FormMain(bool showStats) :
 
 	changeVisibleStats();
 	updateStats();
-	setMapColor();
 
 	setWindowTitle(APP_NAME_VERSION);
 
@@ -496,17 +495,8 @@ void FormMain::showPreferences()
 {
 	FormSettings dlg(this);
 	if (dlg.exec()) {
-		setMapColor();
+
 	}
-}
-
-
-/****************************************************************************/
-
-
-void FormMain::setMapColor()
-{
-	g_openorbiter->graphicsScene()->setMapColor(g_config->mapColor());
 }
 
 

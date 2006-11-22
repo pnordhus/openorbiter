@@ -39,12 +39,8 @@ public:
 	FormSettings(QWidget* parent);
 	~FormSettings();
 
-private:
-	void	setColor(const QColor& color);
-
 private slots:
 	void	accept();
-	void	showColorDialog();
 
 private:
 	Ui::FormSettings*	m_window;

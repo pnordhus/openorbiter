@@ -46,11 +46,11 @@ Node::Node(float x, float y) :
 	m_isSvg(false)
 {
 	m_item = new QGraphicsEllipseItem;
-	toggleSvg(g_config->svgEnabled());
+	setSvg("useSVG");
 	updateItem();
 
 #ifdef USE_SVG
-	connect(g_config, SIGNAL(svgChanged(bool)), this, SLOT(toggleSvg(bool)));
+	connect(g_config, SIGNAL(changed(const QString&)), this, SLOT(setSvg(const QString&)));
 #endif
 }
 
@@ -93,10 +93,15 @@ void Node::disconnectScene()
 
 
 #ifndef USE_SVG
-void Node::toggleSvg(bool) {}
+void Node::setSvg(const QString&) {}
 #else
-void Node::toggleSvg(bool enable)
+void Node::setSvg(const QString& name)
 {
+	if (name != "useSVG")
+		return;
+
+	bool enable = g_config->getBool("useSVG");
+
 	QGraphicsScene* scene = m_item->scene();
 
 	delete m_item;

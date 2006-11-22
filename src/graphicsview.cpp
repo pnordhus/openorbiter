@@ -19,11 +19,20 @@
  ***************************************************************************/
 
 
+#include "../build/configure.h"
+
+
+#include "config.h"
 #include "graphicsview.h"
 
 
 #include <QDebug>
 #include <QGraphicsScene>
+
+
+#ifdef USE_OPENGL
+#  include <QGLWidget>
+#endif
 
 
 /****************************************************************************/
@@ -32,7 +41,15 @@
 GraphicsView::GraphicsView(QWidget* parent) :
 	QGraphicsView(parent)
 {
+#ifdef USE_OPENGL
+	QGLFormat f;
+	f.setSwapInterval(1);
+	f.setSampleBuffers(0);
+	QGLFormat::setDefaultFormat(f);
 
+	if (g_config->getBool("useOpenGL"))
+		setViewport(new QGLWidget);
+#endif
 }
 
 

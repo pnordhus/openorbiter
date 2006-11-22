@@ -79,7 +79,6 @@ private slots:
 	void	statsContextMenu(const QPoint&);
 
 	void	showPreferences();
-	void	setMapColor();
 
 	void	shortcutPlay();
 

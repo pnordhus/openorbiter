@@ -95,15 +95,15 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	const QRect& g = g_config->windowGeometry();
+	QRect g = g_config->getRect("windowGeometry");
 
-	FormMain form(g_config->windowShowStats());
+	FormMain form(g_config->getBool("windowShowStats"));
 	form.resize(g.width(), g.height());
 	
-	if (g_config->windowMaximized())
+	if (g_config->getBool("windowMaximized"))
 		form.setWindowState(form.windowState() | Qt::WindowMaximized);
 		
-	if (g_config->windowFullScreen())
+	if (g_config->getBool("windowFullScreen"))
 		form.setWindowState(form.windowState() | Qt::WindowFullScreen);
 
 	form.setStatsShown(g_config->statsShown());
@@ -117,11 +117,11 @@ int main(int argc, char* argv[])
 
 	g_config->setStatsShown(form.statsShown());
 
-	g_config->setWindowMaximized(form.isMaximized());
-	g_config->setWindowFullScreen(form.isFullScreen());
-	g_config->setWindowShowStats(form.isStatsShown());
+	g_config->set("windowMaximized",	form.isMaximized());
+	g_config->set("windowFullScreen",	form.isFullScreen());
+	g_config->set("windowShowStats",	form.isStatsShown());
 
-	g_config->setWindowGeometry(form.normalGeometry());
+	g_config->set("windowGeometry", form.normalGeometry());
 
 	OpenOrbiter::destroy();
 	Config::destroy();

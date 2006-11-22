@@ -49,7 +49,7 @@ private:
 	void	updateItem();
 
 private slots:
-	void	toggleSvg(bool enabled);
+	void	setSvg(const QString& name);
 
 private:
 	bool			m_mark;

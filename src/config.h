@@ -43,43 +43,27 @@ class Config : public QObject
 public:
 	Config();
 
-	const QString&	dataDir() const	{ return m_dataDir; }
-	const QString&	userDir() const	{ return m_userDir; }
+public:
+	QVariant	get(const QString& name) const;
+	bool		getBool(const QString& name) const;
+	QColor		getColor(const QString& name) const;
+	float		getFloat(const QString& name) const;
+	QRect		getRect(const QString& name) const;
+	QString		getString(const QString& name) const;
 
-public: /* get methods */
-	const QRect&	windowGeometry() const 		{ return m_windowGeometry; }
-	bool			windowMaximized() const 	{ return m_windowMaximized; }
-	bool			windowFullScreen() const	{ return m_windowFullScreen; }
-	bool			windowShowStats() const		{ return m_windowShowStats; }
+	void		set(const QString& name, const QVariant& value);
 
-	float					gravityFactor() const	{ return m_gravityFactor; }
-	const StringBoolMap&	statsShown() const		{ return m_statsShown; }
-	bool	svgEnabled() const { return m_svgEnabled; }
-
-public: /* set methods */
-	void	setWindowGeometry(const QRect& g);
-	void	setWindowMaximized(bool);
-	void	setWindowFullScreen(bool);
-	void	setWindowShowStats(bool);
-
-	void	setGravityFactor(float);
-	void	setStatsShown(const StringBoolMap&);
-	void	setSvgEnabled(bool);
+	void					setStatsShown(const StringBoolMap&);
+	const StringBoolMap&	statsShown() const	{ return m_statsShown; }
 
 public:
-	float	firstNodeTime() const { return m_firstNodeTime; }
-	float	nextNodeTime() const { return m_nextNodeTime; }
-
-	const QString&	lastMap() const { return m_lastMap; }
-	void			setLastMap(const QString&);
-
-	const QColor&	mapColor() { return m_mapColor; }
-	void			setMapColor(const QColor&);
-
 	void	save(const QString& filename);
 	void	load(const QString& filename);
 
 private:
+	template <typename T>
+	inline T	getType(const QString& name) const;
+
 	void	saveGame(QDomDocument&, QDomElement&);
 	void	savePlayers(QDomDocument&, QDomElement&);
 	void	saveWindow(QDomDocument&, QDomElement&);
@@ -89,29 +73,13 @@ private:
 	void	loadWindow(const QDomElement&);
 
 private:
-	QString	m_dataDir;
-	QString	m_userDir;
-	float	m_gravityFactor;
-
-	QRect	m_windowGeometry;
-	bool	m_windowMaximized;
-	bool	m_windowFullScreen;
-	bool	m_windowShowStats;
-
 	StringBoolMap	m_statsShown;
 
-	float	m_firstNodeTime;
-	float	m_nextNodeTime;
-	QColor	m_mapColor;
-	
-	QString	m_lastMap;
-
-	bool	m_svgEnabled;
-
-	QSettings	m_settings;
+	typedef QMap<QString, QVariant> ValueMap;
+	ValueMap	m_values;
 
 signals:
-	void	svgChanged(bool enabled);
+	void	changed(const QString& name);
 
 public:
 	static	void	create();

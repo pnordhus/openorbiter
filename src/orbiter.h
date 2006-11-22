@@ -85,7 +85,7 @@ private:
 	void	updateItem();
 
 private slots:
-	void	toggleSvg(bool enable);
+	void	setSvg(const QString& name);
 
 private:
 	Player&	m_player;
@@ -93,7 +93,8 @@ private:
 	float	m_radius;
 	float	m_mass;
 	Vector	m_position;
-	Vector	m_speed;
+	Vector	m_impulse;
+
 	float	m_nodeRadius;
 	float	m_angle;
 	float	m_angleSpeed;
