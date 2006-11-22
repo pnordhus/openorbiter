@@ -52,7 +52,7 @@ Config::Config()
 	m_values.insert("mapColor",			QColor(0, 0, 10));
 
 	m_values.insert("useSVG",			true);
-	m_values.insert("useOpenGL",		true);
+	m_values.insert("useOpenGL",		false);
 
 	m_values.insert("windowMaximized",	false);
 	m_values.insert("windowFullScreen",	false);
@@ -187,6 +187,7 @@ void Config::saveGame(QDomDocument& doc, QDomElement& root)
 	SET_TEXT(game, "lastMap", getString("lastMap"));
 //	SET_TEXT(game, "mapColor", m_mapColor.name());
 	SET_TEXT(game, "useSVG", get("useSVG").toString());
+	SET_TEXT(game, "useOpenGL", get("useOpenGL").toString());
 }
 
 
@@ -298,6 +299,10 @@ void Config::loadGame(const QDomElement& elem)
 	READ_STRING(child, "useSVG", tmp);
 	if (tmp.length() > 0)
 		set("useSVG", tmp);
+
+	READ_STRING(child, "useOpenGL", tmp);
+	if (tmp.length() > 0)
+		set("useOpenGL", tmp);
 }
 
 

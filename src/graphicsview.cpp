@@ -26,7 +26,6 @@
 #include "graphicsview.h"
 
 
-#include <QDebug>
 #include <QGraphicsScene>
 
 
@@ -47,9 +46,10 @@ GraphicsView::GraphicsView(QWidget* parent) :
 	f.setSampleBuffers(0);
 	QGLFormat::setDefaultFormat(f);
 
-	if (g_config->getBool("useOpenGL"))
-		setViewport(new QGLWidget);
+	configChanged("useOpenGL");
 #endif
+
+	connect(g_config, SIGNAL(changed(const QString&)), this, SLOT(configChanged(const QString&)));
 }
 
 
@@ -66,6 +66,21 @@ void GraphicsView::resize(float w, float h)
 	QMatrix mat;
 	mat.scale(r, r);
 	setMatrix(mat);
+}
+
+
+/****************************************************************************/
+
+
+void GraphicsView::configChanged(const QString& name)
+{
+	if (name != "useOpenGL")
+		return;
+
+	if (g_config->getBool("useOpenGL"))
+		setViewport(new QGLWidget);
+	else
+		setViewport(new QWidget);
 }
 
 

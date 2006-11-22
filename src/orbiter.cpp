@@ -345,6 +345,11 @@ void Orbiter::setSvg(const QString& name)
 
 	updateItem();
 
+	if (m_isSvg)
+		update(2);
+	else
+		update(1);
+
 	if (scene)
 		scene->addItem(m_item);
 }

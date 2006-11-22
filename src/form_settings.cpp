@@ -19,10 +19,14 @@
  ***************************************************************************/
 
 
+#include "../build/configure.h"
+#include "../build/ui_form_settings.h"
+
 #include "config.h"
 #include "form_settings.h"
 #include "openorbiter.h"
-#include "../build/ui_form_settings.h"
+
+
 #include <QColorDialog>
 
 
@@ -32,7 +36,18 @@ FormSettings::FormSettings(QWidget* parent) :
 	m_window = new Ui::FormSettings;
 	m_window->setupUi(this);
 
-	m_window->checkSvgEnabled->setChecked(g_config->getBool("useSVG"));
+	m_window->checkSVG->setChecked(g_config->getBool("useSVG"));
+	m_window->checkOpenGL->setChecked(g_config->getBool("useOpenGL"));
+
+#ifndef USE_SVG
+	m_window->checkSVG->setEnabled(false);
+	m_window->checkSVG->setChecked(false);
+#endif
+
+#ifndef USE_OPENGL
+	m_window->checkOpenGL->setEnabled(false);
+	m_window->checkOpenGL->setChecked(false);
+#endif
 }
 
 
@@ -44,6 +59,13 @@ FormSettings::~FormSettings()
 
 void FormSettings::accept()
 {
-	g_config->set("useSVG", m_window->checkSvgEnabled->isChecked());
+#ifdef USE_SVG
+	g_config->set("useSVG", m_window->checkSVG->isChecked());
+#endif
+
+#ifdef USE_OPENGL
+	g_config->set("useOpenGL", m_window->checkOpenGL->isChecked());
+#endif
+
 	QDialog::accept();
 }

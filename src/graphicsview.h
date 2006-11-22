@@ -36,6 +36,9 @@ public:
 public slots:
 	void	resize(float w, float h);
 
+private slots:
+	void	configChanged(const QString& name);
+
 private:
 	void	resizeEvent(QResizeEvent*);
 };
