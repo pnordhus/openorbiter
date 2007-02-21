@@ -26,16 +26,6 @@
 #include "types.h"
 
 
-#include <QColor>
-#include <QRect>
-#include <QSettings>
-#include <QString>
-
-
-class QDomDocument;
-class QDomElement;
-
-
 class Config : public QObject
 {
 	Q_OBJECT

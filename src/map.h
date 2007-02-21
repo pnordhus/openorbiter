@@ -27,14 +27,8 @@
 #include "types.h"
 
 
-#include <QHash>
-#include <QList>
-#include <QString>
-
-
 class Node;
 class SpawnPoint;
-class QDomElement;
 
 
 class Map

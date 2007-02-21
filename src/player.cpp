@@ -24,9 +24,6 @@
 #include "player.h"
 
 
-#include <QDebug>
-
-
 Player::Player(int id, const QString& name, const QColor& color, const QString& filename) :
 	m_id(id),
 	m_name(name),

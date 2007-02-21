@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 
-#include "../build/ui_form_selectmap.h"
+#include "ui_form_selectmap.h"
 
 
 #include "form_selectmap.h"

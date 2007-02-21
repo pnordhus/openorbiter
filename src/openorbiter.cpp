@@ -19,26 +19,12 @@
  ***************************************************************************/
 
 
-#include "../build/configure.h"
-
-
 #include "config.h"
 #include "map.h"
 #include "match.h"
 #include "openorbiter.h"
 #include "player.h"
 #include "graphicsscene.h"
-
-
-#include <QDebug>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QRect>
-
-
-#ifdef USE_SVG
-#  include <QSvgRenderer>
-#endif
 
 
 OpenOrbiter::OpenOrbiter() :
@@ -62,9 +48,9 @@ OpenOrbiter::~OpenOrbiter()
 
 	qDeleteAll(m_maps);
 
-#ifdef USE_SVG
+#ifdef BUILD_SVG
 	delete m_nodeRenderer;
-#endif
+#endif // BUILD_SVG
 
 	delete m_graphicsScene;
 }
@@ -141,9 +127,9 @@ void OpenOrbiter::process()
 
 void OpenOrbiter::init(bool load)
 {
-#ifdef USE_SVG
+#ifdef BUILD_SVG
 	m_nodeRenderer = new QSvgRenderer(g_config->getString("dataDir") + "gfx/node.svg");
-#endif
+#endif // BUILD_SVG
 
 	initPlayers();
 

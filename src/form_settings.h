@@ -23,9 +23,6 @@
 #define OPENORBITER_FORM_SETTINGS_H
 
 
-#include <QDialog>
-
-
 namespace Ui {
 	class FormSettings;
 }

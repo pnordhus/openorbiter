@@ -2,37 +2,38 @@
 <kdevelop>
   <general>
     <author>Philipp Nordhus</author>
-    <email>philipp.nordhus@web.de</email>
+    <email>pnordhus@users.sourceforge.net</email>
     <version>$VERSION$</version>
     <projectmanagement>KDevCustomProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
-    <ignoreparts>
-      <part>kdevdoxygen</part>
-    </ignoreparts>
+    <ignoreparts/>
+    <projectname>openorbiter</projectname>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <description/>
+    <defaultencoding/>
     <versioncontrol/>
   </general>
   <kdevcustomproject>
     <run>
       <mainprogram>bin/openorbiter</mainprogram>
       <directoryradio>executable</directoryradio>
-      <customdirectory>/</customdirectory>
       <programargs/>
+      <globaldebugarguments/>
+      <globalcwd/>
+      <useglobalprogram>false</useglobalprogram>
       <terminal>false</terminal>
-      <autocompile>true</autocompile>
+      <autocompile>false</autocompile>
+      <autoinstall>false</autoinstall>
+      <autokdesu>false</autokdesu>
       <envvars/>
     </run>
-    <general>
-      <activedir/>
-    </general>
     <build>
       <buildtool>make</buildtool>
       <builddir/>
     </build>
     <make>
-      <abortonerror>true</abortonerror>
+      <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <prio>0</prio>
       <dontact>false</dontact>
@@ -48,7 +49,6 @@
   <kdevdebugger>
     <general>
       <dbgshell/>
-      <programargs/>
       <gdbpath/>
       <configGdbScript/>
       <runShellScript/>
@@ -112,33 +112,45 @@
   <kdevfilecreate>
     <filetypes/>
     <useglobaltypes>
+      <type ext="ui" />
       <type ext="cpp" />
       <type ext="h" />
     </useglobaltypes>
   </kdevfilecreate>
-  <cppsupportpart>
-    <filetemplates>
-      <interfacesuffix>.h</interfacesuffix>
-      <implementationsuffix>.cpp</implementationsuffix>
-    </filetemplates>
-  </cppsupportpart>
   <kdevcppsupport>
     <qt>
       <used>false</used>
-      <version>4</version>
+      <version>3</version>
+      <includestyle>3</includestyle>
       <root>/usr/qt/3</root>
+      <designerintegration>EmbeddedKDevDesigner</designerintegration>
+      <qmake>/usr/qt/3/bin/qmake</qmake>
+      <designer>/usr/qt/3/bin/designer</designer>
+      <designerpluginpaths/>
     </qt>
+    <references/>
     <codecompletion>
-      <includeGlobalFunctions>true</includeGlobalFunctions>
-      <includeTypes>true</includeTypes>
-      <includeEnums>true</includeEnums>
-      <includeTypedefs>false</includeTypedefs>
-      <automaticCodeCompletion>true</automaticCodeCompletion>
+      <automaticCodeCompletion>false</automaticCodeCompletion>
       <automaticArgumentsHint>true</automaticArgumentsHint>
       <automaticHeaderCompletion>true</automaticHeaderCompletion>
       <codeCompletionDelay>250</codeCompletionDelay>
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
+      <showOnlyAccessibleItems>false</showOnlyAccessibleItems>
+      <completionBoxItemOrder>0</completionBoxItemOrder>
+      <howEvaluationContextMenu>true</howEvaluationContextMenu>
+      <showCommentWithArgumentHint>true</showCommentWithArgumentHint>
+      <statusBarTypeEvaluation>false</statusBarTypeEvaluation>
+      <namespaceAliases>std=_GLIBCXX_STD;__gnu_cxx=std</namespaceAliases>
+      <processPrimaryTypes>true</processPrimaryTypes>
+      <processFunctionArguments>false</processFunctionArguments>
+      <preProcessAllHeaders>false</preProcessAllHeaders>
+      <parseMissingHeaders>false</parseMissingHeaders>
+      <resolveIncludePaths>true</resolveIncludePaths>
+      <alwaysParseInBackground>true</alwaysParseInBackground>
+      <usePermanentCaching>true</usePermanentCaching>
+      <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
+      <includePaths>.;</includePaths>
     </codecompletion>
     <creategettersetter>
       <prefixGet/>
@@ -148,9 +160,11 @@
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
-    <references>
-      <pcs>QT4</pcs>
-    </references>
+    <splitheadersource>
+      <enabled>false</enabled>
+      <synchronize>true</synchronize>
+      <orientation>Vertical</orientation>
+    </splitheadersource>
   </kdevcppsupport>
   <kdevfileview>
     <groups>
@@ -159,14 +173,15 @@
     </groups>
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
-      <hidenonprojectfiles>true</hidenonprojectfiles>
-      <showvcsfields>false</showvcsfields>
+      <hidenonprojectfiles>false</hidenonprojectfiles>
     </tree>
   </kdevfileview>
-  <ctagspart>
-    <customArguments/>
-    <customTagfilePath/>
-  </ctagspart>
+  <cppsupportpart>
+    <filetemplates>
+      <interfacesuffix>.h</interfacesuffix>
+      <implementationsuffix>.cpp</implementationsuffix>
+    </filetemplates>
+  </cppsupportpart>
   <kdevdocumentation>
     <projectdoc>
       <docsystem/>

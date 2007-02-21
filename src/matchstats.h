@@ -23,9 +23,6 @@
 #define OPENORBITER_MATCHSTATS_H
 
 
-#include <QtGlobal>
-
-
 class MatchStats
 {
 public:

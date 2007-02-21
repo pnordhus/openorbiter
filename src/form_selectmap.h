@@ -23,9 +23,6 @@
 #define OPENORBITER_FORM_SELECTMAP_H
 
 
-#include <QDialog>
-
-
 namespace Ui {
 	class FormSelectMap;
 }

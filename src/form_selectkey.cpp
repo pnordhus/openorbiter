@@ -19,16 +19,12 @@
  ***************************************************************************/
 
 
-#include "../build/ui_form_selectkey.h"
+#include "ui_form_selectkey.h"
 
 
 #include "form_selectkey.h"
 #include "openorbiter.h"
 #include "player.h"
-
-
-#include <QDebug>
-#include <QKeyEvent>
 
 
 FormSelectKey::FormSelectKey(QWidget* parent) :

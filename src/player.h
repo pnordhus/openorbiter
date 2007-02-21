@@ -27,10 +27,6 @@
 #include "gamestats.h"
 #include "matchstats.h"
 
-#include <QString>
-#include <QColor>
-#include <QKeySequence>
-
 
 class Player
 {

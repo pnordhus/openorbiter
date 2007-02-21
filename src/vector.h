@@ -23,11 +23,6 @@
 #define OPENORBITER_VECTOR_H
 
 
-#include <QDebug>
-#include <QRect>
-#include <cmath>
-
-
 class Vector
 {
 public:

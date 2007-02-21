@@ -19,19 +19,8 @@
  ***************************************************************************/
 
 
-#include "../build/configure.h"
-
-
 #include "config.h"
 #include "graphicsview.h"
-
-
-#include <QGraphicsScene>
-
-
-#ifdef USE_OPENGL
-#  include <QGLWidget>
-#endif
 
 
 /****************************************************************************/
@@ -40,16 +29,16 @@
 GraphicsView::GraphicsView(QWidget* parent) :
 	QGraphicsView(parent)
 {
-#ifdef USE_OPENGL
+#ifdef BUILD_OPENGL
 	QGLFormat f;
 	f.setSwapInterval(1);
 	f.setSampleBuffers(0);
 	QGLFormat::setDefaultFormat(f);
 
 	configChanged("useOpenGL");
-#endif
 
 	connect(g_config, SIGNAL(changed(const QString&)), this, SLOT(configChanged(const QString&)));
+#endif
 }
 
 
@@ -72,6 +61,9 @@ void GraphicsView::resize(float w, float h)
 /****************************************************************************/
 
 
+#ifdef BUILD_OPENGL
+
+
 void GraphicsView::configChanged(const QString& name)
 {
 	if (name != "useOpenGL")
@@ -82,6 +74,9 @@ void GraphicsView::configChanged(const QString& name)
 	else
 		setViewport(new QWidget);
 }
+
+
+#endif
 
 
 /****************************************************************************/

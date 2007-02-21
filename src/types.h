@@ -23,11 +23,6 @@
 #define OPENORBITER_TYPES_H
 
 
-#include <QList>
-#include <QMap>
-#include <QString>
-
-
 typedef QMap<QString, bool>			StringBoolMap;
 typedef QList<class Node*>			NodeList;
 typedef QList<class SpawnPoint*>	SpawnPointList;

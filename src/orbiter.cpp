@@ -19,23 +19,10 @@
  ***************************************************************************/
 
 
-#include "../build/configure.h"
-
-
 #include "config.h"
 #include "node.h"
 #include "orbiter.h"
 #include "player.h"
-
-
-#include <QGraphicsEllipseItem>
-#include <QGraphicsScene>
-
-
-#ifdef USE_SVG
-#  include <QGraphicsSvgItem>
-#  include <QSvgRenderer>
-#endif
 
 
 Orbiter::Orbiter(Player& player, const QString& filename) :
@@ -48,12 +35,13 @@ Orbiter::Orbiter(Player& player, const QString& filename) :
 	m_line.setZValue(10.0f);
 
 	m_item = new Graphic<QGraphicsEllipseItem>(this, 1);
-	setSvg("useSVG");
-	updateItem();
 
-#ifdef USE_SVG
+#ifdef BUILD_SVG
+	setSvg("useSVG");
 	connect(g_config, SIGNAL(changed(const QString&)), this, SLOT(setSvg(const QString&)));
-#endif
+#endif // BUILD_SVG
+
+	updateItem();
 }
 
 
@@ -248,7 +236,7 @@ void Orbiter::disconnectScene()
 
 void Orbiter::updateItem()
 {
-#ifdef USE_SVG
+#ifdef BUILD_SVG
 	if (m_isSvg) {
 		Graphic<QGraphicsSvgItem>* item = static_cast<Graphic<QGraphicsSvgItem>*>(m_item);
 		item->setZValue(30.0f);
@@ -258,7 +246,7 @@ void Orbiter::updateItem()
 		m_lightAngle = 0.0f;
 		return;
 	}
-#endif
+#endif // BUILD_SVG
 
 	Graphic<QGraphicsEllipseItem>* item = static_cast<Graphic<QGraphicsEllipseItem>*>(m_item);
 	item->setPen(Qt::NoPen);
@@ -294,7 +282,7 @@ void Orbiter::update(int id)
 			item->setRect(rect);
 		}
 		break;
-#ifdef USE_SVG
+#ifdef BUILD_SVG
 	case 2:
 		{
 			float angle = 360.0f * asin(m_position.y / m_position.length()) / (2.0f * M_PI);
@@ -306,14 +294,12 @@ void Orbiter::update(int id)
 			m_item->moveBy(off.x(), off.y());
 		}
 		break;
-#endif
+#endif // BUILD_SVG
 	}
 }
 
 
-#ifndef USE_SVG
-void Orbiter::setSvg(const QString&) {}
-#else
+#ifdef BUILD_SVG
 void Orbiter::setSvg(const QString& name)
 {
 	if (name != "useSVG")
@@ -353,7 +339,7 @@ void Orbiter::setSvg(const QString& name)
 	if (scene)
 		scene->addItem(m_item);
 }
-#endif
+#endif // BUILD_SVG
 
 
 template <typename T>

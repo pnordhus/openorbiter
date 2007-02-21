@@ -19,22 +19,9 @@
  ***************************************************************************/
 
 
-#include "../build/configure.h"
-
-
 #include "config.h"
 #include "node.h"
 #include "openorbiter.h"
-
-
-#include <QGraphicsEllipseItem>
-#include <QGraphicsScene>
-
-
-#ifdef USE_SVG
-#  include <QGraphicsSvgItem>
-#  include <QSvgRenderer>
-#endif
 
 
 const float Node::m_radius = 0.3f;
@@ -46,12 +33,13 @@ Node::Node(float x, float y) :
 	m_isSvg(false)
 {
 	m_item = new QGraphicsEllipseItem;
-	setSvg("useSVG");
-	updateItem();
 
-#ifdef USE_SVG
+#ifdef BUILD_SVG
+	setSvg("useSVG");
 	connect(g_config, SIGNAL(changed(const QString&)), this, SLOT(setSvg(const QString&)));
-#endif
+#endif // BUILD_SVG
+
+	updateItem();
 }
 
 
@@ -92,9 +80,7 @@ void Node::disconnectScene()
 }
 
 
-#ifndef USE_SVG
-void Node::setSvg(const QString&) {}
-#else
+#ifdef BUILD_SVG
 void Node::setSvg(const QString& name)
 {
 	if (name != "useSVG")
@@ -127,12 +113,12 @@ void Node::setSvg(const QString& name)
 	if (scene)
 		scene->addItem(m_item);
 }
-#endif
+#endif // BUILD_SVG
 
 
 void Node::updateItem()
 {
-#ifdef USE_SVG
+#ifdef BUILD_SVG
 	if (m_isSvg) {
 		QGraphicsSvgItem* item = static_cast<QGraphicsSvgItem*>(m_item);
 		item->setMatrix(QMatrix());
@@ -141,7 +127,7 @@ void Node::updateItem()
 		item->setPos(x - m_radius, y - m_radius);
 		return;
 	}
-#endif
+#endif // BUILD_SVG
 
 	QGraphicsEllipseItem* item = static_cast<QGraphicsEllipseItem*>(m_item);
 	item->setPen(Qt::NoPen);

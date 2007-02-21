@@ -23,10 +23,6 @@
 #define OPENORBITER_OPENORBITER_H
 
 
-#include <QDir>
-#include <QTime>
-
-
 class Game;
 class GraphicsScene;
 class Map;

@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 
-#include "../build/ui_form_main.h"
+#include "ui_form_main.h"
 
 
 #include "config.h"
@@ -35,10 +35,6 @@
 #include "openorbiter.h"
 #include "orbiter.h"
 #include "player.h"
-
-
-#include <cmath>
-#include <QHeaderView>
 
 
 class PlayerShortcut : public QShortcut

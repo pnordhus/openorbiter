@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Philipp Nordhus                                 *
- *   philipp.nordhus@web.de                                                *
+ *   Copyright (C) 2007 by Philipp Nordhus                                 *
+ *   pnordhus@users.sourceforge.net                                        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,43 +19,27 @@
  ***************************************************************************/
 
 
-#ifndef OPENORBITER_NODE_H
-#define OPENORBITER_NODE_H
+#ifndef OPENORBITER_PCH_H
+#define OPENORBITER_PCH_H
 
 
-#include "vector.h"
+#include <QtCore>
+#include <QtGui>
+#include <QtXml>
 
 
-class Node : public QObject, public Vector
-{
-	Q_OBJECT
-
-public:
-	Node(float x, float y);
-	~Node();
-
-	void	setMark(bool b);
-	QColor	getColor() const;
-	
-	void	connectScene(QGraphicsScene*);
-	void	disconnectScene();
-
-private:
-	void	updateItem();
-
-private slots:
-	void	setSvg(const QString& name);
-
-private:
-	bool			m_mark;
-	QGraphicsItem*	m_item;
-	bool			m_isSvg;
-
-	static const float		m_radius;
-
-private:
-	Q_DISABLE_COPY(Node);
-};
+#ifdef BUILD_OPENGL
+#  include <QtOpenGL>
+#endif // BUILD_OPENGL
 
 
+#ifdef BUILD_SVG
+#  include <QtSvg>
 #endif
+
+
+
+#include <cmath>
+
+
+#endif // OPENORBITER_PCH_H

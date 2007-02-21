@@ -27,9 +27,6 @@
 #include "randomizer.h"
 
 
-#include <QDebug>
-
-
 Match::Match(Map* map) :
 	m_map(map),
 	m_time(0.0),

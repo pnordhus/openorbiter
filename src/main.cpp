@@ -25,11 +25,6 @@
 #include "openorbiter.h"
 
 
-#include <QApplication>
-#include <QMessageBox>
-#include <QDebug>
-
-
 /****************************************************************************/
 
 

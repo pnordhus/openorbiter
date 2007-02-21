@@ -26,17 +26,10 @@
 #include "types.h"
 
 
-#include <QList>
-
-
 class Map;
 class Orbiter;
 class Player;
 class Vector;
-
-
-class QPoint;
-class QRect;
 
 
 class Game

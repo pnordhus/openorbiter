@@ -26,10 +26,6 @@
 #include "spawnpoint.h"
 
 
-#include <QFile>
-#include <QDomDocument>
-
-
 Map::~Map()
 {
 	foreach (Node* node, m_nodes)

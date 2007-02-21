@@ -19,15 +19,9 @@
  ***************************************************************************/
 
 
-#include "../build/configure.h"
 #include "config.h"
 #include "openorbiter.h"
 #include "player.h"
-
-
-#include <QDir>
-#include <QDomDocument>
-#include <QVariant>
 
 
 /****************************************************************************/

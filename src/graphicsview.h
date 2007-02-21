@@ -23,9 +23,6 @@
 #define OPENORBITER_GRAPHICSVIEW_H
 
 
-#include <QGraphicsView>
-
-
 class GraphicsView : public QGraphicsView
 {
 	Q_OBJECT
@@ -36,8 +33,10 @@ public:
 public slots:
 	void	resize(float w, float h);
 
+#ifdef BUILD_OPENGL
 private slots:
 	void	configChanged(const QString& name);
+#endif
 
 private:
 	void	resizeEvent(QResizeEvent*);

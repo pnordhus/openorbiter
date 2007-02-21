@@ -23,9 +23,6 @@
 #define OPENORBITER_DEFS_H
 
 
-#include <QString>
-
-
 const quint8	APP_VERSION_MAJOR = 0;
 const quint8	APP_VERSION_MINOR = 3;
 const quint8	APP_VERSION_MICRO = 0;

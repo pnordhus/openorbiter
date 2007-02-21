@@ -26,13 +26,6 @@
 #include "types.h"
 
 
-#include <QEvent>
-#include <QMainWindow>
-#include <QShortcut>
-#include <QStandardItemModel>
-#include <QTimer>
-
-
 namespace Ui {
 	class FormMain;
 }

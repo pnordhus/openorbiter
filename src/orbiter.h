@@ -26,10 +26,6 @@
 #include "vector.h"
 
 
-#include <QGraphicsLineItem>
-#include <QRect>
-
-
 class Node;
 class Orbiter;
 class Player;

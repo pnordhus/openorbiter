@@ -23,10 +23,6 @@
 #define OPENORBITER_FORM_CREATEMATCH_H
 
 
-#include <QDialog>
-#include <QStandardItemModel>
-
-
 namespace Ui {
 	class FormCreateMatch;
 }

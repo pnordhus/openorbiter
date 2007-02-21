@@ -23,10 +23,6 @@
 #define OPENORBITER_FORM_SELECTKEY_H
 
 
-#include <QDialog>
-#include <QTimer>
-
-
 namespace Ui {
 	class FormSelectKey;
 }

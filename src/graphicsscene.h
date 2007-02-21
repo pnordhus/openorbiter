@@ -23,11 +23,6 @@
 #define OPENORBITER_GRAPHICSSCENE_H
 
 
-#include <QGraphicsRectItem>
-#include <QGraphicsScene>
-#include <QGraphicsTextItem>
-
-
 class GraphicsScene : public QGraphicsScene
 {
 	Q_OBJECT

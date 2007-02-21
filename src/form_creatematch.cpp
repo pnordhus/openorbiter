@@ -19,7 +19,8 @@
  ***************************************************************************/
 
 
-#include "../build/ui_form_creatematch.h"
+#include "ui_form_main.h"
+#include "ui_form_creatematch.h"
 
 
 #include "form_creatematch.h"
@@ -27,10 +28,6 @@
 #include "map.h"
 #include "openorbiter.h"
 #include "player.h"
-
-
-#include <QDebug>
-#include <QMessageBox>
 
 
 FormCreateMatch::FormCreateMatch(QWidget* parent) :
