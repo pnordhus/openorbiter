@@ -19,30 +19,14 @@
  ***************************************************************************/
 
 
-#ifndef NODE_H
-#define NODE_H
+#ifndef MAPLOADER_H
+#define MAPLOADER_H
 
 
-#include "physics/vector.h"
-#include <QGraphicsEllipseItem>
-
-
-class Scene;
-
-
-class Node
+class MapLoader
 {
-public:
-	Node(Scene& scene);
-	~Node();
-
-public:
-	void	setPosition(const Vector& pos);
-	Vector	position() const;
-
-private:
-	QGraphicsEllipseItem*	m_item;
+	
 };
 
 
-#endif // NODE_H
+#endif // MAPLOADER_H

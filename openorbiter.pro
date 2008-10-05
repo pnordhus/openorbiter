@@ -14,7 +14,8 @@ HEADERS = src/form_main.h \
  src/physics/world.h \
  src/player.h \
  src/scene.h \
- src/view.h
+ src/view.h \
+ src/maploader.h
 MOC_DIR = build
 OBJECTS_DIR = build
 QT += core gui opengl
@@ -32,7 +33,8 @@ SOURCES = src/form_main.cpp \
  src/physics/world.cpp \
  src/player.cpp \
  src/scene.cpp \
- src/view.cpp
+ src/view.cpp \
+ src/maploader.cpp
 TARGET = bin/openorbiter
 TEMPLATE = app
 UI_DIR = build
