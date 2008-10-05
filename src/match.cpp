@@ -22,6 +22,7 @@
 #include "game.h"
 #include "map.h"
 #include "match.h"
+#include "orbiter.h"
 #include "player.h"
 #include "scene.h"
 #include <algorithm>
@@ -64,7 +65,9 @@ void Match::pause()
 	m_state = Pause;
 	m_timer.stop();
 	
-	m_needKey = m_players;
+	m_needKey.clear();
+	foreach (Orbiter* orb, m_game->orbiters())
+		m_needKey.append(orb->player());
 	
 	updatePauseText();
 }

@@ -47,6 +47,7 @@ public:
 public:
 	Node*			nearestNode(const Vector& pos);
 	void			keyPressed(int key);
+	const QList<Orbiter*>&	orbiters() const { return m_orbiters; }
 
 public slots:
 	const Player*	process(float time);
