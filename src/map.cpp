@@ -25,7 +25,8 @@
 Map::Map(const QString& name, float width, float height) :
 	m_name(name),
 	m_width(width),
-	m_height(height)
+	m_height(height),
+	m_gravity(0.0f, 10.0f)
 {
 	
 }
@@ -52,4 +53,10 @@ void Map::addNode(const Vector& pos)
 void Map::addSpawn(const Vector& spawn)
 {
 	m_spawns.append(spawn);
+}
+
+
+void Map::setGravity(const Vector& gravity)
+{
+	m_gravity = gravity;
 }

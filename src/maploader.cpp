@@ -80,6 +80,10 @@ bool MapLoader::startElement(const QString&, const QString&, const QString& qNam
 		
 		delete m_map;
 		m_map = new Map(name, width, height);
+		
+		const float gravityX = QVariant(atts.value("gravityX")).toDouble();
+		const float gravityY = QVariant(atts.value("gravityY")).toDouble();
+		m_map->setGravity(Vector(gravityX, gravityY));
 	} else if (qName == "spawn") {
 		const float x = QVariant(atts.value("x")).toDouble();
 		const float y = QVariant(atts.value("y")).toDouble();

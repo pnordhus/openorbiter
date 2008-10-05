@@ -37,7 +37,7 @@ FormMain::FormMain() :
 	m_ui = new Ui::FormMain;
 	m_ui->setupUi(this);
 	
-	setWindowTitle("OpenOrbiter 0.3-pre");
+	setWindowTitle("OpenOrbiter 0.4.0-svn");
 	
 	RenderManager::create();
 	

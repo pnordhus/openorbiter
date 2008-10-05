@@ -40,7 +40,7 @@ Game::Game(Scene& scene, const Map& map, const QList<Player*>& players) :
 	
 	m_scene.setField(width, height);
 	
-	m_world.setGravity(Vector(0,10));
+	m_world.setGravity(map.gravity());
 	
 	foreach (const Vector& pos, map.nodes()) {
 		Node* node = new Node(m_scene);

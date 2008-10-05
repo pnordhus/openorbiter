@@ -49,7 +49,7 @@ void World::process(float time)
 	for (uint i = 0; i < iterations; i++) {
 		foreach (Object* obj, m_objects) {
 			if (obj->isLinked()) {
-				obj->accelerate(stepSize);
+				obj->accelerate(0.5f * stepSize);
 			} else {
 				// gravity only applies to non-linked objects
 				obj->accelerate(m_gravity * stepSize);
