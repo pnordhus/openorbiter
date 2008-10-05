@@ -39,6 +39,9 @@ public:
 	float			height() const { return m_height; }
 	const QList<Vector>& nodes() const { return m_nodes; }
 	const QList<Vector>& spawns() const { return m_spawns; }
+	
+	void	setAuthor(const QString& name);
+	void	setDescription(const QString& desc);
 
 public:
 	void	addNode(const Vector& pos);
@@ -46,6 +49,8 @@ public:
 
 private:
 	QString			m_name;
+	QString			m_author;
+	QString			m_description;
 	float			m_width;
 	float			m_height;
 	

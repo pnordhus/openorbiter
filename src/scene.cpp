@@ -49,6 +49,8 @@ void Scene::setField(float width, float height)
 {
 	m_field->setRect(0.0f, 0.0f, width, height);
 	setSceneRect(-0.2, -0.2, width + 0.4, height + 0.4);
+	
+	emit sizeChanged();
 }
 
 

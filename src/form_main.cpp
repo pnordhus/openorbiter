@@ -22,9 +22,11 @@
 #include "form_main.h"
 #include "form_match.h"
 #include "map.h"
+#include "maploader.h"
 #include "match.h"
 #include "orbiter.h"
 #include "ui_form_main.h"
+#include <QDir>
 #include <QSettings>
 
 
@@ -35,6 +37,7 @@ FormMain::FormMain() :
 	m_ui->setupUi(this);
 	
 	m_ui->view->setScene(&m_scene);
+	connect(&m_scene, SIGNAL(sizeChanged()), m_ui->view, SLOT(sizeChanged()));
 	
 	connect(m_ui->actionNewMatch,		SIGNAL(triggered()),				SLOT(newMatch()));
 	connect(m_ui->actionAntialiasing,	SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableAntiAliasing(bool)));
@@ -44,42 +47,15 @@ FormMain::FormMain() :
 	QSettings s;
 	restoreGeometry(s.value("geometry", QSize(400, 400)).toByteArray());
 	
-	{
-		Map map("One Node to rule them all", 40.0f, 30.0f);
-		
-		map.addNode(Vector(20, 15));
-		
-		map.addSpawn(Vector(10, 2));
-		map.addSpawn(Vector(15, 2));
-		map.addSpawn(Vector(25, 2));
-		map.addSpawn(Vector(30, 2));
-		
-		map.addSpawn(Vector(12.5, 4));
-		map.addSpawn(Vector(17.5, 4));
-		map.addSpawn(Vector(22.5, 4));
-		map.addSpawn(Vector(27.5, 4));
-		
-		m_maps.append(map);
-	}
-	
-	{
-		Map map("Bermuda Triangle", 40.0f, 30.0f);
-		
-		map.addNode(Vector(20, 10));
-		map.addNode(Vector(14.33, 20));
-		map.addNode(Vector(25.77, 20));
-		
-		map.addSpawn(Vector(10, 2));
-		map.addSpawn(Vector(15, 2));
-		map.addSpawn(Vector(25, 2));
-		map.addSpawn(Vector(30, 2));
-		
-		map.addSpawn(Vector(12.5, 4));
-		map.addSpawn(Vector(17.5, 4));
-		map.addSpawn(Vector(22.5, 4));
-		map.addSpawn(Vector(27.5, 4));
-		
-		m_maps.append(map);
+	QDir dir("data/maps");
+	QStringList files = dir.entryList(QStringList() << "*.xml", QDir::Files | QDir::Readable);
+	foreach (const QString& file, files) {
+		MapLoader loader;
+		if (loader.loadMap(dir.absoluteFilePath(file))) {
+			Map* map = loader.takeMap();
+			m_maps.append(*map);
+			delete map;
+		}
 	}
 }
 

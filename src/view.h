@@ -42,6 +42,7 @@ public slots:
 	void	enableGL(bool enable);
 	void	enableAntiAliasing(bool enable);
 	void	switchSettings(bool gl, bool antiAliasing);
+	void	sizeChanged();
 
 protected:
 	void	resizeEvent(QResizeEvent*);

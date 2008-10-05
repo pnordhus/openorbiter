@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE oomap SYSTEM "oomap.dtd">
+
+<oomap name="Single" width="40" height="30.0" gravityX="0" gravityY="9.375">
+	<author>OpenOrbiter Testing Squad</author>
+	<description>One Node to rule them all</description>
+
+	<spawn x="10" y="2" />
+	<spawn x="15" y="2" />
+	<spawn x="25" y="2" />
+	<spawn x="30" y="2" />
+
+	<spawn x="12.5" y="4" />
+	<spawn x="17.5" y="4" />
+	<spawn x="22.5" y="4" />
+	<spawn x="27.5" y="4" />
+
+	<node x="20" y="15" />
+</oomap>

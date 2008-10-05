@@ -31,6 +31,18 @@ Map::Map(const QString& name, float width, float height) :
 }
 
 
+void Map::setAuthor(const QString& name)
+{
+	m_author = name;
+}
+
+
+void Map::setDescription(const QString& desc)
+{
+	m_description = desc;
+}
+
+
 void Map::addNode(const Vector& pos)
 {
 	m_nodes.append(pos);

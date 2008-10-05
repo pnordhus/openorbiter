@@ -70,9 +70,15 @@ void View::switchSettings(bool gl, bool antiAliasing)
 }
 
 
-void View::resizeEvent(QResizeEvent* e)
+void View::sizeChanged()
 {
 	fitInView(sceneRect().adjusted(-0.1, -0.1, 0.1, 0.1), Qt::KeepAspectRatio);
+}
+
+
+void View::resizeEvent(QResizeEvent* e)
+{
+	sizeChanged();
 	QGraphicsView::resizeEvent(e);
 }
 

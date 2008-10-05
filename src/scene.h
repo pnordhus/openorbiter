@@ -34,6 +34,9 @@ public:
 	Scene();
 	~Scene();
 
+signals:
+	void	sizeChanged();
+
 public:
 	void	setField(float width, float height);
 	void	showText(const QString& text);

@@ -23,9 +23,30 @@
 #define MAPLOADER_H
 
 
-class MapLoader
+#include <QXmlDefaultHandler>
+
+
+class Map;
+
+
+class MapLoader : private QXmlDefaultHandler
 {
-	
+public:
+	MapLoader();
+	~MapLoader();
+
+public:
+	bool	loadMap(const QString& filename);
+	Map*	takeMap();
+
+private:
+	bool	startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts);
+	bool	endElement(const QString& namespaceURI, const QString& localName, const QString& qName);
+	bool	characters(const QString& text);
+
+private:
+	Map*	m_map;
+	QString	m_text;
 };
 
 
