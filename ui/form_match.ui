@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>517</width>
-    <height>521</height>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -196,8 +196,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>groupBox_4</zorder>
-  <zorder>horizontalSpacer</zorder>
  </widget>
  <tabstops>
   <tabstop>btnStart</tabstop>
@@ -270,8 +268,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>472</x>
-     <y>412</y>
+     <x>511</x>
+     <y>469</y>
     </hint>
     <hint type="destinationlabel" >
      <x>257</x>
