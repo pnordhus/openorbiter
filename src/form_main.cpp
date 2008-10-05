@@ -25,6 +25,7 @@
 #include "maploader.h"
 #include "match.h"
 #include "orbiter.h"
+#include "rendermanager.h"
 #include "ui_form_main.h"
 #include <QDir>
 #include <QSettings>
@@ -37,6 +38,8 @@ FormMain::FormMain() :
 	m_ui->setupUi(this);
 	
 	setWindowTitle("OpenOrbiter 0.3-pre");
+	
+	RenderManager::create();
 	
 	m_ui->view->setScene(&m_scene);
 	connect(&m_scene, SIGNAL(sizeChanged()), m_ui->view, SLOT(sizeChanged()));
@@ -65,6 +68,8 @@ FormMain::FormMain() :
 FormMain::~FormMain()
 {
 	delete m_match;
+	
+	RenderManager::destroy();
 	delete m_ui;
 }
 

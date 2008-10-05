@@ -24,7 +24,7 @@
 
 
 #include "player.h"
-#include <QGraphicsEllipseItem>
+#include <QGraphicsItem>
 
 
 class Circle;
@@ -69,7 +69,7 @@ private slots:
 private:
 	Player*					m_player;
 	
-	QGraphicsEllipseItem*	m_graphicsItem;
+	QGraphicsItem*			m_item;
 	QGraphicsLineItem*		m_connectionLine;
 	Circle*					m_circle;
 	Game*					m_game;

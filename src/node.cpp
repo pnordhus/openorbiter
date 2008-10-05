@@ -20,16 +20,16 @@
 
 
 #include "node.h"
+#include "rendermanager.h"
 #include "scene.h"
 
 
 Node::Node(Scene& scene)
 {
-	const float radius = 0.5;
-	m_item = scene.addEllipse(-radius / 2.0f, -radius / 2.0f, radius, radius);
-	m_item->setPen(Qt::NoPen);
-	m_item->setBrush(QBrush(Qt::white));
+	m_item = RenderManager::get().createNodeItem(m_radius);
 	m_item->setZValue(10);
+	
+	scene.addItem(m_item);
 }
 
 
@@ -41,11 +41,11 @@ Node::~Node()
 
 void Node::setPosition(const Vector& pos)
 {
-	m_item->setPos(pos.x, pos.y);
+	m_item->setPos(pos.x - m_radius, pos.y - m_radius);
 }
 
 
 Vector Node::position() const
 {
-	return Vector(m_item->pos().x(), m_item->pos().y());
+	return Vector(m_item->pos().x() + m_radius, m_item->pos().y() + m_radius);
 }

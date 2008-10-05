@@ -19,31 +19,42 @@
  ***************************************************************************/
 
 
-#ifndef NODE_H
-#define NODE_H
+#ifndef RENDERMANAGER_H
+#define RENDERMANAGER_H
 
 
-#include "physics/vector.h"
 #include <QGraphicsItem>
+#include <QSvgRenderer>
 
 
-class Scene;
-
-
-class Node
+class RenderManager
 {
 public:
-	Node(Scene& scene);
-	~Node();
+	QGraphicsItem*	createNodeItem(float radius);
+	QGraphicsItem*	createOrbiterItem(float radius, const QColor& color);
 
 public:
-	void	setPosition(const Vector& pos);
-	Vector	position() const;
+	static void	create();
+	static void	destroy();
+	static RenderManager& get() { Q_ASSERT(m_singleton); return *m_singleton; }
 
 private:
-	QGraphicsItem*		m_item;
-	static const float	m_radius = 0.3f;
+	RenderManager();
+	~RenderManager();
+
+private:
+	void	loadRenderer(const QString& name, const QColor& color);
+
+private:
+	QSvgRenderer*					m_rendererNode;
+	QMap<QString, QSvgRenderer*>	m_rendererOrbiter;
+
+private:
+	static RenderManager*	m_singleton;
+
+private:
+	Q_DISABLE_COPY(RenderManager);
 };
 
 
-#endif // NODE_H
+#endif // RENDERMANAGER_H

@@ -15,10 +15,15 @@ HEADERS = src/form_main.h \
  src/physics/world.h \
  src/player.h \
  src/scene.h \
- src/view.h
+ src/view.h \
+ src/rendermanager.h
 MOC_DIR = build
 OBJECTS_DIR = build
-QT += core gui opengl xml
+QT += core \
+ gui \
+ opengl \
+ xml \
+ svg
 SOURCES = src/form_main.cpp \
  src/form_match.cpp \
  src/game.cpp \
@@ -34,7 +39,8 @@ SOURCES = src/form_main.cpp \
  src/physics/world.cpp \
  src/player.cpp \
  src/scene.cpp \
- src/view.cpp
+ src/view.cpp \
+ src/rendermanager.cpp
 TARGET = bin/openorbiter
 TEMPLATE = app
 UI_DIR = build

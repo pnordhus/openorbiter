@@ -22,10 +22,9 @@
 #include "game.h"
 #include "node.h"
 #include "orbiter.h"
+#include "rendermanager.h"
 #include "scene.h"
 #include "physics/circle.h"
-#include <QBrush>
-#include <QPen>
 
 
 Orbiter::Orbiter(Player* player) :
@@ -36,10 +35,8 @@ Orbiter::Orbiter(Player* player) :
 {
 	const float radius = 0.5f; 
 	
-	m_graphicsItem = new QGraphicsEllipseItem(-radius, -radius, radius * 2.0f, radius * 2.0f);
-	m_graphicsItem->setPen(QPen(Qt::NoPen));
-	m_graphicsItem->setBrush(QBrush(color()));
-	m_graphicsItem->setZValue(100);
+	m_item = RenderManager::get().createOrbiterItem(radius, color());
+	m_item->setZValue(100);
 	
 	m_connectionLine = new QGraphicsLineItem;
 	m_connectionLine->setZValue(5);
@@ -55,7 +52,7 @@ Orbiter::~Orbiter()
 {
 	delete m_connectionLine;
 	delete m_circle;
-	delete m_graphicsItem;
+	delete m_item;
 }
 
 
@@ -66,12 +63,12 @@ void Orbiter::enter(Game& game, World& world, Scene& scene)
 	m_game = &game;
 	m_circle->setWorld(&world);
 	
-	if (m_graphicsItem->scene()) {
-		m_graphicsItem->scene()->removeItem(m_graphicsItem);
+	if (m_item->scene()) {
+		m_item->scene()->removeItem(m_item);
 		m_connectionLine->scene()->removeItem(m_connectionLine);
 	}
 	
-	scene.addItem(m_graphicsItem);
+	scene.addItem(m_item);
 	scene.addItem(m_connectionLine);
 	
 	
@@ -84,8 +81,8 @@ void Orbiter::leave()
 	
 	m_circle->setWorld(NULL);
 	
-	if (m_graphicsItem->scene()) {
-		m_graphicsItem->scene()->removeItem(m_graphicsItem);
+	if (m_item->scene()) {
+		m_item->scene()->removeItem(m_item);
 		m_connectionLine->scene()->removeItem(m_connectionLine);
 	}
 	
@@ -149,12 +146,12 @@ void Orbiter::update()
 		m_connectionLine->show();
 	}
 	
-	m_graphicsItem->setPos(m_circle->position().x, m_circle->position().y);
+	m_item->setPos(m_circle->position().x - radius(), m_circle->position().y - radius());
 }
 
 
 void Orbiter::setPosition(const Vector& pos)
 {
 	m_circle->setPosition(pos);
-	m_graphicsItem->setPos(pos.x, pos.y);
+	m_item->setPos(pos.x - radius(), pos.y - radius());
 }
