@@ -1,0 +1,283 @@
+<ui version="4.0" >
+ <class>FormMatch</class>
+ <widget class="QDialog" name="FormMatch" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>517</width>
+    <height>521</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>New match</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3" >
+   <item>
+    <layout class="QGridLayout" name="gridLayout_2" >
+     <item row="0" column="0" >
+      <widget class="QGroupBox" name="groupBox_3" >
+       <property name="title" >
+        <string>End conditions</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout" >
+        <item row="0" column="0" >
+         <widget class="QCheckBox" name="checkBox" >
+          <property name="text" >
+           <string>Score</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QSpinBox" name="spinBox" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="minimum" >
+           <number>1</number>
+          </property>
+          <property name="maximum" >
+           <number>1000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QCheckBox" name="checkBox_2" >
+          <property name="text" >
+           <string>Number of games</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" >
+         <widget class="QSpinBox" name="spinBox_2" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="minimum" >
+           <number>1</number>
+          </property>
+          <property name="maximum" >
+           <number>1000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" >
+         <widget class="QCheckBox" name="checkBox_3" >
+          <property name="text" >
+           <string>Time limit</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" >
+         <widget class="QSpinBox" name="spinBox_3" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="suffix" >
+           <string> min</string>
+          </property>
+          <property name="minimum" >
+           <number>1</number>
+          </property>
+          <property name="maximum" >
+           <number>300</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item rowspan="2" row="0" column="1" >
+      <widget class="QGroupBox" name="groupBox_2" >
+       <property name="title" >
+        <string>Maps</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2" >
+        <item>
+         <widget class="QTreeView" name="treeMaps" >
+          <property name="editTriggers" >
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="rootIsDecorated" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="frame" >
+          <property name="minimumSize" >
+           <size>
+            <width>200</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QGroupBox" name="groupBox" >
+       <property name="title" >
+        <string>Players</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout" >
+        <item>
+         <widget class="QTreeView" name="treePlayers" >
+          <property name="rootIsDecorated" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout" >
+          <item>
+           <widget class="QPushButton" name="btnAdd" >
+            <property name="text" >
+             <string>Add</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnRemove" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Remove</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" >
+     <item>
+      <spacer name="horizontalSpacer" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnStart" >
+       <property name="enabled" >
+        <bool>true</bool>
+       </property>
+       <property name="text" >
+        <string>Start match</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnCancel" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <zorder>groupBox_4</zorder>
+  <zorder>horizontalSpacer</zorder>
+ </widget>
+ <tabstops>
+  <tabstop>btnStart</tabstop>
+  <tabstop>btnCancel</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>spinBox_2</tabstop>
+  <tabstop>checkBox_3</tabstop>
+  <tabstop>spinBox_3</tabstop>
+  <tabstop>treePlayers</tabstop>
+  <tabstop>btnAdd</tabstop>
+  <tabstop>btnRemove</tabstop>
+  <tabstop>treeMaps</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>118</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>184</x>
+     <y>55</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spinBox_2</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>78</x>
+     <y>95</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>185</x>
+     <y>90</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_3</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spinBox_3</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>86</x>
+     <y>125</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>197</x>
+     <y>123</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>FormMatch</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>472</x>
+     <y>412</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>257</x>
+     <y>215</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
