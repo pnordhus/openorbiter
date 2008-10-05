@@ -1,4 +1,4 @@
-CONFIG += debug warn_on
+CONFIG += debug warn_on silent
 FORMS = ui/form_main.ui ui/form_match.ui
 HEADERS = src/form_main.h \
  src/form_match.h \
