@@ -30,9 +30,7 @@
 Match::Match(Scene& scene) :
 	m_scene(scene),
 	m_game(NULL),
-	m_paused(false),
-	m_gameOver(true),
-	m_countdown(0.0f)
+	m_state(Setup)
 {
 	connect(&m_timer, SIGNAL(timeout()), SLOT(process()));
 }
@@ -57,66 +55,98 @@ void Match::start()
 
 void Match::pause()
 {
-	if (m_paused || m_gameOver)
+	if (m_state != Ingame)
 		return;
 	
-	if (!m_needKey.isEmpty())
-		return;
+	if (m_textPrefix == "")
+		m_textPrefix = "<center>Pause</center>";
 	
-	m_paused = true;
-	m_scene.showText("<center>Pause</center>");
+	m_state = Pause;
+	m_timer.stop();
+	
+	m_needKey = m_players;
+	
+	updatePauseText();
+}
+
+
+void Match::updatePauseText()
+{
+	QRectF rect(0,0,5,5);
+	
+	QString table;
+	foreach (Player* player, m_players) {
+		QString name = player->name();
+		if (!m_needKey.contains(player))
+			name = "<u>" + name + "</u>";
+		
+		table += QString("<tr><td><font color=\"%1\">%2</font></td><td width=\"20\"></td><td align=\"right\">%3</td></tr>").arg(player->color().name()).arg(name).arg(player->wins());
+	}
+	
+	m_scene.showText(m_textPrefix + QString("<center><font size=\"1\"><table>%1</table><br></font></center><center>Hit your keys</center>").arg(table));
 }
 
 
 void Match::resume()
 {
-	if (!m_paused || m_gameOver)
-		return;
+	Q_ASSERT(m_state != Ingame);
 	
-	if (!m_needKey.isEmpty())
-		return;
-	
+	m_state = Ingame;
+	m_timer.start(20);
+	m_time.restart();
 	m_scene.hideText();
-	m_paused = false;
+	m_textPrefix = "";
 }
 
 
 void Match::keyPressed(int key)
 {
-	// key setup
-	if (!m_needKey.isEmpty()) {
-		if (key == Qt::Key_Space)
-			return;
-		
-		foreach (const Player* player, m_players) {
-			if (player->key() == key)
-				return;
+	switch (m_state) {
+	case Setup:
+		{
+			if (key == Qt::Key_Space)
+				break;
+			
+			foreach (const Player* player, m_players) {
+				if (player->key() == key)
+					return;
+			}
+			
+			Q_ASSERT(!m_needKey.isEmpty());
+			Player* player = m_needKey.takeFirst();
+			player->setKey(key);
+			
+			if (!requestKey()) {
+				resume();
+			}
 		}
-		
-		Player* player = m_needKey.takeFirst();
-		player->setKey(key);
-		
-		if (!requestKey()) {
-			m_scene.hideText();
-			m_gameOver = false;
-			m_timer.start(20);
-			m_time.restart();
-		}
-		return;
-	}
+		break;
 	
-	if (key == Qt::Key_Space) {
-		if (m_paused)
-			resume();
-		else
+	case Ingame:
+		if (key == Qt::Key_Space)
 			pause();
 		
-		return;
-	}
-	
-	// normal game
-	if (m_game && !m_paused && !m_gameOver)
 		m_game->keyPressed(key);
+		break;
+	
+	case Pause:
+		Q_ASSERT(!m_needKey.isEmpty());
+		for (int i = m_needKey.size() - 1; i >= 0; i--) {
+			if (m_needKey.at(i)->key() == key) {
+				m_needKey.removeAt(i);
+				if (m_needKey.isEmpty()) {
+					resume();
+					return;
+				}
+			}
+		}
+		
+		updatePauseText();
+		break;
+	
+	default:
+		break;
+	}
 }
 
 
@@ -163,41 +193,13 @@ void Match::process()
 {
 	const float time = std::min(float(m_time.restart()) / 1000.0f, 0.5f);
 	
-	if (m_paused)
-		return;
-	
-	if (m_countdown > 0.0f) {
-		m_countdown -= time;
-		int newVal = m_countdown + 1.0f;
-		if (newVal == m_countdownInt)
-			return;
-		
-		m_countdownInt = newVal;
-		
-		if (m_countdownInt > 0) {
-			m_scene.showText(m_countdownText.arg(m_countdownInt));
-		} else {
-			m_scene.hideText();
-			m_gameOver = false;
-		}
-		
-		return;
-	}
+	Q_ASSERT(m_state == Ingame);
 	
 	const Player* winner = m_game->process(time); 
 	if (winner) {
-		m_gameOver = true;
+		m_textPrefix = QString("<center><font color=\"%1\">%2</font> wins<br></center>").arg(winner->color().name()).arg(winner->name());
 		newGame();
-		
-		QString table;
-		foreach (const Player* player, m_players) {
-			table += QString("<tr><td><font color=\"%1\">%2</font></td><td width=\"20\"></td><td align=\"right\">%3</td></tr>").arg(player->color().name()).arg(player->name()).arg(player->wins());
-		}
-		
-		m_countdownText = QString("<center><font color=\"%1\">%2</font> wins<br><font size=\"1\"><table>%3</table><br></font></center><center>New game starts in %4...</center>").arg(winner->color().name()).arg(winner->name()).arg(table);
-		m_countdown = 3.0f;
-		m_countdownInt = 3;
-		m_scene.showText(m_countdownText.arg(m_countdownInt));
+		pause();
 	}
 }
 

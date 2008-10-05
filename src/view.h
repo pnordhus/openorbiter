@@ -36,7 +36,6 @@ public:
 signals:
 	void	keyPressed(int key);
 	void	pause();
-	void	resume();
 
 public slots:
 	void	enableGL(bool enable);

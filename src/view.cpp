@@ -87,7 +87,6 @@ void View::focusInEvent(QFocusEvent* e)
 {
 	QGraphicsView::focusInEvent(e);
 	//grabKeyboard();
-	//emit resume();
 }
 
 

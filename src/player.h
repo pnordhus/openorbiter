@@ -24,7 +24,6 @@
 
 
 #include <QColor>
-#include <QString>
 
 
 class Player

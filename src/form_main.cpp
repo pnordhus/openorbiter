@@ -93,7 +93,6 @@ void FormMain::newMatch()
 		m_match = new Match(m_scene);
 		connect(m_ui->view, SIGNAL(keyPressed(int)),	m_match,	SLOT(keyPressed(int)));
 		connect(m_ui->view, SIGNAL(pause()),			m_match,	SLOT(pause()));
-		connect(m_ui->view, SIGNAL(resume()),			m_match,	SLOT(resume()));
 		
 		m_match->setPlayers(form.players());
 		m_match->setMaps(form.maps());

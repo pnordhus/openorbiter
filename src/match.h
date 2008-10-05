@@ -52,15 +52,19 @@ public:
 public slots:
 	void	keyPressed(int key);
 	void	pause();
-	void	resume();
 
 private slots:
 	void	process();
 
 private:
+	void	updatePauseText();
+	void	resume();
 	void	newGame();
 	Map		nextMap();
 	bool	requestKey();
+
+private:
+	enum State { Setup, Pause, Ingame, Finished };
 
 private:
 	QList<Player*>	m_players;
@@ -70,11 +74,9 @@ private:
 	Game*			m_game;
 	QTimer			m_timer;
 	QTime			m_time;
-	bool			m_paused;
-	bool			m_gameOver;
-	QString			m_countdownText;
-	float			m_countdown;
-	int				m_countdownInt;
+	QString			m_textPrefix;
+	
+	State			m_state;
 	
 	QList<Player*>	m_needKey;
 };
