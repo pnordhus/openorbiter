@@ -36,6 +36,8 @@ FormMain::FormMain() :
 	m_ui = new Ui::FormMain;
 	m_ui->setupUi(this);
 	
+	setWindowTitle("OpenOrbiter 0.3-pre");
+	
 	m_ui->view->setScene(&m_scene);
 	connect(&m_scene, SIGNAL(sizeChanged()), m_ui->view, SLOT(sizeChanged()));
 	
