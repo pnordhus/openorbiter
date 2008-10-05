@@ -87,7 +87,7 @@ void Game::keyPressed(int key)
 const Player* Game::process(float time)
 {
 	foreach (Orbiter* orb, m_orbiters)
-		orb->process();
+		orb->process(time);
 	
 	m_world.process(time);
 	

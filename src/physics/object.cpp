@@ -125,6 +125,10 @@ void Object::unlink()
 		m_speed.y = center.x;
 		m_speed.setLength(-m_linkSpeed);
 	}
-	
-	emit unlinked();
+}
+
+
+void Object::collide()
+{
+	emit collided();
 }

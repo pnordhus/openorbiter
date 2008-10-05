@@ -31,7 +31,8 @@ Orbiter::Orbiter(Player* player) :
 	m_player(player),
 	m_game(NULL),
 	m_node(NULL),
-	m_connected(false)
+	m_connected(false),
+	m_collisionTimer(0.0f)
 {
 	const float radius = 0.5f; 
 	
@@ -44,7 +45,7 @@ Orbiter::Orbiter(Player* player) :
 	m_connectionLine->hide();
 	
 	m_circle = new Circle(radius);
-	connect(m_circle, SIGNAL(unlinked()), SLOT(disconnectNode()));
+	connect(m_circle, SIGNAL(collided()), SLOT(collide()));
 }
 
 
@@ -99,6 +100,13 @@ void Orbiter::toggleConnect()
 }
 
 
+void Orbiter::collide()
+{
+	disconnectNode();
+	m_collisionTimer = 0.75f;
+}
+
+
 void Orbiter::connectNode()
 {
 	m_connectionLine->setPen(QPen(Qt::darkRed));
@@ -117,9 +125,11 @@ void Orbiter::disconnectNode()
 }
 
 
-void Orbiter::process()
+void Orbiter::process(float time)
 {
-	if (m_node && !m_connected) {
+	m_collisionTimer -= time;
+	
+	if (m_node && !m_connected && (m_collisionTimer <= 0.0f)) {
 		m_connected = true;
 		m_connectionLine->setPen(QPen(Qt::white));
 		m_circle->link(m_node->position());

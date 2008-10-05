@@ -121,6 +121,9 @@ void World::collide2(Circle* obj1, Circle* obj2)
 	const float move = (obj1->radius() + obj2->radius() - dist) / 2.0f;
 	obj1->move(to1 * move);
 	obj2->move(to2 * move);
+	
+	obj1->collide();
+	obj2->collide();
 }
 
 

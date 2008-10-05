@@ -51,9 +51,10 @@ public:
 	void			link(const Vector& pos);
 	void			unlink();
 	bool			isLinked() const { return m_linked; }
+	void			collide();
 
 signals:
-	void			unlinked();
+	void			collided();
 
 protected:
 	Object(Type type);

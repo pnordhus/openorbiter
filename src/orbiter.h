@@ -53,7 +53,7 @@ public:
 
 public:
 	void	setPosition(const Vector& position);
-	void	process();
+	void	process(float time);
 	void	update();
 	
 	void	enter(Game& game, World& world, Scene& scene);
@@ -63,8 +63,12 @@ public:
 	void	toggleConnect();
 
 private slots:
+	void	collide();
+
+private:
 	void	connectNode();
 	void	disconnectNode();
+
 
 private:
 	Player*					m_player;
@@ -75,6 +79,7 @@ private:
 	Game*					m_game;
 	Node*					m_node;
 	bool					m_connected;
+	float					m_collisionTimer;
 };
 
 
