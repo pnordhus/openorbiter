@@ -24,7 +24,10 @@
 
 
 #include <QGraphicsItem>
-#include <QSvgRenderer>
+
+#ifdef QT_SVG_LIB
+#  include <QSvgRenderer>
+#endif
 
 
 class RenderManager
@@ -42,12 +45,14 @@ private:
 	RenderManager();
 	~RenderManager();
 
+#ifdef QT_SVG_LIB
 private:
 	void	loadRenderer(const QString& name, const QColor& color);
 
 private:
 	QSvgRenderer*					m_rendererNode;
 	QMap<QString, QSvgRenderer*>	m_rendererOrbiter;
+#endif
 
 private:
 	static RenderManager*	m_singleton;

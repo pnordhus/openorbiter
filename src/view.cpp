@@ -21,7 +21,10 @@
 
 #include "view.h"
 #include <QKeyEvent>
-#include <QGLWidget>
+
+#ifdef QT_OPENGL_LIB
+#  include <QGLWidget>
+#endif
 
 
 View::View(QWidget* parent) :
@@ -33,10 +36,12 @@ View::View(QWidget* parent) :
 }
 
 
+#ifdef QT_OPENGL_LIB
 void View::enableGL(bool enable)
 {
 	switchSettings(enable, m_antiAliasing);
 }
+#endif
 
 
 void View::enableAntiAliasing(bool enable)
@@ -48,10 +53,14 @@ void View::enableAntiAliasing(bool enable)
 void View::switchSettings(bool gl, bool antiAliasing)
 {
 	if (gl) {
+#ifdef QT_OPENGL_LIB
 		if (antiAliasing)
 			setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
 		else
 			setViewport(new QGLWidget);
+#else
+		Q_ASSERT(false);
+#endif
 	} else {
 		setViewport(new QWidget);
 		

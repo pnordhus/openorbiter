@@ -21,8 +21,11 @@
 
 #include "rendermanager.h"
 #include <QBrush>
-#include <QGraphicsSvgItem>
 #include <QPen>
+
+#ifdef QT_SVG_LIB
+#  include <QGraphicsSvgItem>
+#endif
 
 
 RenderManager* RenderManager::m_singleton = NULL;
@@ -30,6 +33,7 @@ RenderManager* RenderManager::m_singleton = NULL;
 
 QGraphicsItem* RenderManager::createNodeItem(float radius)
 {
+#ifdef QT_SVG_LIB
 	if (m_rendererNode) {
 		QGraphicsSvgItem* item = new QGraphicsSvgItem;
 		item->setSharedRenderer(m_rendererNode);
@@ -38,17 +42,19 @@ QGraphicsItem* RenderManager::createNodeItem(float radius)
 		//TODO: disabling the cache resolves a mixing problem, find a better way
 		item->setCacheMode(QGraphicsItem::NoCache);
 		return item;
-	} else {
-		QGraphicsEllipseItem* item = new QGraphicsEllipseItem(0.0f, 0.0f, 2.0f * radius, 2.0f * radius);
-		item->setPen(QPen(Qt::NoPen));
-		item->setBrush(QBrush(Qt::white));
-		return item;
 	}
+#endif
+	
+	QGraphicsEllipseItem* item = new QGraphicsEllipseItem(0.0f, 0.0f, 2.0f * radius, 2.0f * radius);
+	item->setPen(QPen(Qt::NoPen));
+	item->setBrush(QBrush(Qt::white));
+	return item;
 }
 
 
 QGraphicsItem* RenderManager::createOrbiterItem(float radius, const QColor& color)
 {
+#ifdef QT_SVG_LIB
 	QSvgRenderer* renderer = m_rendererOrbiter.value(color.name());
 	if (renderer) {
 		QGraphicsSvgItem* item = new QGraphicsSvgItem;
@@ -58,23 +64,26 @@ QGraphicsItem* RenderManager::createOrbiterItem(float radius, const QColor& colo
 		//TODO: disabling the cache resolves a mixing problem, find a better way
 		item->setCacheMode(QGraphicsItem::NoCache);
 		return item;
-	} else {
-		QGraphicsEllipseItem* item = new QGraphicsEllipseItem(0.0f, 0.0f, 2.0f * radius, 2.0f * radius);
-		item->setPen(QPen(Qt::NoPen));
-		item->setBrush(QBrush(color));
-		return item;
 	}
+#endif
+	
+	QGraphicsEllipseItem* item = new QGraphicsEllipseItem(0.0f, 0.0f, 2.0f * radius, 2.0f * radius);
+	item->setPen(QPen(Qt::NoPen));
+	item->setBrush(QBrush(color));
+	return item;
 }
 
 
-RenderManager::RenderManager() :
-	m_rendererNode(NULL)
+RenderManager::RenderManager()
 {
-	QSvgRenderer* renderer = new QSvgRenderer(QString("data/gfx/node.svg"));
-	if (renderer->isValid())
+#ifdef QT_SVG_LIB
+	QSvgRenderer* renderer = new QSvgRenderer(QString(DATADIR "/gfx/node.svg"));
+	if (renderer->isValid()) {
 		m_rendererNode = renderer;
-	else
+	} else {
+		m_rendererNode = NULL;
 		delete renderer;
+	}
 	
 	loadRenderer("red",			Qt::red);
 	loadRenderer("green",		Qt::green);
@@ -84,24 +93,29 @@ RenderManager::RenderManager() :
 	loadRenderer("magenta",		Qt::magenta);
 	loadRenderer("darkYellow",	Qt::darkYellow);
 	loadRenderer("lightGray",	Qt::lightGray);
+#endif
 }
 
 
 RenderManager::~RenderManager()
 {
+#ifdef QT_SVG_LIB
 	delete m_rendererNode;
 	qDeleteAll(m_rendererOrbiter);
+#endif
 }
 
 
+#ifdef QT_SVG_LIB
 void RenderManager::loadRenderer(const QString& name, const QColor& color)
 {
-	QSvgRenderer* renderer = new QSvgRenderer(QString("data/gfx/%1.svg").arg(name));
+	QSvgRenderer* renderer = new QSvgRenderer(QString(DATADIR "/gfx/%1.svg").arg(name));
 	if (renderer->isValid())
 		m_rendererOrbiter.insert(color.name(), renderer);
 	else
 		delete renderer;
 }
+#endif
 
 
 void RenderManager::create()

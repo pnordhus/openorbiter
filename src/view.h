@@ -38,7 +38,9 @@ signals:
 	void	pause();
 
 public slots:
+#ifdef QT_OPENGL_LIB
 	void	enableGL(bool enable);
+#endif
 	void	enableAntiAliasing(bool enable);
 	void	switchSettings(bool gl, bool antiAliasing);
 	void	sizeChanged();

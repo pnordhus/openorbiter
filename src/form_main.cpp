@@ -46,13 +46,17 @@ FormMain::FormMain() :
 	
 	connect(m_ui->actionNewMatch,		SIGNAL(triggered()),				SLOT(newMatch()));
 	connect(m_ui->actionAntialiasing,	SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableAntiAliasing(bool)));
-	connect(m_ui->actionOpenGL,			SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableGL(bool)));
 	connect(m_ui->actionAboutQt,		SIGNAL(triggered()),	qApp,		SLOT(aboutQt()));
+	
+#ifdef QT_OPENGL_LIB
+	QAction* actionOpenGL = m_ui->menuView->addAction("Enable OpenGL");
+	connect(actionOpenGL,				SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableGL(bool)));
+#endif
 	
 	QSettings s;
 	restoreGeometry(s.value("geometry", QSize(400, 400)).toByteArray());
 	
-	QDir dir("data/maps");
+	QDir dir(DATADIR "/maps");
 	QStringList files = dir.entryList(QStringList() << "*.xml", QDir::Files | QDir::Readable);
 	foreach (const QString& file, files) {
 		MapLoader loader;
