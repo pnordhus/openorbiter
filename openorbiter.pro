@@ -15,11 +15,11 @@ INSTALLS += \
  maps \
  target
 
-!no-opengl {
+!disable-opengl {
 	QT += opengl
 }
 
-!no-svg {
+!disable-svg {
 	QT += svg
 	INSTALLS += gfx
 }
