@@ -37,7 +37,7 @@ FormMain::FormMain() :
 	m_ui = new Ui::FormMain;
 	m_ui->setupUi(this);
 	
-	setWindowTitle("OpenOrbiter 0.4.0-svn");
+	setWindowTitle("OpenOrbiter 0.4-pre");
 	
 	RenderManager::create();
 	
@@ -50,6 +50,7 @@ FormMain::FormMain() :
 	
 #ifdef QT_OPENGL_LIB
 	QAction* actionOpenGL = m_ui->menuView->addAction("Enable OpenGL");
+	actionOpenGL->setCheckable(true);
 	connect(actionOpenGL,				SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableGL(bool)));
 #endif
 	

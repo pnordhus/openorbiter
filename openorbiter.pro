@@ -24,7 +24,6 @@ opengl {
 	QT += opengl
 }
 
-
 svg {
 	QT += svg
 	INSTALLS += gfx
