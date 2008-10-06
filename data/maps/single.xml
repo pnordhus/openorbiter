@@ -16,7 +16,4 @@
 	<spawn x="27.5" y="4" />
 
 	<node x="20" y="15" />
-
-	<bouncer x1="10" y1="0" x2="30" y2="0" width="0.5" boost="10" />
-	<bouncer x1="10" y1="28" x2="30" y2="28" width="0.5" boost="10" />
 </oomap>
