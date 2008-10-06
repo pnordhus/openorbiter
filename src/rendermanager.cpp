@@ -77,7 +77,7 @@ QGraphicsItem* RenderManager::createOrbiterItem(float radius, const QColor& colo
 RenderManager::RenderManager()
 {
 #ifdef QT_SVG_LIB
-	QSvgRenderer* renderer = new QSvgRenderer(QString(DATADIR "/gfx/node.svg"));
+	QSvgRenderer* renderer = new QSvgRenderer(QString(OO_DATADIR "/gfx/node.svg"));
 	if (renderer->isValid()) {
 		m_rendererNode = renderer;
 	} else {
@@ -109,7 +109,7 @@ RenderManager::~RenderManager()
 #ifdef QT_SVG_LIB
 void RenderManager::loadRenderer(const QString& name, const QColor& color)
 {
-	QSvgRenderer* renderer = new QSvgRenderer(QString(DATADIR "/gfx/%1.svg").arg(name));
+	QSvgRenderer* renderer = new QSvgRenderer(QString(OO_DATADIR "/gfx/%1.svg").arg(name));
 	if (renderer->isValid())
 		m_rendererOrbiter.insert(color.name(), renderer);
 	else

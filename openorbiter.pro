@@ -7,34 +7,47 @@ isEmpty(DATADIR) {
 }
 
 TEMPLATE = app
-TARGET = bin/openorbiter
-CONFIG += debug_and_release silent warn_on
-DEFINES += DATADIR=\"\\\"$$DATADIR\\\"\"
-
-OBJECTS_DIR = build/release
-MOC_DIR = build/release
-UI_DIR = build/release
+CONFIG += silent warn_on
+DEFINES += OO_DATADIR=\"\\\"$$DATADIR\\\"\"
 
 QT += core gui xml
 INSTALLS += \
  maps \
  target
 
-opengl {
+!no-opengl {
 	QT += opengl
 }
 
-svg {
+!no-svg {
 	QT += svg
 	INSTALLS += gfx
 }
 
-build_pass:CONFIG(debug, debug|release) {
-	OBJECTS_DIR = build/debug
-	MOC_DIR = build/debug
-	UI_DIR = build/debug
-	TARGET = bin/openorbiter_debug
+win32-g++ {
+	CONFIG -= debug_and_release
+	CONFIG -= debug_and_release_target
+	
+	OBJECTS_DIR = release
+	MOC_DIR = release
+	UI_DIR = release
+	TARGET = release/bin/openorbiter
+} else {
+	CONFIG += debug_and_release
+	
+	build_pass:CONFIG(debug, debug|release) {
+		OBJECTS_DIR = build/debug
+		MOC_DIR = build/debug
+		UI_DIR = build/debug
+		TARGET = bin/openorbiter_debug
+	} else {
+		OBJECTS_DIR = build/release
+		MOC_DIR = build/release
+		UI_DIR = build/release
+		TARGET = bin/openorbiter
+	}
 }
+
 
 HEADERS = \
  src/bouncer.h \

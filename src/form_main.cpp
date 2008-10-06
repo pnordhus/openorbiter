@@ -57,7 +57,7 @@ FormMain::FormMain() :
 	QSettings s;
 	restoreGeometry(s.value("geometry", QSize(400, 400)).toByteArray());
 	
-	QDir dir(DATADIR "/maps");
+	QDir dir(OO_DATADIR "/maps");
 	QStringList files = dir.entryList(QStringList() << "*.xml", QDir::Files | QDir::Readable);
 	foreach (const QString& file, files) {
 		MapLoader loader;
