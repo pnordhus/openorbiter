@@ -19,12 +19,31 @@
  ***************************************************************************/
 
 
-#include "plane.h"
+#include "rect.h"
 
 
-Plane::Plane(const Vector& normal) :
-	Object(Object::Plane),
-	m_normal(normal)
+Rect::Rect() :
+	Object(Object::Rect),
+	m_width(0.0f)
 {
+	setStatic(true);
+}
+
+
+void Rect::setPositions(const Vector& pos1, const Vector& pos2)
+{
+	m_position1 = pos1;
+	m_position2 = pos2;
+	m_dir = (m_position2 - m_position1).normalized();
+	Object::setPosition((pos1 + pos2) * 0.5f);
+	setWidth(m_width);
+}
+
+
+void Rect::setWidth(float width)
+{
+	m_width = width;
 	
+	const float a = width + (m_position1 - m_position2).length() / 2.0f;
+	setRadius(std::sqrt(width * width + a * a));
 }

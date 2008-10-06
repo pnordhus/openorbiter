@@ -29,6 +29,7 @@
 #include <QRectF>
 
 
+class Bouncer;
 class Map;
 class Node;
 class Orbiter;
@@ -58,6 +59,7 @@ private:
 	
 	QList<Orbiter*>	m_orbiters;
 	QList<Node*>	m_nodes;
+	QList<Bouncer*>	m_bouncers;
 	QRectF			m_rect;
 };
 

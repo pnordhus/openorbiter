@@ -29,13 +29,12 @@
 class Circle : public Object
 {
 public:
+	Circle();
 	Circle(float radius);
 
 public:
-	float	radius() const { return m_radius; }
-
-private:
-	float	m_radius;
+	void	setRadius(float radius);
+	void	setPosition(const Vector& pos);
 };
 
 

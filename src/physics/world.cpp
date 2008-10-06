@@ -20,6 +20,7 @@
 
 
 #include "circle.h"
+#include "rect.h"
 #include "world.h"
 
 
@@ -48,6 +49,9 @@ void World::process(float time)
 	
 	for (uint i = 0; i < iterations; i++) {
 		foreach (Object* obj, m_objects) {
+			if (obj->isStatic())
+				continue;
+			
 			if (obj->isLinked()) {
 				obj->accelerate(0.5f * stepSize);
 			} else {
@@ -75,12 +79,51 @@ void World::collide()
 
 void World::collide(Object* obj1, Object* obj2)
 {
+	if ((obj1->type() != Object::Circle) && (obj2->type() != Object::Circle))
+		return;
+	
 	if ((obj1->type() == Object::Circle) && (obj2->type() == Object::Circle)) {
 		collide2(static_cast<Circle*>(obj1), static_cast<Circle*>(obj2));
 		return;
 	}
 	
+	if ((obj1->type() == Object::Circle) && (obj2->type() == Object::Rect)) {
+		collide2(static_cast<Circle*>(obj1), static_cast<Rect*>(obj2));
+		return;
+	}
+	
+	if ((obj1->type() == Object::Rect) && (obj2->type() == Object::Circle)) {
+		collide2(static_cast<Circle*>(obj2), static_cast<Rect*>(obj1));
+		return;
+	}
+	
 	Q_ASSERT(false);
+}
+
+#include <QDebug>
+void World::collide2(Circle* circle, Rect* rect)
+{
+	const float dist = (circle->position() - rect->position()).length();
+	if (dist >= circle->radius() + rect->radius())
+		return;
+	
+	Vector toCirc = circle->position() - rect->position();
+	
+	const float distToLine = toCirc * rect->dir().perpendicular();
+	if (qAbs(distToLine) > circle->radius() + rect->width())
+		return;
+	
+	const float move = circle->radius() + rect->width() - qAbs(distToLine);
+	
+	float angle = rect->dir().angleTo(circle->speed());
+	Vector accelDir(angle + rect->dir().angle());
+	
+	toCirc = rect->dir().perpendicular() * distToLine;
+	
+	circle->unlink();
+	circle->accelerate(-circle->speed() + accelDir * (circle->speed().length() + 1.0));
+	circle->move(toCirc.normalized() * move);
+	circle->collide(false);
 }
 
 
@@ -106,8 +149,8 @@ void World::collide2(Circle* obj1, Circle* obj2)
 	float impulseTransferToFactor1 = ((mass1 - mass2) * speed1.length() + 2.0f * mass2 * speed2.length()) / massSum;
 	float impulseTransferToFactor2 = ((mass2 - mass1) * speed2.length() + 2.0f * mass1 * speed1.length()) / massSum;
 	
-	const float angleAffectorTo1 = to1 * speed2;
-	const float angleAffectorTo2 = to2 * speed1;
+	const float angleAffectorTo1 = cos(to1.angleTo(speed2));
+	const float angleAffectorTo2 = cos(to2.angleTo(speed1));
 	
 	impulseTransferToFactor1 = angleAffectorTo1 * impulseTransferToFactor1;
 	impulseTransferToFactor2 = angleAffectorTo2 * impulseTransferToFactor2;
@@ -122,8 +165,8 @@ void World::collide2(Circle* obj1, Circle* obj2)
 	obj1->move(to1 * move);
 	obj2->move(to2 * move);
 	
-	obj1->collide();
-	obj2->collide();
+	obj1->collide(true);
+	obj2->collide(true);
 }
 
 

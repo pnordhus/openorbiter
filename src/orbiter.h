@@ -63,7 +63,7 @@ public:
 	void	toggleConnect();
 
 private slots:
-	void	collide();
+	void	collide(bool timer);
 
 private:
 	void	connectNode();

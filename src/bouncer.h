@@ -19,95 +19,39 @@
  ***************************************************************************/
 
 
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef BOUNCER_H
+#define BOUNCER_H
 
 
-#include <cmath>
+#include "physics/rect.h"
+#include <QGraphicsRectItem>
 
 
-class Vector
+class Scene;
+class World;
+
+
+class Bouncer
 {
 public:
-	Vector() : x(0.0), y(0.0) {}
-	Vector(float x, float y) : x(x), y(y) {}
-	explicit Vector(float angle) : x(std::cos(angle)), y(std::sin(angle)) {}
+	Bouncer(Scene& scene, World& world);
+	~Bouncer();
 
 public:
-	float angle() const
-	{
-		return atan2(y, x);
-	}
-	
-	float lengthSquared() const
-	{
-		return x * x + y * y;
-	}
-	
-	float length() const
-	{
-		return std::sqrt(lengthSquared());
-	}
-	
-	void setLength(float newLen)
-	{
-		const float len = length();
-		x *= newLen / len;
-		y *= newLen / len;
-	}
-	
-	Vector normalized() const
-	{
-		const float len = length();
-		return Vector(x / len, y / len);
-	}
-	
-	Vector& operator += (const Vector& rho)
-	{
-		x += rho.x;
-		y += rho.y;
-		return *this;
-	}
-	
-	Vector operator + (const Vector& rho) const
-	{
-		return Vector(x + rho.x, y + rho.y);
-	}
-	
-	Vector operator - (const Vector& rho) const
-	{
-		return Vector(x - rho.x, y - rho.y);
-	}
-	
-	Vector operator * (float v) const
-	{
-		return Vector(x * v, y * v);
-	}
-	
-	Vector operator - () const
-	{
-		return Vector(-x, -y);
-	}
-	
-	float angleTo(const Vector& rho) const
-	{
-		return angle() - rho.angle();
-	}
-	
-	float operator * (const Vector& rho) const
-	{
-		return x * rho.x + y * rho.y;
-	}
-	
-	Vector perpendicular() const
-	{
-		return Vector(-y, x);
-	}
+	void	setPositions(const Vector& pos1, const Vector& pos2);
+	void	setWidth(float width);
 
-public:
-	float	x;
-	float	y;
+private:
+	void	updateItem();
+
+private:
+	QGraphicsRectItem*		m_item;
+	QGraphicsEllipseItem*	m_itemCap1;
+	QGraphicsEllipseItem*	m_itemCap2;
+	Vector					m_position1;
+	Vector					m_position2;
+	Rect*					m_rect;
 };
 
 
-#endif // VECTOR_H
+#endif // BOUNCER_H

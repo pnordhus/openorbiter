@@ -27,7 +27,9 @@ Object::Object(Type type) :
 	m_type(type),
 	m_world(NULL),
 	m_mass(1.0f),
-	m_linked(false)
+	m_linked(false),
+	m_radius(0.0),
+	m_static(false)
 {
 	
 }
@@ -37,6 +39,18 @@ Object::~Object()
 {
 	if (m_world)
 		m_world->unregisterObject(this);
+}
+
+
+void Object::setRadius(float radius)
+{
+	m_radius = radius;
+}
+
+
+void Object::setStatic(bool enable)
+{
+	m_static = enable;
 }
 
 
@@ -63,6 +77,8 @@ void Object::accelerate(const Vector& acc)
 	Q_ASSERT(!m_linked);
 	
 	m_speed += acc;
+	if (m_speed.length() > 40.0f)
+		m_speed.setLength(40.0f);
 }
 
 
@@ -74,6 +90,8 @@ void Object::accelerate(float acc)
 		m_linkSpeed += acc;
 	else
 		m_linkSpeed -= acc;
+	
+	m_linkSpeed = qBound(-40.0f, m_linkSpeed, 40.0f);
 }
 
 
@@ -128,7 +146,7 @@ void Object::unlink()
 }
 
 
-void Object::collide()
+void Object::collide(bool timer)
 {
-	emit collided();
+	emit collided(timer);
 }

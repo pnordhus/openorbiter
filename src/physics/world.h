@@ -29,6 +29,7 @@
 
 
 class Circle;
+class Rect;
 
 
 class World
@@ -44,6 +45,7 @@ public:
 private:
 	void	collide();
 	void	collide(Object* obj1, Object* obj2);
+	void	collide2(Circle* circle, Rect* rect);
 	void	collide2(Circle* obj1, Circle* obj2);
 	void	registerObject(Object* obj);
 	void	unregisterObject(Object* obj);
@@ -51,6 +53,9 @@ private:
 private:
 	QList<Object*>	m_objects;
 	Vector			m_gravity;
+
+private:
+	Q_DISABLE_COPY(World);
 
 friend class Object;
 };

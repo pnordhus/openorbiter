@@ -19,21 +19,32 @@
  ***************************************************************************/
 
 
-#ifndef PLANE_H
-#define PLANE_H
+#ifndef RECT_H
+#define RECT_H
 
 
 #include "object.h"
 
 
-class Plane : public Object
+class Rect : public Object
 {
 public:
-	Plane(const Vector& normal);
+	Rect();
+
+public:
+	void	setPositions(const Vector& pos1, const Vector& pos2);
+	void	setWidth(float width);
+	float	width() const { return m_width; }
+	const Vector&	position1() const { return m_position1; }
+	const Vector&	position2() const { return m_position2; }
+	const Vector&	dir() const { return m_dir; }
 
 private:
-	Vector	m_normal;
+	Vector	m_position1;
+	Vector	m_position2;
+	Vector	m_dir;
+	float	m_width;
 };
 
 
-#endif // PLANE_H
+#endif // RECT_H

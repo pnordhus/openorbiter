@@ -35,14 +35,13 @@ class Object : public QObject
 	Q_OBJECT
 
 public:
-	enum Type { Circle, Plane };
+	enum Type { Circle, Rect };
 
 public:
 	Type			type() const { return m_type; }
 	const Vector&	position() const { return m_position; }
 	const Vector&	speed() const { return m_speed; }
 	float			mass() const { return m_mass; }
-	void			setPosition(const Vector& pos);
 	void			accelerate(const Vector& acc);
 	void			accelerate(float acc);
 	void			move(float time);
@@ -51,10 +50,17 @@ public:
 	void			link(const Vector& pos);
 	void			unlink();
 	bool			isLinked() const { return m_linked; }
-	void			collide();
+	void			collide(bool timer);
+	float			radius() const { return m_radius; }
+	void			setStatic(bool enable);
+	bool			isStatic() const { return m_static; }
+
+protected:
+	void			setPosition(const Vector& pos);
+	void			setRadius(float radius);
 
 signals:
-	void			collided();
+	void			collided(bool timer);
 
 protected:
 	Object(Type type);
@@ -70,8 +76,11 @@ private:
 	bool		m_linked;
 	float		m_linkSpeed;
 	float		m_linkRadius;
+	float		m_radius;
+	bool		m_static;
 
-Q_DISABLE_COPY(Object);
+private:
+	Q_DISABLE_COPY(Object);
 };
 
 

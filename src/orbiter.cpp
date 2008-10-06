@@ -44,8 +44,9 @@ Orbiter::Orbiter(Player* player) :
 	m_connectionLine->setPen(QPen(Qt::white));
 	m_connectionLine->hide();
 	
-	m_circle = new Circle(radius);
-	connect(m_circle, SIGNAL(collided()), SLOT(collide()));
+	m_circle = new Circle;
+	m_circle->setRadius(radius);
+	connect(m_circle, SIGNAL(collided(bool)), SLOT(collide(bool)));
 }
 
 
@@ -100,10 +101,11 @@ void Orbiter::toggleConnect()
 }
 
 
-void Orbiter::collide()
+void Orbiter::collide(bool timer)
 {
 	disconnectNode();
-	m_collisionTimer = 0.75f;
+	if (timer)
+		m_collisionTimer = 0.75f;
 }
 
 

@@ -22,9 +22,27 @@
 #include "circle.h"
 
 
-Circle::Circle(float radius) :
-	Object(Object::Circle),
-	m_radius(radius)
+Circle::Circle() :
+	Object(Object::Circle)
 {
 	
+}
+
+
+Circle::Circle(float radius) :
+	Object(Object::Circle)
+{
+	setRadius(radius);
+}
+
+
+void Circle::setRadius(float radius)
+{
+	Object::setRadius(radius);
+}
+
+
+void Circle::setPosition(const Vector& pos)
+{
+	Object::setPosition(pos);
 }
