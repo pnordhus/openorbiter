@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE oomap SYSTEM "oomap.dtd">
+
+<oomap name="The Big Dipper" width="50" height="37.5" gravityX="0" gravityY="9.375">
+	<author>OpenOrbiter Testing Squad</author>
+
+	<spawn x="13.75" y="2.5" />
+	<spawn x="21.25" y="2.5" />
+	<spawn x="28.75" y="2.5" />
+	<spawn x="36.25" y="2.5" />
+
+	<spawn x="10" y="7.5" />
+	<spawn x="17.5" y="7.5" />
+	<spawn x="32.5" y="7.5" />
+	<spawn x="40" y="7.5" />
+
+	<node x="18.75" y="12.5" />
+	<node x="31.25" y="25" />
+
+	<bouncer x1="0" y1="37.5" x2="50" y2="37.5" width="0.5" boost="2" />
+	<bouncer x1="0" y1="0" x2="0" y2="37.5" width="0.5" boost="2" />
+	<bouncer x1="50" y1="0" x2="50" y2="37.5" width="0.5" boost="2" />
+</oomap>
