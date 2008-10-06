@@ -19,35 +19,35 @@
  ***************************************************************************/
 
 
-#ifndef RECT_H
-#define RECT_H
+#ifndef BOUNCERDEF_H
+#define BOUNCERDEF_H
 
 
-#include "object.h"
+#include "physics/vector.h"
 
 
-class Rect : public Object
+class BouncerDef
 {
 public:
-	Rect();
+	BouncerDef();
 
 public:
 	void	setPositions(const Vector& pos1, const Vector& pos2);
 	void	setWidth(float width);
 	void	setBoost(float boost);
-	float	width() const { return m_width; }
-	float	boost() const { return m_boost; }
+
+public:
 	const Vector&	position1() const { return m_position1; }
 	const Vector&	position2() const { return m_position2; }
-	const Vector&	dir() const { return m_dir; }
+	float			width() const { return m_width; }
+	float			boost() const { return m_boost; }
 
 private:
 	Vector	m_position1;
 	Vector	m_position2;
-	Vector	m_dir;
 	float	m_width;
 	float	m_boost;
 };
 
 
-#endif // RECT_H
+#endif // BOUNCERDEF_H

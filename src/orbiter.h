@@ -80,6 +80,9 @@ private:
 	Node*					m_node;
 	bool					m_connected;
 	float					m_collisionTimer;
+
+private:
+	Q_DISABLE_COPY(Orbiter);
 };
 
 

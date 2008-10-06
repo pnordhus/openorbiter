@@ -100,7 +100,7 @@ void World::collide(Object* obj1, Object* obj2)
 	Q_ASSERT(false);
 }
 
-#include <QDebug>
+
 void World::collide2(Circle* circle, Rect* rect)
 {
 	const float dist = (circle->position() - rect->position()).length();
@@ -121,7 +121,7 @@ void World::collide2(Circle* circle, Rect* rect)
 	toCirc = rect->dir().perpendicular() * distToLine;
 	
 	circle->unlink();
-	circle->accelerate(-circle->speed() + accelDir * (circle->speed().length() + 1.0));
+	circle->accelerate(-circle->speed() + accelDir * (circle->speed().length() + rect->boost()));
 	circle->move(toCirc.normalized() * move);
 	circle->collide(false);
 }

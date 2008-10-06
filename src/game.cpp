@@ -49,6 +49,12 @@ Game::Game(Scene& scene, const Map& map, const QList<Player*>& players) :
 		m_nodes.append(node);
 	}
 	
+	foreach (const BouncerDef& def, map.bouncers()) {
+		Bouncer* bouncer = new Bouncer(m_scene, m_world);
+		bouncer->setDef(def);
+		m_bouncers.append(bouncer);
+	}
+	
 	QList<Vector> spawns = map.spawns();
 	std::random_shuffle(spawns.begin(), spawns.end());
 	
@@ -63,20 +69,6 @@ Game::Game(Scene& scene, const Map& map, const QList<Player*>& players) :
 	
 	std::random_shuffle(m_orbiters.begin(), m_orbiters.end());
 	std::random_shuffle(m_nodes.begin(), m_nodes.end());
-	
-	{
-		Bouncer* bouncer = new Bouncer(m_scene, m_world);
-		bouncer->setPositions(Vector(10, 28), Vector(30, 28));
-		bouncer->setWidth(0.5);
-		m_bouncers.append(bouncer);
-	}
-	
-	{
-		Bouncer* bouncer = new Bouncer(m_scene, m_world);
-		bouncer->setPositions(Vector(10, 0), Vector(30, 0));
-		bouncer->setWidth(0.5);
-		m_bouncers.append(bouncer);
-	}
 }
 
 

@@ -92,6 +92,19 @@ bool MapLoader::startElement(const QString&, const QString&, const QString& qNam
 		const float x = QVariant(atts.value("x")).toDouble();
 		const float y = QVariant(atts.value("y")).toDouble();
 		m_map->addNode(Vector(x, y));
+	} else if (qName == "bouncer") {
+		const float x1 = QVariant(atts.value("x1")).toDouble();
+		const float y1 = QVariant(atts.value("y1")).toDouble();
+		const float x2 = QVariant(atts.value("x2")).toDouble();
+		const float y2 = QVariant(atts.value("y2")).toDouble();
+		const float width = QVariant(atts.value("width")).toDouble();
+		const float boost = QVariant(atts.value("boost")).toDouble();
+		
+		BouncerDef def;
+		def.setPositions(Vector(x1, y1), Vector(x2, y2));
+		def.setWidth(width);
+		def.setBoost(boost);
+		m_map->addBouncer(def);
 	}
 	
 	m_text.clear();

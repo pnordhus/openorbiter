@@ -23,9 +23,11 @@
 #define MAP_H
 
 
+#include "bouncerdef.h"
 #include "physics/vector.h"
 #include <QList>
 #include <QString>
+
 
 
 class Map
@@ -39,6 +41,7 @@ public:
 	float			height() const { return m_height; }
 	const QList<Vector>& nodes() const { return m_nodes; }
 	const QList<Vector>& spawns() const { return m_spawns; }
+	const QList<BouncerDef>& bouncers() const { return m_bouncers; }
 	const Vector&	gravity() const { return m_gravity; }
 	void	setGravity(const Vector& gravity);
 	
@@ -48,6 +51,7 @@ public:
 public:
 	void	addNode(const Vector& pos);
 	void	addSpawn(const Vector& spawn);
+	void	addBouncer(const BouncerDef& def);
 
 private:
 	QString			m_name;
@@ -57,8 +61,9 @@ private:
 	float			m_height;
 	Vector			m_gravity;
 	
-	QList<Vector>	m_nodes;
-	QList<Vector>	m_spawns;
+	QList<Vector>		m_nodes;
+	QList<Vector>		m_spawns;
+	QList<BouncerDef>	m_bouncers;
 };
 
 

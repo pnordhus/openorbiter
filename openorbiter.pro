@@ -17,7 +17,8 @@ HEADERS = src/bouncer.h \
  src/player.h \
  src/rendermanager.h \
  src/scene.h \
- src/view.h
+ src/view.h \
+ src/bouncerdef.h
 MOC_DIR = build
 OBJECTS_DIR = build
 QT += core \
@@ -42,7 +43,8 @@ SOURCES = src/bouncer.cpp \
  src/player.cpp \
  src/rendermanager.cpp \
  src/scene.cpp \
- src/view.cpp
+ src/view.cpp \
+ src/bouncerdef.cpp
 TARGET = bin/openorbiter
 TEMPLATE = app
 UI_DIR = build

@@ -20,6 +20,7 @@
 
 
 #include "bouncer.h"
+#include "bouncerdef.h"
 #include "scene.h"
 
 
@@ -57,16 +58,12 @@ Bouncer::~Bouncer()
 }
 
 
-void Bouncer::setPositions(const Vector& pos1, const Vector& pos2)
+void Bouncer::setDef(const BouncerDef& def)
 {
-	m_rect->setPositions(pos1, pos2);
-	updateItem();
-}
-
-
-void Bouncer::setWidth(float width)
-{
-	m_rect->setWidth(width);
+	m_rect->setPositions(def.position1(), def.position2());
+	m_rect->setWidth(def.width());
+	m_rect->setBoost(def.boost());
+	
 	updateItem();
 }
 

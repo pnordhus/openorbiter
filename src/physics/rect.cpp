@@ -24,7 +24,8 @@
 
 Rect::Rect() :
 	Object(Object::Rect),
-	m_width(0.0f)
+	m_width(0.0f),
+	m_boost(0.0f)
 {
 	setStatic(true);
 }
@@ -46,4 +47,10 @@ void Rect::setWidth(float width)
 	
 	const float a = width + (m_position1 - m_position2).length() / 2.0f;
 	setRadius(std::sqrt(width * width + a * a));
+}
+
+
+void Rect::setBoost(float boost)
+{
+	m_boost = boost;
 }

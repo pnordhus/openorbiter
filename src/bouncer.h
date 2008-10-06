@@ -29,6 +29,7 @@
 
 class Scene;
 class World;
+class BouncerDef;
 
 
 class Bouncer
@@ -38,8 +39,7 @@ public:
 	~Bouncer();
 
 public:
-	void	setPositions(const Vector& pos1, const Vector& pos2);
-	void	setWidth(float width);
+	void	setDef(const BouncerDef& def);
 
 private:
 	void	updateItem();
@@ -48,9 +48,10 @@ private:
 	QGraphicsRectItem*		m_item;
 	QGraphicsEllipseItem*	m_itemCap1;
 	QGraphicsEllipseItem*	m_itemCap2;
-	Vector					m_position1;
-	Vector					m_position2;
 	Rect*					m_rect;
+
+private:
+	Q_DISABLE_COPY(Bouncer);
 };
 
 

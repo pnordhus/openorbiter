@@ -43,6 +43,9 @@ public:
 private:
 	QGraphicsItem*		m_item;
 	static const float	m_radius = 0.3f;
+
+private:
+	Q_DISABLE_COPY(Node);
 };
 
 

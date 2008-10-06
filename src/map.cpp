@@ -56,6 +56,12 @@ void Map::addSpawn(const Vector& spawn)
 }
 
 
+void Map::addBouncer(const BouncerDef& def)
+{
+	m_bouncers.append(def);
+}
+
+
 void Map::setGravity(const Vector& gravity)
 {
 	m_gravity = gravity;
