@@ -95,7 +95,7 @@ void Match::resume()
 	Q_ASSERT(m_state != Ingame);
 	
 	m_state = Ingame;
-	m_timer.start(20);
+	m_timer.start(30);
 	m_time.restart();
 	m_scene.hideText();
 	m_textPrefix = "";
