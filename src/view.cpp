@@ -32,7 +32,9 @@ View::View(QWidget* parent) :
 	m_gl(false),
 	m_antiAliasing(false)
 {
-	
+	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setBackgroundBrush(Qt::black);
 }
 
 

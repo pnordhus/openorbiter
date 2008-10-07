@@ -21,26 +21,7 @@
   <widget class="QWidget" name="centralwidget" >
    <layout class="QVBoxLayout" name="verticalLayout" >
     <item>
-     <widget class="View" name="view" >
-      <property name="verticalScrollBarPolicy" >
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy" >
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="backgroundBrush" >
-       <brush brushstyle="SolidPattern" >
-        <color alpha="255" >
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </property>
-      <property name="renderHints" >
-       <set>QPainter::TextAntialiasing</set>
-      </property>
-     </widget>
+     <widget class="View" name="view" />
     </item>
    </layout>
   </widget>
