@@ -37,15 +37,13 @@ QGraphicsItem* RenderManager::createNodeItem(float radius)
 	if (m_useSvg && m_rendererNode) {
 		QGraphicsSvgItem* item = new QGraphicsSvgItem;
 		item->setSharedRenderer(m_rendererNode);
-		
 		item->scale(0.01 * 2.0f * radius, 0.01 * 2.0f * radius);
-		//TODO: disabling the cache resolves a mixing problem, find a better way
-		item->setCacheMode(QGraphicsItem::NoCache);
 		return item;
 	}
 #endif
 	
 	QGraphicsEllipseItem* item = new QGraphicsEllipseItem(0.0f, 0.0f, 2.0f * radius, 2.0f * radius);
+	item->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 	item->setPen(QPen(Qt::NoPen));
 	item->setBrush(QBrush(Qt::white));
 	return item;
@@ -60,14 +58,12 @@ QGraphicsItem* RenderManager::createOrbiterItem(float radius, const QColor& colo
 		QGraphicsSvgItem* item = new QGraphicsSvgItem;
 		item->setSharedRenderer(renderer);
 		item->scale(0.01 * 2.0f * radius, 0.01 * 2.0f * radius);
-		
-		//TODO: disabling the cache resolves a mixing problem, find a better way
-		item->setCacheMode(QGraphicsItem::NoCache);
 		return item;
 	}
 #endif
 	
 	QGraphicsEllipseItem* item = new QGraphicsEllipseItem(0.0f, 0.0f, 2.0f * radius, 2.0f * radius);
+	item->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 	item->setPen(QPen(Qt::NoPen));
 	item->setBrush(QBrush(color));
 	return item;

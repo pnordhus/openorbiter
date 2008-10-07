@@ -22,6 +22,7 @@
 #include "scene.h"
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
+#include <QPixmapCache>
 
 
 Scene::Scene()
@@ -47,6 +48,9 @@ Scene::~Scene()
 
 void Scene::setField(float width, float height)
 {
+	// clear the pixmap cache to make sure all objects are rendered again
+	QPixmapCache::clear();
+	
 	m_field->setRect(0.0f, 0.0f, width, height);
 	setSceneRect(-0.2, -0.2, width + 0.4, height + 0.4);
 	
