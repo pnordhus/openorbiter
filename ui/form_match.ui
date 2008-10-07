@@ -120,6 +120,9 @@
             <height>150</height>
            </size>
           </property>
+          <property name="focusPolicy" >
+           <enum>Qt::NoFocus</enum>
+          </property>
           <property name="renderHints" >
            <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::TextAntialiasing</set>
           </property>

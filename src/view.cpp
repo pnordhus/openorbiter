@@ -78,6 +78,8 @@ void View::switchSettings(bool gl, bool antiAliasing)
 	
 	m_antiAliasing = antiAliasing;
 	m_gl = gl;
+	
+	setFocus(Qt::OtherFocusReason);
 }
 
 
