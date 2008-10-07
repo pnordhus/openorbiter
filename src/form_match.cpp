@@ -116,6 +116,8 @@ void FormMatch::setMaps(const QList<MapDef>& maps)
 		
 		m_modelMaps.appendRow(QList<QStandardItem*>() << itemName);
 	}
+	
+	m_ui->treeMaps->sortByColumn(0, Qt::AscendingOrder);
 }
 
 
