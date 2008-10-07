@@ -41,7 +41,6 @@ Orbiter::Orbiter(Player* player) :
 	
 	m_connectionLine = new QGraphicsLineItem;
 	m_connectionLine->setZValue(5);
-	m_connectionLine->setPen(QPen(Qt::white));
 	m_connectionLine->hide();
 	
 	m_circle = new Circle;
@@ -72,8 +71,6 @@ void Orbiter::enter(Game& game, World* world, Scene& scene)
 	
 	scene.addItem(m_item);
 	scene.addItem(m_connectionLine);
-	
-	
 }
 
 
@@ -111,7 +108,7 @@ void Orbiter::collide(bool timer)
 
 void Orbiter::connectNode()
 {
-	m_connectionLine->setPen(QPen(Qt::darkRed));
+	m_connectionLine->setPen(QPen(Qt::darkRed, 0.1f));
 	
 	m_node = m_game->nearestNode(m_circle->position());
 	m_connected = false;
@@ -133,7 +130,7 @@ void Orbiter::process(float time)
 	
 	if (m_node && !m_connected && (m_collisionTimer <= 0.0f)) {
 		m_connected = true;
-		m_connectionLine->setPen(QPen(Qt::white));
+		m_connectionLine->setPen(QPen(Qt::white, 0.1f));
 		m_circle->link(m_node->position());
 	}
 }
