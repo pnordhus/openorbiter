@@ -7,7 +7,7 @@ isEmpty(DATADIR) {
 }
 
 TEMPLATE = app
-CONFIG += silent warn_on
+CONFIG += warn_on
 DEFINES += OO_DATADIR=\"\\\"$$DATADIR\\\"\"
 
 QT += core gui xml
@@ -33,7 +33,7 @@ win32-g++ {
 	UI_DIR = release
 	TARGET = release/bin/openorbiter
 } else {
-	CONFIG += debug_and_release
+	CONFIG += silent debug_and_release
 	
 	build_pass:CONFIG(debug, debug|release) {
 		OBJECTS_DIR = build/debug
