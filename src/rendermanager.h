@@ -24,14 +24,17 @@
 
 
 #include <QGraphicsItem>
+#include <QObject>
 
 #ifdef QT_SVG_LIB
 #  include <QSvgRenderer>
 #endif
 
 
-class RenderManager
+class RenderManager : public QObject
 {
+	Q_OBJECT
+
 public:
 	QGraphicsItem*	createNodeItem(float radius);
 	QGraphicsItem*	createOrbiterItem(float radius, const QColor& color);
@@ -46,12 +49,16 @@ private:
 	~RenderManager();
 
 #ifdef QT_SVG_LIB
+public slots:
+	void	enableSvg(bool enable);
+
 private:
 	void	loadRenderer(const QString& name, const QColor& color);
 
 private:
 	QSvgRenderer*					m_rendererNode;
 	QMap<QString, QSvgRenderer*>	m_rendererOrbiter;
+	bool							m_useSvg;
 #endif
 
 private:

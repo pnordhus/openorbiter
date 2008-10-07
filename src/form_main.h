@@ -57,6 +57,13 @@ private:
 	bool			m_firstShow;
 	
 	QList<MapDef>	m_maps;
+
+#ifdef QT_SVG_LIB
+	QAction*		m_actionSvg;
+#endif
+#ifdef QT_OPENGL_LIB
+	QAction*		m_actionOpenGL;
+#endif
 };
 
 

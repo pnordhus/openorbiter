@@ -34,7 +34,7 @@ RenderManager* RenderManager::m_singleton = NULL;
 QGraphicsItem* RenderManager::createNodeItem(float radius)
 {
 #ifdef QT_SVG_LIB
-	if (m_rendererNode) {
+	if (m_useSvg && m_rendererNode) {
 		QGraphicsSvgItem* item = new QGraphicsSvgItem;
 		item->setSharedRenderer(m_rendererNode);
 		
@@ -56,7 +56,7 @@ QGraphicsItem* RenderManager::createOrbiterItem(float radius, const QColor& colo
 {
 #ifdef QT_SVG_LIB
 	QSvgRenderer* renderer = m_rendererOrbiter.value(color.name());
-	if (renderer) {
+	if (m_useSvg && renderer) {
 		QGraphicsSvgItem* item = new QGraphicsSvgItem;
 		item->setSharedRenderer(renderer);
 		item->scale(0.01 * 2.0f * radius, 0.01 * 2.0f * radius);
@@ -77,6 +77,8 @@ QGraphicsItem* RenderManager::createOrbiterItem(float radius, const QColor& colo
 RenderManager::RenderManager()
 {
 #ifdef QT_SVG_LIB
+	m_useSvg = false;
+	
 	QSvgRenderer* renderer = new QSvgRenderer(QString(OO_DATADIR "/gfx/node.svg"));
 	if (renderer->isValid()) {
 		m_rendererNode = renderer;
@@ -114,6 +116,12 @@ void RenderManager::loadRenderer(const QString& name, const QColor& color)
 		m_rendererOrbiter.insert(color.name(), renderer);
 	else
 		delete renderer;
+}
+
+
+void RenderManager::enableSvg(bool enable)
+{
+	m_useSvg = enable;
 }
 #endif
 

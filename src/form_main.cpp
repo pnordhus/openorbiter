@@ -48,13 +48,23 @@ FormMain::FormMain() :
 	connect(m_ui->actionAntialiasing,	SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableAntiAliasing(bool)));
 	connect(m_ui->actionAboutQt,		SIGNAL(triggered()),	qApp,		SLOT(aboutQt()));
 	
-#ifdef QT_OPENGL_LIB
-	QAction* actionOpenGL = m_ui->menuView->addAction("Enable OpenGL");
-	actionOpenGL->setCheckable(true);
-	connect(actionOpenGL,				SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableGL(bool)));
+	QSettings s;
+	m_ui->actionAntialiasing->setChecked(s.value("antialiasing", false).toBool());
+	
+#ifdef QT_SVG_LIB
+	m_actionSvg = m_ui->menuView->addAction("Use SVGs");
+	m_actionSvg->setCheckable(true);
+	connect(m_actionSvg,				SIGNAL(toggled(bool)),	&RenderManager::get(), SLOT(enableSvg(bool)));
+	m_actionSvg->setChecked(s.value("svg", true).toBool());
 #endif
 	
-	QSettings s;
+#ifdef QT_OPENGL_LIB
+	m_actionOpenGL = m_ui->menuView->addAction("Enable OpenGL");
+	m_actionOpenGL->setCheckable(true);
+	connect(m_actionOpenGL,				SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableGL(bool)));
+	m_actionOpenGL->setChecked(s.value("opengl", false).toBool());
+#endif
+	
 	restoreGeometry(s.value("geometry", QSize(400, 400)).toByteArray());
 	
 	QDir dir(OO_DATADIR "/maps");
@@ -80,6 +90,13 @@ void FormMain::closeEvent(QCloseEvent* e)
 {
 	QSettings s;
 	s.setValue("geometry", saveGeometry());
+#ifdef QT_SVG_LIB
+	s.setValue("svg", m_actionSvg->isChecked());
+#endif
+#ifdef QT_OPENGL_LIB
+	s.setValue("opengl", m_actionOpenGL->isChecked());
+#endif
+	s.setValue("antialiasing", m_ui->actionAntialiasing->isChecked());
 	QMainWindow::closeEvent(e);
 }
 
