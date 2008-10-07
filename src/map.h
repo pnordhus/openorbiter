@@ -33,7 +33,7 @@
 class Map
 {
 public:
-	Map(const QString& name, float width, float height);
+	Map(const QString& name, float width, float height, const Vector& gravity);
 
 public:
 	const QString&	name() const { return m_name; }
@@ -43,10 +43,7 @@ public:
 	const QList<Vector>& spawns() const { return m_spawns; }
 	const QList<BouncerDef>& bouncers() const { return m_bouncers; }
 	const Vector&	gravity() const { return m_gravity; }
-	void	setGravity(const Vector& gravity);
-	
-	void	setAuthor(const QString& name);
-	void	setDescription(const QString& desc);
+	void			validate() const;
 
 public:
 	void	addNode(const Vector& pos);
@@ -55,8 +52,6 @@ public:
 
 private:
 	QString			m_name;
-	QString			m_author;
-	QString			m_description;
 	float			m_width;
 	float			m_height;
 	Vector			m_gravity;

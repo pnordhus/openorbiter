@@ -23,30 +23,41 @@
 #define MAPLOADER_H
 
 
-#include <QXmlDefaultHandler>
+#include <QString>
 
 
 class Map;
+class QDomDocument;
+class QDomElement;
 
 
-class MapLoader : private QXmlDefaultHandler
+class MapLoader
 {
 public:
 	MapLoader();
 	~MapLoader();
 
 public:
-	bool	loadMap(const QString& filename);
-	Map*	takeMap();
+	bool		loadMap(const QString& filename);
+	const Map&	map() const { Q_ASSERT(m_map); return *m_map; }
+	
+private:
+	void		load(const QString& filename);
+	void		parse();
+	void		parseRoot(const QDomElement& e);
+	void		parseSpawn(const QDomElement& e);
+	void		parseNode(const QDomElement& e);
+	void		parseBouncer(const QDomElement& e);
+	
+	template <typename T>
+	T			require(QDomElement e, const QString& name, const QString& error);
+	template <typename T>
+	T			optional(QDomElement e, const QString& name, const T& defaultValue);
+
 
 private:
-	bool	startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts);
-	bool	endElement(const QString& namespaceURI, const QString& localName, const QString& qName);
-	bool	characters(const QString& text);
-
-private:
-	Map*	m_map;
-	QString	m_text;
+	Map*			m_map;
+	QDomDocument*	m_document;
 };
 
 

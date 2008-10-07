@@ -1,8 +1,7 @@
-<!ELEMENT oomap			(author,description,spawn,spawn+,node+)>
-<!ELEMENT author		(#PCDATA)>
-<!ELEMENT description	(#PCDATA)>
+<!ELEMENT oomap			(spawn,spawn,spawn,spawn,spawn,spawn,spawn,spawn,spawn*,node+,bouncer*)>
 <!ELEMENT spawn			(#PCDATA)>
 <!ELEMENT node			(#PCDATA)>
+<!ELEMENT bouncer		(#PCDATA)>
 
 <!ATTLIST map	name		CDATA	#REQUIRED>
 <!ATTLIST map	width		CDATA	#REQUIRED>
@@ -15,3 +14,10 @@
 
 <!ATTLIST node	x			CDATA	#REQUIRED>
 <!ATTLIST node	y			CDATA	#REQUIRED>
+
+<!ATTLIST bouncer	x1		CDATA	#REQUIRED>
+<!ATTLIST bouncer	y1		CDATA	#REQUIRED>
+<!ATTLIST bouncer	x2		CDATA	#REQUIRED>
+<!ATTLIST bouncer	y2		CDATA	#REQUIRED>
+<!ATTLIST bouncer	width	CDATA	#REQUIRED>
+<!ATTLIST bouncer	boost	CDATA	"0.0">

@@ -61,11 +61,8 @@ FormMain::FormMain() :
 	QStringList files = dir.entryList(QStringList() << "*.xml", QDir::Files | QDir::Readable);
 	foreach (const QString& file, files) {
 		MapLoader loader;
-		if (loader.loadMap(dir.absoluteFilePath(file))) {
-			Map* map = loader.takeMap();
-			m_maps.append(*map);
-			delete map;
-		}
+		if (loader.loadMap(dir.absoluteFilePath(file)))
+			m_maps.append(loader.map());
 	}
 }
 

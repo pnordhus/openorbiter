@@ -21,12 +21,14 @@
 
 #include "map.h"
 #include "maploader.h"
+#include <QDomDocument>
+#include <QFile>
 #include <QVariant>
-#include <QXmlInputSource>
 
 
 MapLoader::MapLoader() :
-	m_map(NULL)
+	m_map(NULL),
+	m_document(NULL)
 {
 	
 }
@@ -35,101 +37,156 @@ MapLoader::MapLoader() :
 MapLoader::~MapLoader()
 {
 	delete m_map;
+	delete m_document;
 }
+
+#include <QDebug>
 
 
 bool MapLoader::loadMap(const QString& filename)
 {
-	delete m_map;
-	m_map = NULL;
+	Q_ASSERT(m_document == NULL);
+	m_document = new QDomDocument;
 	
-	QFile file(filename);
-	QXmlInputSource source(&file);
-	QXmlSimpleReader xmlReader;
-	xmlReader.setContentHandler(this);
-	if (!xmlReader.parse(source))
-		return false;
-	
-	return m_map;
-}
-
-
-Map* MapLoader::takeMap()
-{
-	Q_ASSERT(m_map);
-	Map* map = m_map;
-	m_map = NULL;
-	return map;
-}
-
-
-bool MapLoader::startElement(const QString&, const QString&, const QString& qName, const QXmlAttributes& atts)
-{
-	if (qName == "oomap") {
-		const QString name = atts.value("name");
-		const float width  = QVariant(atts.value("width")).toDouble();
-		const float height = QVariant(atts.value("height")).toDouble();
-		if (name.isEmpty())
-			return false;
-		
-		if (width < 5.0f)
-			return false;
-		
-		if (height < 5.0f)
-			return false;
-		
+	try {
+		load(filename);
+		parse();
+	} catch (const QString& error) {
+		qDebug() << qPrintable(QString("Error in map '%1': %2!").arg(filename).arg(error));
 		delete m_map;
-		m_map = new Map(name, width, height);
-		
-		const float gravityX = QVariant(atts.value("gravityX")).toDouble();
-		const float gravityY = QVariant(atts.value("gravityY")).toDouble();
-		m_map->setGravity(Vector(gravityX, gravityY));
-	} else if (qName == "spawn") {
-		const float x = QVariant(atts.value("x")).toDouble();
-		const float y = QVariant(atts.value("y")).toDouble();
-		m_map->addSpawn(Vector(x, y));
-	} else if (qName == "node") {
-		const float x = QVariant(atts.value("x")).toDouble();
-		const float y = QVariant(atts.value("y")).toDouble();
-		m_map->addNode(Vector(x, y));
-	} else if (qName == "bouncer") {
-		const float x1 = QVariant(atts.value("x1")).toDouble();
-		const float y1 = QVariant(atts.value("y1")).toDouble();
-		const float x2 = QVariant(atts.value("x2")).toDouble();
-		const float y2 = QVariant(atts.value("y2")).toDouble();
-		const float width = QVariant(atts.value("width")).toDouble();
-		const float boost = QVariant(atts.value("boost")).toDouble();
-		
-		BouncerDef def;
-		def.setPositions(Vector(x1, y1), Vector(x2, y2));
-		def.setWidth(width);
-		def.setBoost(boost);
-		m_map->addBouncer(def);
+		m_map = NULL;
+		return false;
 	}
 	
-	m_text.clear();
-	
 	return true;
 }
 
 
-bool MapLoader::endElement(const QString&, const QString&, const QString& qName)
+void MapLoader::load(const QString& filename)
 {
-	if (!m_map)
-		return true;
+	QFile file(filename);
+	if (!file.open(QIODevice::ReadOnly))
+		return;
 	
-	if (qName == "author")
-		m_map->setAuthor(m_text);
-	else if (qName == "description")
-		m_map->setDescription(m_text); 
-	
-	return true;
+	QString errorMsg;
+	int errorLine;
+	int errorColumn;
+	if (!m_document->setContent(&file, false, &errorMsg, &errorLine, &errorColumn))
+		throw QString("%1 (line %2, column %3)").arg(errorMsg).arg(errorLine).arg(errorColumn);
 }
 
 
-bool MapLoader::characters(const QString& text)
+void MapLoader::parse()
 {
-	m_text += text;
-	return true;
+	QDomElement docElem = m_document->documentElement();
+	
+	parseRoot(docElem);
+	
+	QDomNode n = docElem.firstChild();
+	while (!n.isNull()) {
+		QDomElement e = n.toElement();
+		if(!e.isNull()) {
+			if (e.tagName() == "spawn")
+				parseSpawn(e);
+			else if (e.tagName() == "node")
+				parseNode(e);
+			else if (e.tagName() == "bouncer")
+				parseBouncer(e);
+			else
+				throw QString("Invalid element ''").arg(e.tagName());
+		} else {
+			throw QString("Unknown error");
+		}
+		
+		n = n.nextSibling();
+	}
+	
+	m_map->validate();
 }
- 
+
+
+template <typename T>
+T MapLoader::require(QDomElement e, const QString& name, const QString& error)
+{
+	if (!e.hasAttribute(name))
+		throw error;
+	
+	T val = QVariant(e.attribute(name)).value<T>();
+	return val;
+}
+
+
+template <typename T>
+T MapLoader::optional(QDomElement e, const QString& name, const T& defaultValue)
+{
+	if (!e.hasAttribute(name))
+		return defaultValue;
+	
+	T val = QVariant(e.attribute(name)).value<T>();
+	return val;
+}
+
+
+void MapLoader::parseRoot(const QDomElement& e)
+{
+	if (e.tagName() != "oomap")
+		throw QString("Not a valid OpenOrbiter map file");
+	
+	const QString mapName = require<QString>(e, "name", "No name given");
+	if (mapName == "")
+		throw QString("Name is empty");
+	
+	const float mapWidth = require<float>(e, "width", "No width defined");
+	if (mapWidth < 5.0f)
+		throw QString("Width is too small");
+	
+	const float mapHeight = require<float>(e, "height", "No height defined");
+	if (mapHeight < 5.0f)
+		throw QString("Height is too small");
+	
+	Vector gravity;
+	gravity.x = optional(e, "gravityX", 0.0f);
+	gravity.y = optional(e, "gravityY", 10.0f);
+	
+	m_map = new Map(mapName, mapWidth, mapHeight, gravity);
+}
+
+
+void MapLoader::parseSpawn(const QDomElement& e)
+{
+	Vector pos;
+	pos.x = require<float>(e, "x", "Spawn point is missing x position");
+	pos.y = require<float>(e, "y", "Spawn point is missing y position");
+	m_map->addSpawn(pos);
+}
+
+
+void MapLoader::parseNode(const QDomElement& e)
+{
+	Vector pos;
+	pos.x = require<float>(e, "x", "Node is missing x position");
+	pos.y = require<float>(e, "y", "Node is missing y position");
+	m_map->addNode(pos);
+}
+
+
+void MapLoader::parseBouncer(const QDomElement& e)
+{
+	Vector pos1;
+	pos1.x = require<float>(e, "x1", "Bouncer is missing x1 position");
+	pos1.y = require<float>(e, "y1", "Bouncer is missing y1 position");
+	
+	Vector pos2;
+	pos2.x = require<float>(e, "x2", "Bouncer is missing x2 position");
+	pos2.y = require<float>(e, "y2", "Bouncer is missing y2 position");
+	
+	float width = require<float>(e, "width", "Bouncer is missing width");
+	float boost = optional<float>(e, "boost", 0.0f);
+	
+	BouncerDef def;
+	def.setPositions(pos1, pos2);
+	def.setWidth(width);
+	def.setBoost(boost);
+	
+	m_map->addBouncer(def);
+}

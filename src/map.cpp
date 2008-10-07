@@ -22,25 +22,13 @@
 #include "map.h"
 
 
-Map::Map(const QString& name, float width, float height) :
+Map::Map(const QString& name, float width, float height, const Vector& gravity) :
 	m_name(name),
 	m_width(width),
 	m_height(height),
-	m_gravity(0.0f, 10.0f)
+	m_gravity(gravity)
 {
 	
-}
-
-
-void Map::setAuthor(const QString& name)
-{
-	m_author = name;
-}
-
-
-void Map::setDescription(const QString& desc)
-{
-	m_description = desc;
 }
 
 
@@ -62,7 +50,11 @@ void Map::addBouncer(const BouncerDef& def)
 }
 
 
-void Map::setGravity(const Vector& gravity)
+void Map::validate() const
 {
-	m_gravity = gravity;
+	if (m_nodes.empty())
+		throw QString("Map has no nodes");
+	
+	if (m_spawns.size() < 8)
+		throw QString("Map has too few spawn points");
 }
