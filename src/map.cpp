@@ -19,42 +19,47 @@
  ***************************************************************************/
 
 
+#include "bouncer.h"
 #include "map.h"
+#include "mapdef.h"
+#include "node.h"
+#include "scene.h"
+#include "physics/world.h"
 
 
-Map::Map(const QString& name, float width, float height, const Vector& gravity) :
-	m_name(name),
-	m_width(width),
-	m_height(height),
-	m_gravity(gravity)
+Map::Map(const MapDef& def, Scene& scene) :
+	m_scene(scene)
 {
+	m_world = new World;
 	
-}
-
-
-void Map::addNode(const Vector& pos)
-{
-	m_nodes.append(pos);
-}
-
-
-void Map::addSpawn(const Vector& spawn)
-{
-	m_spawns.append(spawn);
-}
-
-
-void Map::addBouncer(const BouncerDef& def)
-{
-	m_bouncers.append(def);
-}
-
-
-void Map::validate() const
-{
-	if (m_nodes.empty())
-		throw QString("Map has no nodes");
+	const float width = def.width();
+	const float height = def.height();
 	
-	if (m_spawns.size() < 8)
-		throw QString("Map has too few spawn points");
+	m_rect.setWidth(width);
+	m_rect.setHeight(height);
+	
+	m_scene.setField(width, height);
+	
+	m_world->setGravity(def.gravity());
+	
+	foreach (const Vector& pos, def.nodes()) {
+		Node* node = new Node(m_scene);
+		node->setPosition(pos);
+		m_nodes.append(node);
+	}
+	
+	foreach (const BouncerDef& def, def.bouncers()) {
+		Bouncer* bouncer = new Bouncer(m_scene, m_world);
+		bouncer->setDef(def);
+		m_bouncers.append(bouncer);
+	}
+}
+
+
+Map::~Map()
+{
+	qDeleteAll(m_bouncers);
+	qDeleteAll(m_nodes);
+	
+	delete m_world;
 }

@@ -30,7 +30,7 @@
 
 
 class Game;
-class Map;
+class MapDef;
 class Orbiter;
 class Player;
 class Scene;
@@ -47,7 +47,7 @@ public:
 public:
 	void	start();
 	void	setPlayers(const QList<Player>& players);
-	void	setMaps(const QList<Map>& maps);
+	void	setMaps(const QList<MapDef>& maps);
 
 public slots:
 	void	keyPressed(int key);
@@ -60,7 +60,7 @@ private:
 	void	updatePauseText();
 	void	resume();
 	void	newGame();
-	Map		nextMap();
+	MapDef	nextMap();
 	bool	requestKey();
 
 private:
@@ -68,7 +68,7 @@ private:
 
 private:
 	QList<Player*>	m_players;
-	QQueue<Map>		m_maps;
+	QQueue<MapDef>	m_maps;
 	
 	Scene&			m_scene;
 	Game*			m_game;

@@ -20,7 +20,7 @@
 
 
 #include "game.h"
-#include "map.h"
+#include "mapdef.h"
 #include "match.h"
 #include "orbiter.h"
 #include "player.h"
@@ -174,10 +174,10 @@ void Match::setPlayers(const QList<Player>& players)
 }
 
 
-void Match::setMaps(const QList<Map>& maps)
+void Match::setMaps(const QList<MapDef>& maps)
 {
 	m_maps.clear();
-	foreach (const Map& map, maps)
+	foreach (const MapDef& map, maps)
 		m_maps.append(map);
 	
 	std::random_shuffle(m_maps.begin(), m_maps.end());
@@ -207,9 +207,9 @@ void Match::process()
 }
 
 
-Map Match::nextMap()
+inline MapDef Match::nextMap()
 {
-	Map map = m_maps.dequeue();
+	MapDef map = m_maps.dequeue();
 	m_maps.enqueue(map);
 	return map;
 }

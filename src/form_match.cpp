@@ -20,6 +20,9 @@
 
 
 #include "form_match.h"
+#include "map.h"
+#include "mapdef.h"
+#include "scene.h"
 #include "ui_form_match.h"
 #include <QMessageBox>
 #include <QPainter>
@@ -27,7 +30,8 @@
 
 
 FormMatch::FormMatch(QWidget* parent) :
-	QDialog(parent)
+	QDialog(parent),
+	m_map(NULL)
 {
 	m_ui = new Ui::FormMatch;
 	m_ui->setupUi(this);
@@ -36,6 +40,10 @@ FormMatch::FormMatch(QWidget* parent) :
 	connect(m_ui->btnAdd,		SIGNAL(clicked()),		SLOT(addPlayer()));
 	connect(m_ui->btnRemove,	SIGNAL(clicked()),		SLOT(removePlayer()));
 	connect(&m_modelMaps,		SIGNAL(itemChanged(QStandardItem*)), SLOT(mapChanged(QStandardItem*)));
+	
+	m_scene = new Scene;
+	m_ui->view->setScene(m_scene);
+	connect(m_scene, SIGNAL(sizeChanged()), m_ui->view, SLOT(sizeChanged()));
 	
 	m_ui->treePlayers->setModel(&m_modelPlayers);
 	m_ui->treeMaps->setModel(&m_modelMaps);
@@ -73,23 +81,29 @@ FormMatch::FormMatch(QWidget* parent) :
 	connect(m_ui->treePlayers->selectionModel(),
 		SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 		SLOT(playersSelectionChanged()));
+	
+	connect(m_ui->treeMaps->selectionModel(),
+		SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+		SLOT(mapsSelectionChanged(const QItemSelection&)));
 }
 
 
 FormMatch::~FormMatch()
 {
+	delete m_map;
+	delete m_scene;
 	delete m_ui;
 }
 
 
-void FormMatch::setMaps(const QList<Map>& maps)
+void FormMatch::setMaps(const QList<MapDef>& maps)
 {
 	m_modelMaps.removeRows(0, m_modelMaps.rowCount());
 	
 	QSettings s;
 	QStringList mapNames = s.value("maps").toStringList();
 	
-	foreach (const Map& map, maps) {
+	foreach (const MapDef& map, maps) {
 		QStandardItem* itemName = new QStandardItem(map.name());
 		itemName->setData(QVariant::fromValue((void*) &map));
 		itemName->setCheckable(true);
@@ -145,7 +159,7 @@ void FormMatch::save()
 		players << m_modelPlayers.item(i)->text();
 	
 	QStringList maps;
-	foreach (const Map* map, m_selectedMaps)
+	foreach (const MapDef* map, m_selectedMaps)
 		maps << map->name();
 	
 	QSettings s;
@@ -205,6 +219,20 @@ void FormMatch::playersSelectionChanged()
 }
 
 
+void FormMatch::mapsSelectionChanged(const QItemSelection& sel)
+{
+	delete m_map;
+	m_map = NULL;
+	
+	QModelIndexList list = sel.indexes();
+	if (!list.isEmpty()) {
+		QStandardItem* item = m_modelMaps.itemFromIndex(list.first());
+		const MapDef* def = static_cast<const MapDef*>(item->data().value<void*>());
+		m_map = new Map(*def, *m_scene);
+	}
+}
+
+
 QList<Player> FormMatch::players() const
 {
 	QList<Player> players;
@@ -216,11 +244,11 @@ QList<Player> FormMatch::players() const
 }
 
 
-QList<Map> FormMatch::maps() const
+QList<MapDef> FormMatch::maps() const
 {
-	QList<Map> maps;
+	QList<MapDef> maps;
 	
-	foreach (const Map* map, m_selectedMaps)
+	foreach (const MapDef* map, m_selectedMaps)
 		maps.append(*map);
 	
 	return maps;
@@ -229,7 +257,7 @@ QList<Map> FormMatch::maps() const
 
 void FormMatch::mapChanged(QStandardItem* item)
 {
-	const Map* map = static_cast<const Map*>(item->data().value<void*>());
+	const MapDef* map = static_cast<const MapDef*>(item->data().value<void*>());
 	if (item->checkState() == Qt::Checked)
 		m_selectedMaps.insert(map);
 	else

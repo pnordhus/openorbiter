@@ -24,7 +24,7 @@
 #include "scene.h"
 
 
-Bouncer::Bouncer(Scene& scene, World& world)
+Bouncer::Bouncer(Scene& scene, World* world)
 {
 	m_item = new QGraphicsRectItem;
 	m_item->setPen(Qt::NoPen);
@@ -45,7 +45,7 @@ Bouncer::Bouncer(Scene& scene, World& world)
 	scene.addItem(m_itemCap2);
 	
 	m_rect = new Rect;
-	m_rect->setWorld(&world);
+	m_rect->setWorld(world);
 }
 
 

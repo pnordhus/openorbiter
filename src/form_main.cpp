@@ -21,7 +21,7 @@
 
 #include "form_main.h"
 #include "form_match.h"
-#include "map.h"
+#include "mapdef.h"
 #include "maploader.h"
 #include "match.h"
 #include "orbiter.h"

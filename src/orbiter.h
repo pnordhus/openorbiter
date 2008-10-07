@@ -56,7 +56,7 @@ public:
 	void	process(float time);
 	void	update();
 	
-	void	enter(Game& game, World& world, Scene& scene);
+	void	enter(Game& game, World* world, Scene& scene);
 	void	leave();
 	
 	void	setKey(int key);

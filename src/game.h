@@ -23,26 +23,21 @@
 #define GAME_H
 
 
-#include "physics/world.h"
-#include <QList>
+#include "map.h"
 #include <QObject>
-#include <QRectF>
 
 
-class Bouncer;
-class Map;
-class Node;
 class Orbiter;
 class Player;
-class Scene;
+class Vector;
 
 
-class Game : public QObject
+class Game : public QObject, public Map
 {
 	Q_OBJECT
 
 public:
-	Game(Scene& scene, const Map& map, const QList<Player*>& players);
+	Game(Scene& scene, const MapDef& map, const QList<Player*>& players);
 	~Game();
 
 public:
@@ -54,13 +49,7 @@ public slots:
 	const Player*	process(float time);
 
 private:
-	World			m_world;
-	Scene&			m_scene;
-	
 	QList<Orbiter*>	m_orbiters;
-	QList<Node*>	m_nodes;
-	QList<Bouncer*>	m_bouncers;
-	QRectF			m_rect;
 };
 
 

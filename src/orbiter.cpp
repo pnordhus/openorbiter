@@ -58,12 +58,12 @@ Orbiter::~Orbiter()
 }
 
 
-void Orbiter::enter(Game& game, World& world, Scene& scene)
+void Orbiter::enter(Game& game, World* world, Scene& scene)
 {
 	Q_ASSERT(m_game == NULL);
 	
 	m_game = &game;
-	m_circle->setWorld(&world);
+	m_circle->setWorld(world);
 	
 	if (m_item->scene()) {
 		m_item->scene()->removeItem(m_item);

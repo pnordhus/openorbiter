@@ -113,18 +113,24 @@
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="frame" >
+         <widget class="View" name="view" >
           <property name="minimumSize" >
            <size>
-            <width>200</width>
-            <height>200</height>
+            <width>150</width>
+            <height>150</height>
            </size>
           </property>
-          <property name="frameShape" >
-           <enum>QFrame::StyledPanel</enum>
+          <property name="backgroundBrush" >
+           <brush brushstyle="SolidPattern" >
+            <color alpha="255" >
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </brush>
           </property>
-          <property name="frameShadow" >
-           <enum>QFrame::Raised</enum>
+          <property name="renderHints" >
+           <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::TextAntialiasing</set>
           </property>
          </widget>
         </item>
@@ -206,6 +212,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>View</class>
+   <extends>QGraphicsView</extends>
+   <header>../../src/view.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>btnStart</tabstop>
   <tabstop>btnCancel</tabstop>

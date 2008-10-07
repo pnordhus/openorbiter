@@ -35,7 +35,7 @@ class BouncerDef;
 class Bouncer
 {
 public:
-	Bouncer(Scene& scene, World& world);
+	Bouncer(Scene& scene, World* world);
 	~Bouncer();
 
 public:

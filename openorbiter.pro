@@ -56,6 +56,7 @@ HEADERS = \
  src/form_match.h \
  src/game.h \
  src/map.h \
+ src/mapdef.h \
  src/maploader.h \
  src/match.h \
  src/node.h \
@@ -81,6 +82,7 @@ SOURCES = src/bouncer.cpp \
  src/game.cpp \
  src/main.cpp \
  src/map.cpp \
+ src/mapdef.cpp \
  src/maploader.cpp \
  src/match.cpp \
  src/node.cpp \

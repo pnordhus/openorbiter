@@ -19,8 +19,9 @@
  ***************************************************************************/
 
 
-#include "map.h"
+#include "mapdef.h"
 #include "maploader.h"
+#include <QDebug>
 #include <QDomDocument>
 #include <QFile>
 #include <QVariant>
@@ -39,8 +40,6 @@ MapLoader::~MapLoader()
 	delete m_map;
 	delete m_document;
 }
-
-#include <QDebug>
 
 
 bool MapLoader::loadMap(const QString& filename)
@@ -148,7 +147,7 @@ void MapLoader::parseRoot(const QDomElement& e)
 	gravity.x = optional(e, "gravityX", 0.0f);
 	gravity.y = optional(e, "gravityY", 10.0f);
 	
-	m_map = new Map(mapName, mapWidth, mapHeight, gravity);
+	m_map = new MapDef(mapName, mapWidth, mapHeight, gravity);
 }
 
 

@@ -19,34 +19,47 @@
  ***************************************************************************/
 
 
-#ifndef MAP_H
-#define MAP_H
+#ifndef MAPDEF_H
+#define MAPDEF_H
 
 
+#include "bouncerdef.h"
+#include "physics/vector.h"
 #include <QList>
-#include <QRectF>
+#include <QString>
 
 
-class Bouncer;
-class MapDef;
-class Node;
-class Scene;
-class World;
 
-
-class Map
+class MapDef
 {
 public:
-	Map(const MapDef& def, Scene& scene);
-	~Map();
+	MapDef(const QString& name, float width, float height, const Vector& gravity);
 
-protected:
-	Scene&			m_scene;
-	World*			m_world;
-	QRectF			m_rect;
-	QList<Node*>	m_nodes;
-	QList<Bouncer*>	m_bouncers;
+public:
+	const QString&	name() const { return m_name; }
+	float			width() const { return m_width; }
+	float			height() const { return m_height; }
+	const QList<Vector>& nodes() const { return m_nodes; }
+	const QList<Vector>& spawns() const { return m_spawns; }
+	const QList<BouncerDef>& bouncers() const { return m_bouncers; }
+	const Vector&	gravity() const { return m_gravity; }
+	void			validate() const;
+
+public:
+	void	addNode(const Vector& pos);
+	void	addSpawn(const Vector& spawn);
+	void	addBouncer(const BouncerDef& def);
+
+private:
+	QString			m_name;
+	float			m_width;
+	float			m_height;
+	Vector			m_gravity;
+	
+	QList<Vector>		m_nodes;
+	QList<Vector>		m_spawns;
+	QList<BouncerDef>	m_bouncers;
 };
 
 
-#endif // MAP_H
+#endif // MAPDEF_H

@@ -23,13 +23,16 @@
 #define FORM_MATCH_H
 
 
-#include "map.h"
 #include "player.h"
 #include <QDialog>
 #include <QSet>
 #include <QStandardItemModel>
 
 
+class Map;
+class MapDef;
+class Scene;
+class QItemSelection;
 namespace Ui { class FormMatch; }
 
 
@@ -42,9 +45,9 @@ public:
 	~FormMatch();
 
 public:
-	void			setMaps(const QList<Map>& maps);
+	void			setMaps(const QList<MapDef>& maps);
 	QList<Player>	players() const;
-	QList<Map>		maps() const;
+	QList<MapDef>	maps() const;
 
 public slots:
 	void			save();
@@ -54,17 +57,20 @@ private slots:
 	void	addPlayer(QString name = QString());
 	void	removePlayer();
 	void	playersSelectionChanged();
+	void	mapsSelectionChanged(const QItemSelection&);
 	void	mapChanged(QStandardItem* item);
 
 private:
 	Ui::FormMatch*		m_ui;
 	QStandardItemModel	m_modelPlayers;
 	QStandardItemModel	m_modelMaps;
+	Scene*				m_scene;
+	Map*				m_map;
 	
 	QList<QColor>		m_colors;
 	QList<QIcon>		m_icons;
 	
-	QSet<const Map*>	m_selectedMaps;
+	QSet<const MapDef*>	m_selectedMaps;
 };
 
 

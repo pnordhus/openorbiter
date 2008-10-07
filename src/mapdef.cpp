@@ -19,34 +19,42 @@
  ***************************************************************************/
 
 
-#ifndef MAP_H
-#define MAP_H
+#include "mapdef.h"
 
 
-#include <QList>
-#include <QRectF>
-
-
-class Bouncer;
-class MapDef;
-class Node;
-class Scene;
-class World;
-
-
-class Map
+MapDef::MapDef(const QString& name, float width, float height, const Vector& gravity) :
+	m_name(name),
+	m_width(width),
+	m_height(height),
+	m_gravity(gravity)
 {
-public:
-	Map(const MapDef& def, Scene& scene);
-	~Map();
-
-protected:
-	Scene&			m_scene;
-	World*			m_world;
-	QRectF			m_rect;
-	QList<Node*>	m_nodes;
-	QList<Bouncer*>	m_bouncers;
-};
+	
+}
 
 
-#endif // MAP_H
+void MapDef::addNode(const Vector& pos)
+{
+	m_nodes.append(pos);
+}
+
+
+void MapDef::addSpawn(const Vector& spawn)
+{
+	m_spawns.append(spawn);
+}
+
+
+void MapDef::addBouncer(const BouncerDef& def)
+{
+	m_bouncers.append(def);
+}
+
+
+void MapDef::validate() const
+{
+	if (m_nodes.empty())
+		throw QString("Map has no nodes");
+	
+	if (m_spawns.size() < 8)
+		throw QString("Map has too few spawn points");
+}

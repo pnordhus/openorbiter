@@ -27,7 +27,7 @@
 #include <QMainWindow>
 
 
-class Map;
+class MapDef;
 class Match;
 namespace Ui { class FormMain; }
 
@@ -56,7 +56,7 @@ private:
 	Match*			m_match;
 	bool			m_firstShow;
 	
-	QList<Map>		m_maps;
+	QList<MapDef>	m_maps;
 };
 
 

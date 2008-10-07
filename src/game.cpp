@@ -21,40 +21,19 @@
 
 #include "bouncer.h"
 #include "game.h"
-#include "map.h"
+#include "mapdef.h"
 #include "node.h"
 #include "orbiter.h"
 #include "player.h"
 #include "scene.h"
+#include "physics/world.h"
 #include <algorithm>
 #include <limits>
 
 
-Game::Game(Scene& scene, const Map& map, const QList<Player*>& players) :
-	m_scene(scene)
+Game::Game(Scene& scene, const MapDef& map, const QList<Player*>& players) :
+	Map(map, scene)
 {
-	const float width = map.width();
-	const float height = map.height();
-	
-	m_rect.setWidth(width);
-	m_rect.setHeight(height);
-	
-	m_scene.setField(width, height);
-	
-	m_world.setGravity(map.gravity());
-	
-	foreach (const Vector& pos, map.nodes()) {
-		Node* node = new Node(m_scene);
-		node->setPosition(pos);
-		m_nodes.append(node);
-	}
-	
-	foreach (const BouncerDef& def, map.bouncers()) {
-		Bouncer* bouncer = new Bouncer(m_scene, m_world);
-		bouncer->setDef(def);
-		m_bouncers.append(bouncer);
-	}
-	
 	QList<Vector> spawns = map.spawns();
 	std::random_shuffle(spawns.begin(), spawns.end());
 	
@@ -74,9 +53,7 @@ Game::Game(Scene& scene, const Map& map, const QList<Player*>& players) :
 
 Game::~Game()
 {
-	qDeleteAll(m_bouncers);
 	qDeleteAll(m_orbiters);
-	qDeleteAll(m_nodes);
 }
 
 
@@ -96,7 +73,7 @@ const Player* Game::process(float time)
 	foreach (Orbiter* orb, m_orbiters)
 		orb->process(time);
 	
-	m_world.process(time);
+	m_world->process(time);
 	
 	for (int i = m_orbiters.size() - 1; i >= 0; i--) {
 		Orbiter* orb = m_orbiters.at(i);

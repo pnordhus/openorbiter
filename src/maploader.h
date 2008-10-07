@@ -26,7 +26,7 @@
 #include <QString>
 
 
-class Map;
+class MapDef;
 class QDomDocument;
 class QDomElement;
 
@@ -38,8 +38,8 @@ public:
 	~MapLoader();
 
 public:
-	bool		loadMap(const QString& filename);
-	const Map&	map() const { Q_ASSERT(m_map); return *m_map; }
+	bool			loadMap(const QString& filename);
+	const MapDef&	map() const { Q_ASSERT(m_map); return *m_map; }
 	
 private:
 	void		load(const QString& filename);
@@ -56,7 +56,7 @@ private:
 
 
 private:
-	Map*			m_map;
+	MapDef*			m_map;
 	QDomDocument*	m_document;
 };
 
