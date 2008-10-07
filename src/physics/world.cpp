@@ -113,6 +113,8 @@ void World::collide2(Circle* circle, Rect* rect)
 	if (qAbs(distToLine) > circle->radius() + rect->width())
 		return;
 	
+	circle->unlink();
+	
 	const float move = circle->radius() + rect->width() - qAbs(distToLine);
 	
 	float angle = rect->dir().angleTo(circle->speed());
@@ -120,7 +122,6 @@ void World::collide2(Circle* circle, Rect* rect)
 	
 	toCirc = rect->dir().perpendicular() * distToLine;
 	
-	circle->unlink();
 	circle->accelerate(-circle->speed() + accelDir * (circle->speed().length() + rect->boost()));
 	circle->move(toCirc.normalized() * move);
 	circle->collide(false);

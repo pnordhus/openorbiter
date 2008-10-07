@@ -40,7 +40,7 @@ public:
 public:
 	Type			type() const { return m_type; }
 	const Vector&	position() const { return m_position; }
-	const Vector&	speed() const { return m_speed; }
+	const Vector&	speed() const { Q_ASSERT(!m_linked); return m_speed; }
 	float			mass() const { return m_mass; }
 	void			accelerate(const Vector& acc);
 	void			accelerate(float acc);
