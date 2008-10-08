@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 
+#include "defs.h"
 #include "form_main.h"
 #include "form_match.h"
 #include "mapdef.h"
@@ -38,7 +39,7 @@ FormMain::FormMain() :
 	m_ui = new Ui::FormMain;
 	m_ui->setupUi(this);
 	
-	setWindowTitle("OpenOrbiter 0.4-pre");
+	setWindowTitle(OPENORBITER_VERSION_STRING);
 	setWindowIcon(QIcon(":/orbiter-64.png"));
 	
 	RenderManager::create();
@@ -136,5 +137,7 @@ void FormMain::showAbout()
 	QDialog dlg(this);
 	Ui::FormAbout about;
 	about.setupUi(&dlg);
+	about.lblVersion->setText(OPENORBITER_VERSION_STRING);
+	about.lblBuildTime->setText(QString("Build date: %1 %2").arg(__DATE__).arg(__TIME__));
 	dlg.exec();
 }

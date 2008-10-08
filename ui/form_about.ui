@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>175</height>
+    <height>184</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -20,6 +20,12 @@
     <layout class="QHBoxLayout" name="horizontalLayout" >
      <item>
       <layout class="QVBoxLayout" name="verticalLayout" >
+       <property name="rightMargin" >
+        <number>10</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>10</number>
+       </property>
        <item>
         <widget class="QLabel" name="label_2" >
          <property name="sizePolicy" >
@@ -63,6 +69,13 @@
          </property>
          <property name="text" >
           <string>OpenOrbiter</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblBuildTime" >
+         <property name="text" >
+          <string>TextLabel</string>
          </property>
         </widget>
        </item>
