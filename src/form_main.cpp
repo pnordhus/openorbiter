@@ -54,16 +54,22 @@ FormMain::FormMain() :
 	
 	QSettings s;
 	m_ui->actionAntialiasing->setChecked(s.value("antialiasing", false).toBool());
+	m_ui->actionAntialiasing->setWhatsThis("Enable anti-aliasing. Improves quality.");
+	m_ui->actionAntialiasing->setStatusTip(m_ui->actionAntialiasing->whatsThis());
 	
 #ifdef QT_SVG_LIB
-	m_actionSvg = m_ui->menuView->addAction("Use SVGs");
+	m_actionSvg = m_ui->menuView->addAction("Pretty objects");
+	m_actionSvg->setWhatsThis("Enable rendering of Scalable Vector Graphics (SVG). Improves quality.");
+	m_actionSvg->setStatusTip(m_actionSvg->whatsThis());
 	m_actionSvg->setCheckable(true);
 	connect(m_actionSvg,				SIGNAL(toggled(bool)),	&RenderManager::get(), SLOT(enableSvg(bool)));
 	m_actionSvg->setChecked(s.value("svg", true).toBool());
 #endif
 	
 #ifdef QT_OPENGL_LIB
-	m_actionOpenGL = m_ui->menuView->addAction("Enable OpenGL");
+	m_actionOpenGL = m_ui->menuView->addAction("Hardware acceleration");
+	m_actionOpenGL->setWhatsThis("Use OpenGL hardware acceleration. May improve speed.");
+	m_actionOpenGL->setStatusTip(m_actionOpenGL->whatsThis());
 	m_actionOpenGL->setCheckable(true);
 	connect(m_actionOpenGL,				SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableGL(bool)));
 	m_actionOpenGL->setChecked(s.value("opengl", false).toBool());
