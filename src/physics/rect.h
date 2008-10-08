@@ -35,9 +35,11 @@ public:
 	void	setPositions(const Vector& pos1, const Vector& pos2);
 	void	setWidth(float width);
 	void	setBoost(float boost);
+	void	setBoostScale(float scale);
 	void	setUnlink(bool unlink);
 	float	width() const { return m_width; }
 	float	boost() const { return m_boost; }
+	float	boostScale() const { return m_boostScale; }
 	bool	unlink() const { return m_unlink; }
 	const Vector&	position1() const { return m_position1; }
 	const Vector&	position2() const { return m_position2; }
@@ -49,6 +51,7 @@ private:
 	Vector	m_dir;
 	float	m_width;
 	float	m_boost;
+	float	m_boostScale;
 	bool	m_unlink;
 };
 

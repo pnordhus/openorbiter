@@ -25,6 +25,7 @@
 BouncerDef::BouncerDef() :
 	m_width(0.0f),
 	m_boost(0.0f),
+	m_boostScale(1.0f),
 	m_unlink(true)
 {
 	
@@ -47,6 +48,12 @@ void BouncerDef::setWidth(float width)
 void BouncerDef::setBoost(float boost)
 {
 	m_boost = boost;
+}
+
+
+void BouncerDef::setBoostScale(float scale)
+{
+	m_boostScale = scale;
 }
 
 

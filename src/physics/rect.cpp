@@ -26,6 +26,7 @@ Rect::Rect() :
 	Object(Object::Rect),
 	m_width(0.0f),
 	m_boost(0.0f),
+	m_boostScale(1.0f),
 	m_unlink(true)
 {
 	setStatic(true);
@@ -54,6 +55,12 @@ void Rect::setWidth(float width)
 void Rect::setBoost(float boost)
 {
 	m_boost = boost;
+}
+
+
+void Rect::setBoostScale(float scale)
+{
+	m_boostScale = scale;
 }
 
 

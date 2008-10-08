@@ -3,22 +3,23 @@
 <!ELEMENT node			(#PCDATA)>
 <!ELEMENT bouncer		(#PCDATA)>
 
-<!ATTLIST map	name		CDATA	#REQUIRED>
-<!ATTLIST map	width		CDATA	#REQUIRED>
-<!ATTLIST map	height		CDATA	#REQUIRED>
-<!ATTLIST map	gravityX	CDATA	"0.0">
-<!ATTLIST map	gravityY	CDATA	"10.0">
+<!ATTLIST map	name			CDATA	#REQUIRED>
+<!ATTLIST map	width			CDATA	#REQUIRED>
+<!ATTLIST map	height			CDATA	#REQUIRED>
+<!ATTLIST map	gravityX		CDATA	"0.0">
+<!ATTLIST map	gravityY		CDATA	"10.0">
 
-<!ATTLIST spawn	x			CDATA	#REQUIRED>
-<!ATTLIST spawn	y			CDATA	#REQUIRED>
+<!ATTLIST spawn	x				CDATA	#REQUIRED>
+<!ATTLIST spawn	y				CDATA	#REQUIRED>
 
-<!ATTLIST node	x			CDATA	#REQUIRED>
-<!ATTLIST node	y			CDATA	#REQUIRED>
+<!ATTLIST node	x				CDATA	#REQUIRED>
+<!ATTLIST node	y				CDATA	#REQUIRED>
 
-<!ATTLIST bouncer	x1		CDATA	#REQUIRED>
-<!ATTLIST bouncer	y1		CDATA	#REQUIRED>
-<!ATTLIST bouncer	x2		CDATA	#REQUIRED>
-<!ATTLIST bouncer	y2		CDATA	#REQUIRED>
-<!ATTLIST bouncer	width	CDATA	#REQUIRED>
-<!ATTLIST bouncer	boost	CDATA	"0.0">
-<!ATTLIST bouncer	unlink	CDATA	"true">
+<!ATTLIST bouncer	x1			CDATA	#REQUIRED>
+<!ATTLIST bouncer	y1			CDATA	#REQUIRED>
+<!ATTLIST bouncer	x2			CDATA	#REQUIRED>
+<!ATTLIST bouncer	y2			CDATA	#REQUIRED>
+<!ATTLIST bouncer	width		CDATA	#REQUIRED>
+<!ATTLIST bouncer	boost		CDATA	"0.0">
+<!ATTLIST bouncer	boostScale	CDATA	"1.0">
+<!ATTLIST bouncer	unlink		CDATA	"true">

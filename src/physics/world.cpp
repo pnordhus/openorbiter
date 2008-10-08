@@ -115,6 +115,7 @@ void World::collide2(Circle* circle, Rect* rect)
 	
 	if (circle->isLinked() && !rect->unlink()) {
 		float speed = 2.0f * qAbs(circle->linkSpeed());
+		speed *= rect->boostScale();
 		speed += rect->boost();
 		circle->accelerate(-speed);
 		return;
@@ -129,7 +130,11 @@ void World::collide2(Circle* circle, Rect* rect)
 	
 	toCirc = rect->dir().perpendicular() * distToLine;
 	
-	circle->accelerate(-circle->speed() + accelDir * (circle->speed().length() + rect->boost()));
+	float speed = circle->speed().length();
+	speed *= rect->boostScale();
+	speed += rect->boost();
+	
+	circle->accelerate(-circle->speed() + accelDir * speed);
 	circle->move(toCirc.normalized() * move);
 	circle->collide(false);
 }

@@ -181,12 +181,14 @@ void MapLoader::parseBouncer(const QDomElement& e)
 	
 	float width = require<float>(e, "width", "Bouncer is missing width");
 	float boost = optional<float>(e, "boost", 0.0f);
+	float boostScale = optional<float>(e, "boostScale", 1.0f);
 	bool unlink = optional<bool>(e, "unlink", true);
 	
 	BouncerDef def;
 	def.setPositions(pos1, pos2);
 	def.setWidth(width);
 	def.setBoost(boost);
+	def.setBoostScale(boostScale);
 	def.setUnlink(unlink);
 	
 	m_map->addBouncer(def);
