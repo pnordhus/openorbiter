@@ -103,6 +103,9 @@ SOURCES = src/bouncer.cpp \
 RESOURCES = \
  res/openorbiter.qrc
 
+RC_FILE = \
+ res/win.rc
+
 maps.path = $$DATADIR/maps
 maps.files += \
  data/maps/cage.xml \
