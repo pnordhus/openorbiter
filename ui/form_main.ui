@@ -52,6 +52,7 @@
     <property name="title" >
      <string>Help</string>
     </property>
+    <addaction name="actionAbout" />
     <addaction name="actionAboutQt" />
    </widget>
    <addaction name="menuFile" />
@@ -94,6 +95,11 @@
    </property>
   </action>
   <action name="actionAboutOpenOrbiter" >
+   <property name="text" >
+    <string>About OpenOrbiter</string>
+   </property>
+  </action>
+  <action name="actionAbout" >
    <property name="text" >
     <string>About OpenOrbiter</string>
    </property>

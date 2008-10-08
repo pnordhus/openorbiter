@@ -26,6 +26,7 @@
 #include "match.h"
 #include "orbiter.h"
 #include "rendermanager.h"
+#include "ui_form_about.h"
 #include "ui_form_main.h"
 #include <QDir>
 #include <QSettings>
@@ -38,6 +39,7 @@ FormMain::FormMain() :
 	m_ui->setupUi(this);
 	
 	setWindowTitle("OpenOrbiter 0.4-pre");
+	setWindowIcon(QIcon(":/orbiter-64.png"));
 	
 	RenderManager::create();
 	
@@ -47,6 +49,7 @@ FormMain::FormMain() :
 	connect(m_ui->actionNewMatch,		SIGNAL(triggered()),				SLOT(newMatch()));
 	connect(m_ui->actionAntialiasing,	SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableAntiAliasing(bool)));
 	connect(m_ui->actionAboutQt,		SIGNAL(triggered()),	qApp,		SLOT(aboutQt()));
+	connect(m_ui->actionAbout,			SIGNAL(triggered()),				SLOT(showAbout()));
 	
 	QSettings s;
 	m_ui->actionAntialiasing->setChecked(s.value("antialiasing", false).toBool());
@@ -125,4 +128,13 @@ void FormMain::newMatch()
 		
 		m_match->start();
 	}
+}
+
+
+void FormMain::showAbout()
+{
+	QDialog dlg(this);
+	Ui::FormAbout about;
+	about.setupUi(&dlg);
+	dlg.exec();
 }
