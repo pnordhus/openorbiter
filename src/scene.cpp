@@ -53,6 +53,7 @@ void Scene::setField(float width, float height)
 	
 	m_field->setRect(0.0f, 0.0f, width, height);
 	setSceneRect(-0.2, -0.2, width + 0.4, height + 0.4);
+	m_textBackground->setRect(sceneRect());
 	
 	emit sizeChanged();
 }
@@ -61,8 +62,9 @@ void Scene::setField(float width, float height)
 void Scene::showText(const QString& text)
 {
 	m_text->setTransform(QTransform());
-	m_text->scale(0.08, 0.08);
-	m_text->setTextWidth(sceneRect().width() / 0.08);
+	const float scale = sceneRect().height() / 300.0f;
+ 	m_text->scale(scale, scale);
+	m_text->setTextWidth(sceneRect().width() / scale);
 	m_text->setHtml(text);
 	
 	QRectF rect = m_text->sceneBoundingRect();
@@ -71,10 +73,6 @@ void Scene::showText(const QString& text)
 	pos.setY((sceneRect().height() - rect.height()) / 2.0f);
 	m_text->setPos(pos);
 	
-	rect = m_text->sceneBoundingRect();
-	rect.adjust(-sceneRect().width(), 0, sceneRect().width(), 0);
-	m_textBackground->setRect(rect);
-
 	m_text->show();	
 	m_textBackground->show();
 }
