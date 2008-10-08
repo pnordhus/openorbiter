@@ -31,6 +31,7 @@ win32-g++ {
 	OBJECTS_DIR = release
 	MOC_DIR = release
 	UI_DIR = release
+	RCC_DIR = release
 	TARGET = release/bin/openorbiter
 } else {
 	CONFIG += silent debug_and_release
@@ -39,11 +40,13 @@ win32-g++ {
 		OBJECTS_DIR = build/debug
 		MOC_DIR = build/debug
 		UI_DIR = build/debug
+		RCC_DIR = build/debug
 		TARGET = bin/openorbiter_debug
 	} else {
 		OBJECTS_DIR = build/release
 		MOC_DIR = build/release
 		UI_DIR = build/release
+		RCC_DIR = build/release
 		TARGET = bin/openorbiter
 	}
 }
