@@ -30,17 +30,35 @@
 #include "ui_form_about.h"
 #include "ui_form_main.h"
 #include <QDir>
+#include <QLocale>
 #include <QSettings>
+#include <QTranslator>
 
 
 FormMain::FormMain() :
+	m_translator(NULL),
 	m_match(NULL)
 {
 	m_ui = new Ui::FormMain;
 	m_ui->setupUi(this);
 	
-	setWindowTitle(OPENORBITER_VERSION_STRING);
 	setWindowIcon(QIcon(":/orbiter-64.png"));
+	
+	{
+		// language setup
+		m_grpLanguages = new QActionGroup(this);
+		m_grpLanguages->addAction(m_ui->actionLangEnglish);
+		connect(m_ui->actionLangEnglish, SIGNAL(triggered()), SLOT(langChanged()));
+		
+		QSettings s;
+		QString lang;
+		if (s.contains("language"))
+			lang = s.value("language").toString();
+		else
+			lang = QLocale::system().name();
+		
+		loadLanguage("de", "Deutsch", lang);
+	}
 	
 	RenderManager::create();
 	
@@ -52,14 +70,17 @@ FormMain::FormMain() :
 	connect(m_ui->actionAboutQt,		SIGNAL(triggered()),	qApp,		SLOT(aboutQt()));
 	connect(m_ui->actionAbout,			SIGNAL(triggered()),				SLOT(showAbout()));
 	
+	//m_grpLanguages->addAction(m_ui->actionLangEnglish);
+	
 	QSettings s;
 	m_ui->actionAntialiasing->setChecked(s.value("antialiasing", false).toBool());
-	m_ui->actionAntialiasing->setWhatsThis("Enable anti-aliasing. Improves quality.");
+	m_ui->actionAntialiasing->setWhatsThis(tr("Enable anti-aliasing. Improves quality."));
 	m_ui->actionAntialiasing->setStatusTip(m_ui->actionAntialiasing->whatsThis());
 	
 #ifdef QT_SVG_LIB
-	m_actionSvg = m_ui->menuView->addAction("Pretty objects");
-	m_actionSvg->setWhatsThis("Enable rendering of Scalable Vector Graphics (SVG). Improves quality.");
+	m_actionSvg = m_ui->menuView->addAction("");
+	m_actionSvg->setText(tr("Pretty objects"));
+	m_actionSvg->setWhatsThis(tr("Enable rendering of Scalable Vector Graphics (SVG). Improves quality."));
 	m_actionSvg->setStatusTip(m_actionSvg->whatsThis());
 	m_actionSvg->setCheckable(true);
 	connect(m_actionSvg,				SIGNAL(toggled(bool)),	&RenderManager::get(), SLOT(enableSvg(bool)));
@@ -67,8 +88,9 @@ FormMain::FormMain() :
 #endif
 	
 #ifdef QT_OPENGL_LIB
-	m_actionOpenGL = m_ui->menuView->addAction("Hardware acceleration");
-	m_actionOpenGL->setWhatsThis("Use OpenGL hardware acceleration. May improve speed.");
+	m_actionOpenGL = m_ui->menuView->addAction("");
+	m_actionOpenGL->setText(tr("Hardware acceleration"));
+	m_actionOpenGL->setWhatsThis(tr("Enable OpenGL hardware acceleration. May improve speed."));
 	m_actionOpenGL->setStatusTip(m_actionOpenGL->whatsThis());
 	m_actionOpenGL->setCheckable(true);
 	connect(m_actionOpenGL,				SIGNAL(toggled(bool)),	m_ui->view, SLOT(enableGL(bool)));
@@ -84,6 +106,8 @@ FormMain::FormMain() :
 		if (loader.loadMap(dir.absoluteFilePath(file)))
 			m_maps.append(loader.map());
 	}
+	
+	retranslate();
 }
 
 
@@ -93,6 +117,83 @@ FormMain::~FormMain()
 	
 	RenderManager::destroy();
 	delete m_ui;
+}
+
+
+void FormMain::loadLanguage(const QString& name, const QString& fullname, const QString& defaultLang)
+{
+	QTranslator* translator = new QTranslator(this);
+	if (!translator->load(QString(OO_DATADIR "/translations/openorbiter_") + name)) {
+		delete translator;
+		return;
+	}
+	
+	m_translators.insert(name, translator);
+	
+	QAction* action = m_ui->menuLanguage->addAction(fullname);
+	m_grpLanguages->addAction(action);
+	action->setCheckable(true);
+	if (name == defaultLang) {
+		Q_ASSERT(!m_translator);
+		action->setChecked(true);
+		m_translator = translator;
+		qApp->installTranslator(translator);
+	}
+	
+	action->setProperty("lang", name);
+	connect(action, SIGNAL(triggered()), SLOT(langChanged()));
+}
+
+
+void FormMain::langChanged()
+{
+	if (m_translator) {
+		qApp->removeTranslator(m_translator);
+		m_translator = NULL;
+	}
+	
+	QSettings s;
+	if (sender() == m_ui->actionLangEnglish) {
+		s.setValue("language", "en");
+		return;
+	}
+	
+	QString lang = sender()->property("lang").toString();
+	QTranslator* translator = m_translators.value(lang);
+	if (translator) {
+		m_translator = translator;
+		qApp->installTranslator(translator);
+		s.setValue("language", lang);
+	}
+}
+
+
+void FormMain::retranslate()
+{
+	setWindowTitle(OPENORBITER_VERSION_STRING);
+	
+#ifdef QT_SVG_LIB
+	m_actionSvg->setText(tr("Pretty objects"));
+	m_actionSvg->setWhatsThis(tr("Enable rendering of Scalable Vector Graphics (SVG). Improves quality."));
+	m_actionSvg->setStatusTip(m_actionSvg->whatsThis());
+#endif
+	
+#ifdef QT_OPENGL_LIB
+	m_actionOpenGL->setText(tr("Hardware acceleration"));
+	m_actionOpenGL->setWhatsThis(tr("Enable OpenGL hardware acceleration. May improve speed."));
+	m_actionOpenGL->setStatusTip(m_actionOpenGL->whatsThis());
+#endif
+}
+
+
+bool FormMain::event(QEvent* e)
+{
+	if (e->type() == QEvent::LanguageChange) {
+		m_ui->retranslateUi(this);
+		retranslate();
+	}
+	
+	return QMainWindow::event(e);
 }
 
 

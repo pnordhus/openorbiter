@@ -25,10 +25,13 @@
 
 #include "scene.h"
 #include <QMainWindow>
+#include <QMap>
 
 
 class MapDef;
 class Match;
+class QActionGroup;
+class QTranslator;
 namespace Ui { class FormMain; }
 
 
@@ -46,12 +49,21 @@ public:
 private slots:
 	void	newMatch();
 	void	showAbout();
+	void	langChanged();
 
 protected:
 	void	closeEvent(QCloseEvent*);
+	bool	event(QEvent*);
+
+private:
+	void	loadLanguage(const QString& name, const QString& fullname, const QString& defaultLang);
+	void	retranslate();
 
 private:
 	Ui::FormMain*	m_ui;
+	QActionGroup*	m_grpLanguages;
+	QTranslator*	m_translator;
+	QMap<QString, QTranslator*>	m_translators;
 	
 	Scene			m_scene;
 	Match*			m_match;

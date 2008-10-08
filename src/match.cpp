@@ -60,7 +60,7 @@ void Match::pause()
 		return;
 	
 	if (m_textPrefix == "")
-		m_textPrefix = "<center>Pause</center>";
+		m_textPrefix = QString("<center>%1<br></center>").arg(tr("Pause"));
 	
 	m_state = Pause;
 	m_timer.stop();
@@ -86,7 +86,7 @@ void Match::updatePauseText()
 		table += QString("<tr><td><font color=\"%1\">%2</font></td><td width=\"20\"></td><td align=\"right\">%3</td></tr>").arg(player->color().name()).arg(name).arg(player->wins());
 	}
 	
-	m_scene.showText(m_textPrefix + QString("<center><font size=\"1\"><table>%1</table><br></font></center><center>Hit your keys</center>").arg(table));
+	m_scene.showText(m_textPrefix + QString("<center><font size=\"1\"><table>%1</table><br></font></center><center>%2</center>").arg(table).arg(tr("Press your keys")));
 }
 
 
@@ -159,7 +159,7 @@ bool Match::requestKey()
 		return false;
 	
 	Player* player = m_needKey.first();
-	m_scene.showText(QString("<center><font color=\"%1\">%2</font><br>choose your key</center>").arg(player->color().name()).arg(player->name()));
+	m_scene.showText(tr("<center><font color=\"%1\">%2</font><br>%3</center>").arg(player->color().name()).arg(player->name()).arg(tr("choose your key")));
 	return true;
 }
 
@@ -200,7 +200,7 @@ void Match::process()
 	
 	const Player* winner = m_game->process(time); 
 	if (winner) {
-		m_textPrefix = QString("<center><font color=\"%1\">%2</font> wins<br></center>").arg(winner->color().name()).arg(winner->name());
+		m_textPrefix = QString("<center><font color=\"%1\">%2</font> %3<br></center>").arg(winner->color().name()).arg(winner->name()).arg(tr("wins"));
 		newGame();
 		pause();
 	}

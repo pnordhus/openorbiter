@@ -106,6 +106,9 @@ RESOURCES = \
 RC_FILE = \
  res/win.rc
 
+TRANSLATIONS = \
+ data/translations/openorbiter_de.ts
+
 maps.path = $$DATADIR/maps
 maps.files += \
  data/maps/cage.xml \

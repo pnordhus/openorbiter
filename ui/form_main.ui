@@ -55,8 +55,15 @@
     <addaction name="actionAbout" />
     <addaction name="actionAboutQt" />
    </widget>
+   <widget class="QMenu" name="menuLanguage" >
+    <property name="title" >
+     <string>Language</string>
+    </property>
+    <addaction name="actionLangEnglish" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuView" />
+   <addaction name="menuLanguage" />
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="statusBar" />
@@ -91,6 +98,17 @@
   <action name="actionAbout" >
    <property name="text" >
     <string>About OpenOrbiter</string>
+   </property>
+  </action>
+  <action name="actionLangEnglish" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>English</string>
    </property>
   </action>
  </widget>
