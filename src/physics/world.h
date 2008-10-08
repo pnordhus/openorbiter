@@ -49,6 +49,10 @@ private:
 	void	collide2(Circle* obj1, Circle* obj2);
 	void	registerObject(Object* obj);
 	void	unregisterObject(Object* obj);
+	
+	bool	collideCircleRectCap(Circle* circle, Rect* rect, const Vector& center, const Vector& dirLine);
+	void	collideCircleRectLinked(Circle* circle, Rect* rect);
+	void	collideCircleRectUnlinked(Circle* circle, Rect* rect, const Vector& tangent);
 
 private:
 	QList<Object*>	m_objects;

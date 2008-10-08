@@ -113,30 +113,81 @@ void World::collide2(Circle* circle, Rect* rect)
 	if (qAbs(distToLine) > circle->radius() + rect->width())
 		return;
 	
+	// test for collision with cap 1
+	if (collideCircleRectCap(circle, rect, rect->position1(), rect->dir()))
+		return;
+	
+	// test for collision with cap 2
+	if (collideCircleRectCap(circle, rect, rect->position2(), -rect->dir()))
+		return;
+	
 	if (circle->isLinked() && !rect->unlink()) {
-		float speed = 2.0f * qAbs(circle->linkSpeed());
-		speed *= rect->boostScale();
-		speed += rect->boost();
-		circle->accelerate(-speed);
+		collideCircleRectLinked(circle, rect);
 		return;
 	}
 	
 	circle->unlink();
 	
-	const float move = circle->radius() + rect->width() - qAbs(distToLine);
+	const float move = circle->radius() + rect->width() - qAbs(distToLine) + 0.001;
 	
-	float angle = rect->dir().angleTo(circle->speed());
-	Vector accelDir(angle + rect->dir().angle());
+	collideCircleRectUnlinked(circle, rect, rect->dir());
 	
 	toCirc = rect->dir().perpendicular() * distToLine;
+	circle->move(toCirc.normalized() * move);
+	circle->collide(false);
+}
+
+
+bool World::collideCircleRectCap(Circle* circle, Rect* rect, const Vector& center, const Vector& dirLine)
+{
+	Vector toCirc = circle->position() - center;
+	const float distToLine = toCirc * dirLine;
+	if (distToLine >= 0.0f)
+		return false;
+	
+	// ok we are behind the line, return true from here on!
+	
+	const float dist = toCirc.length();
+	
+	if (dist >= circle->radius() + rect->width())
+		return true;
+	
+	if (circle->isLinked() && !rect->unlink()) {
+		collideCircleRectLinked(circle, rect);
+		return true;
+	}
+	
+	circle->unlink();
+	
+	const Vector dir = toCirc.perpendicular().normalized();;
+	const float move = circle->radius() + rect->width() - toCirc.length() + 0.001;
+	
+	collideCircleRectUnlinked(circle, rect, dir);
+	circle->move(toCirc.normalized() * move);
+	circle->collide(false);
+	
+	return true;
+}
+
+
+void World::collideCircleRectLinked(Circle* circle, Rect* rect)
+{
+	float speed = 2.0f * qAbs(circle->linkSpeed());
+	speed *= rect->boostScale();
+	speed += rect->boost();
+	circle->accelerate(-speed);
+}
+
+
+void World::collideCircleRectUnlinked(Circle* circle, Rect* rect, const Vector& tangent)
+{
+	const float angle = tangent.angleTo(circle->speed());
+	const Vector accelDir(angle + tangent.angle());
 	
 	float speed = circle->speed().length();
 	speed *= rect->boostScale();
 	speed += rect->boost();
-	
 	circle->accelerate(-circle->speed() + accelDir * speed);
-	circle->move(toCirc.normalized() * move);
-	circle->collide(false);
 }
 
 
