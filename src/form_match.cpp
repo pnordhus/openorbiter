@@ -75,9 +75,9 @@ FormMatch::FormMatch(QWidget* parent) :
 		QSettings s;
 		{
 			bool b;
-			uint scale = s.value("mapscale", "100").toUInt(&b);
+			uint scale = s.value("mapscale").toUInt(&b);
 			if (!b)
-				scale = 100;
+				scale = 50;
 			m_ui->spinMapScale->setValue(scale);
 		}
 		
