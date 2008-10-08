@@ -67,4 +67,5 @@ void BouncerDef::scale(float scale)
 {
 	m_position1 *= scale;
 	m_position2 *= scale;
+	m_width *= scale;
 }
