@@ -113,6 +113,13 @@ void World::collide2(Circle* circle, Rect* rect)
 	if (qAbs(distToLine) > circle->radius() + rect->width())
 		return;
 	
+	if (circle->isLinked() && !rect->unlink()) {
+		float speed = 2.0f * qAbs(circle->linkSpeed());
+		speed += rect->boost();
+		circle->accelerate(-speed);
+		return;
+	}
+	
 	circle->unlink();
 	
 	const float move = circle->radius() + rect->width() - qAbs(distToLine);

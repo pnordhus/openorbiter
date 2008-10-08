@@ -40,7 +40,8 @@ public:
 public:
 	Type			type() const { return m_type; }
 	const Vector&	position() const { return m_position; }
-	const Vector&	speed() const { Q_ASSERT(!m_linked); return m_speed; }
+	const Vector&	speed() const { if (m_linked) recalcSpeed(); return m_speed; }
+	float			linkSpeed() const { Q_ASSERT(m_linked); return m_linkSpeed; }
 	float			mass() const { return m_mass; }
 	void			accelerate(const Vector& acc);
 	void			accelerate(float acc);
@@ -62,6 +63,9 @@ protected:
 signals:
 	void			collided(bool timer);
 
+private:
+	void			recalcSpeed() const;
+
 protected:
 	Object(Type type);
 	virtual ~Object();
@@ -70,7 +74,7 @@ private:
 	const Type	m_type;
 	World*		m_world;
 	Vector		m_position;
-	Vector		m_speed;
+	mutable Vector	m_speed;
 	float		m_mass;
 	Vector		m_linkPos;
 	bool		m_linked;

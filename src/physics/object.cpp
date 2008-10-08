@@ -74,7 +74,10 @@ void Object::setPosition(const Vector& pos)
 
 void Object::accelerate(const Vector& acc)
 {
-	Q_ASSERT(!m_linked);
+	if (m_linked) {
+		accelerate(acc.length());
+		return;
+	}
 	
 	m_speed += acc;
 	if (m_speed.length() > 50.0f)
@@ -132,7 +135,12 @@ void Object::unlink()
 		return;
 	
 	m_linked = false;
-	
+	recalcSpeed();
+}
+
+
+void Object::recalcSpeed() const
+{
 	const Vector center = m_linkPos - m_position;
 	if (m_linkSpeed > 0.0f) {
 		m_speed.x = center.y;

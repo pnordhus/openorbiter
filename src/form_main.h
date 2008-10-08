@@ -45,6 +45,7 @@ public:
 
 private slots:
 	void	newMatch();
+	void	showAbout();
 
 protected:
 	void	closeEvent(QCloseEvent*);

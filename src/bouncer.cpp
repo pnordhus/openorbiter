@@ -63,6 +63,7 @@ void Bouncer::setDef(const BouncerDef& def)
 	m_rect->setPositions(def.position1(), def.position2());
 	m_rect->setWidth(def.width());
 	m_rect->setBoost(def.boost());
+	m_rect->setUnlink(def.unlink());
 	
 	updateItem();
 }

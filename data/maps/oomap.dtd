@@ -21,3 +21,4 @@
 <!ATTLIST bouncer	y2		CDATA	#REQUIRED>
 <!ATTLIST bouncer	width	CDATA	#REQUIRED>
 <!ATTLIST bouncer	boost	CDATA	"0.0">
+<!ATTLIST bouncer	unlink	CDATA	"true">

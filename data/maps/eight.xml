@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE oomap SYSTEM "oomap.dtd">
+
+<oomap name="Magic 8-Room" width="40" height="60">
+	<spawn x="18.5" y="3" />
+	<spawn x="21.5" y="3" />
+	
+	<spawn x="15.5" y="6" />
+	<spawn x="24.5" y="6" />
+	
+	<spawn x="12.5" y="9" />
+	<spawn x="27.5" y="9" />
+	
+	<spawn x="9.5" y="12" />
+	<spawn x="30.5" y="12" />
+	
+	<node x="20" y="15" />
+	<node x="20" y="45" />
+	
+	<bouncer x1="15" y1="0" x2="0" y2="15" width="0.5" boost="3" />
+	<bouncer x1="0" y1="15" x2="15" y2="30" width="0.5" boost="3" />
+	<bouncer x1="15" y1="30" x2="0" y2="45" width="0.5" boost="3" />
+	<bouncer x1="0" y1="45" x2="15" y2="60" width="0.5" boost="3" />
+	
+	<bouncer x1="25" y1="0" x2="40" y2="15" width="0.5" boost="3" />
+	<bouncer x1="40" y1="15" x2="25" y2="30" width="0.5" boost="3" />
+	<bouncer x1="25" y1="30" x2="40" y2="45" width="0.5" boost="3" />
+	<bouncer x1="40" y1="45" x2="25" y2="60" width="0.5" boost="3" />
+</oomap>
