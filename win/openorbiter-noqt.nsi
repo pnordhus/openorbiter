@@ -34,6 +34,9 @@ Section "Install"
   SetOutPath "$INSTDIR\gfx"
   file /r ..\data\gfx\*.svg
   
+  SetOutPath "$INSTDIR\translations"
+  file /r ..\data\translations\*.qm
+  
   DetailPrint "Rembering install location (for next time)"
   WriteRegStr HKCU "Software\OpenOrbiter" "" $INSTDIR
   DetailPrint "Creating Uninstaller"
