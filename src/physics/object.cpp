@@ -80,8 +80,8 @@ void Object::accelerate(const Vector& acc)
 	}
 	
 	m_speed += acc;
-	if (m_speed.length() > 50.0f)
-		m_speed.setLength(50.0f);
+	if (m_speed.length() > 40.0f)
+		m_speed.setLength(40.0f);
 }
 
 
@@ -94,7 +94,7 @@ void Object::accelerate(float acc)
 	else
 		m_linkSpeed -= acc;
 	
-	m_linkSpeed = qBound(-50.0f, m_linkSpeed, 50.0f);
+	m_linkSpeed = qBound(-40.0f, m_linkSpeed, 40.0f);
 }
 
 
