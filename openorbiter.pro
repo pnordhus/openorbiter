@@ -72,9 +72,10 @@ HEADERS = \
  src/view.h
 
 FORMS = \
+ ui/form_about.ui \
  ui/form_main.ui \
  ui/form_match.ui
-
+ 
 SOURCES = src/bouncer.cpp \
  src/bouncerdef.cpp \
  src/form_main.cpp \
@@ -95,6 +96,9 @@ SOURCES = src/bouncer.cpp \
  src/rendermanager.cpp \
  src/scene.cpp \
  src/view.cpp
+
+RESOURCES = \
+ res/openorbiter.qrc
 
 maps.path = $$DATADIR/maps
 maps.files += \
