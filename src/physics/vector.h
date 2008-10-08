@@ -79,6 +79,13 @@ public:
 		return Vector(x - rho.x, y - rho.y);
 	}
 	
+	Vector& operator *= (float v)
+	{
+		x *= v;
+		y *= v;
+		return *this;
+	}
+	
 	Vector operator * (float v) const
 	{
 		return Vector(x * v, y * v);

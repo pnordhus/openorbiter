@@ -27,29 +27,30 @@
 #include "physics/world.h"
 
 
-Map::Map(const MapDef& def, Scene& scene) :
+Map::Map(const MapDef& mapDef, Scene& scene) :
 	m_scene(scene)
 {
 	m_world = new World;
 	
-	const float width = def.width();
-	const float height = def.height();
+	const float width = mapDef.width() * mapDef.scale();
+	const float height = mapDef.height() * mapDef.scale();
 	
 	m_rect.setWidth(width);
 	m_rect.setHeight(height);
 	
 	m_scene.setField(width, height);
 	
-	m_world->setGravity(def.gravity());
+	m_world->setGravity(mapDef.gravity());
 	
-	foreach (const Vector& pos, def.nodes()) {
+	foreach (const Vector& pos, mapDef.nodes()) {
 		Node* node = new Node(m_scene);
-		node->setPosition(pos);
+		node->setPosition(pos * mapDef.scale());
 		m_nodes.append(node);
 	}
 	
-	foreach (const BouncerDef& def, def.bouncers()) {
+	foreach (BouncerDef def, mapDef.bouncers()) {
 		Bouncer* bouncer = new Bouncer(m_scene, m_world);
+		def.scale(mapDef.scale());
 		bouncer->setDef(def);
 		m_bouncers.append(bouncer);
 	}

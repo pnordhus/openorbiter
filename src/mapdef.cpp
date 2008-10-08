@@ -26,6 +26,7 @@ MapDef::MapDef(const QString& name, float width, float height, const Vector& gra
 	m_name(name),
 	m_width(width),
 	m_height(height),
+	m_scale(1.0f),
 	m_gravity(gravity)
 {
 	
@@ -47,6 +48,12 @@ void MapDef::addSpawn(const Vector& spawn)
 void MapDef::addBouncer(const BouncerDef& def)
 {
 	m_bouncers.append(def);
+}
+
+
+void MapDef::setScale(float scale)
+{
+	m_scale = scale;
 }
 
 

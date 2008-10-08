@@ -37,6 +37,7 @@ public:
 	void	setBoost(float boost);
 	void	setBoostScale(float scale);
 	void	setUnlink(bool unlink);
+	void	scale(float scale);
 
 public:
 	const Vector&	position1() const { return m_position1; }

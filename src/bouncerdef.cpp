@@ -61,3 +61,10 @@ void BouncerDef::setUnlink(bool unlink)
 {
 	m_unlink = unlink;
 }
+
+
+void BouncerDef::scale(float scale)
+{
+	m_position1 *= scale;
+	m_position2 *= scale;
+}

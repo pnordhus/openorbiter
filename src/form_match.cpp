@@ -73,6 +73,14 @@ FormMatch::FormMatch(QWidget* parent) :
 	
 	{
 		QSettings s;
+		{
+			bool b;
+			uint scale = s.value("mapscale", "100").toUInt(&b);
+			if (!b)
+				scale = 100;
+			m_ui->spinMapScale->setValue(scale);
+		}
+		
 		QStringList players = s.value("players").toStringList();
 		foreach (const QString& name, players)
 			addPlayer(name);
@@ -165,6 +173,7 @@ void FormMatch::save()
 		maps << map->name();
 	
 	QSettings s;
+	s.setValue("mapscale", m_ui->spinMapScale->value());
 	s.setValue("players", players);
 	s.setValue("maps", maps);
 }
@@ -250,8 +259,10 @@ QList<MapDef> FormMatch::maps() const
 {
 	QList<MapDef> maps;
 	
-	foreach (const MapDef* map, m_selectedMaps)
+	foreach (const MapDef* map, m_selectedMaps) {
 		maps.append(*map);
+		maps.last().setScale(float(m_ui->spinMapScale->value()) / 100.0f);
+	}
 	
 	return maps;
 }

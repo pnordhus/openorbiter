@@ -34,7 +34,9 @@
 Game::Game(Scene& scene, const MapDef& map, const QList<Player*>& players) :
 	Map(map, scene)
 {
-	QList<Vector> spawns = map.spawns();
+	QList<Vector> spawns;
+	foreach (const Vector& pos, map.spawns())
+		spawns.append(pos * map.scale());
 	std::random_shuffle(spawns.begin(), spawns.end());
 	
 	Q_ASSERT(spawns.size() >= players.size());

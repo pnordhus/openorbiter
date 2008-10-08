@@ -36,16 +36,18 @@ public:
 	MapDef(const QString& name, float width, float height, const Vector& gravity);
 
 public:
-	const QString&	name() const { return m_name; }
-	float			width() const { return m_width; }
-	float			height() const { return m_height; }
-	const QList<Vector>& nodes() const { return m_nodes; }
-	const QList<Vector>& spawns() const { return m_spawns; }
-	const QList<BouncerDef>& bouncers() const { return m_bouncers; }
-	const Vector&	gravity() const { return m_gravity; }
-	void			validate() const;
+	const QString&		name() const { return m_name; }
+	float				width() const { return m_width; }
+	float				height() const { return m_height; }
+	float				scale() const { return m_scale; }
+	QList<Vector>		nodes() const { return m_nodes; }
+	QList<Vector>		spawns() const { return m_spawns; }
+	QList<BouncerDef>	bouncers() const { return m_bouncers; }
+	Vector				gravity() const { return m_gravity; }
+	void				validate() const;
 
 public:
+	void	setScale(float scale);
 	void	addNode(const Vector& pos);
 	void	addSpawn(const Vector& spawn);
 	void	addBouncer(const BouncerDef& def);
@@ -54,6 +56,7 @@ private:
 	QString			m_name;
 	float			m_width;
 	float			m_height;
+	float			m_scale;
 	Vector			m_gravity;
 	
 	QList<Vector>		m_nodes;
