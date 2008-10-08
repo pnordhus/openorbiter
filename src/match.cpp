@@ -159,7 +159,7 @@ bool Match::requestKey()
 		return false;
 	
 	Player* player = m_needKey.first();
-	m_scene.showText(tr("<center><font color=\"%1\">%2</font><br>%3</center>").arg(player->color().name()).arg(player->name()).arg(tr("choose your key")));
+	m_scene.showText(QString("<center><font color=\"%1\">%2</font><br>%3</center>").arg(player->color().name()).arg(player->name()).arg(tr("choose your key")));
 	return true;
 }
 

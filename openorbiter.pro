@@ -13,7 +13,8 @@ DEFINES += OO_DATADIR=\"\\\"$$DATADIR\\\"\"
 QT += core gui xml
 INSTALLS += \
  maps \
- target
+ target \
+ translations
 
 !disable-opengl {
 	QT += opengl
@@ -110,22 +111,16 @@ TRANSLATIONS = \
  data/translations/openorbiter_de.ts
 
 maps.path = $$DATADIR/maps
-maps.files += \
- data/maps/cage.xml \
- data/maps/dipper.xml \
- data/maps/double.xml \
- data/maps/single.xml \
- data/maps/triangle.xml
+maps.files = \
+ data/maps/*.xml
 
 gfx.path = $$DATADIR/gfx
-gfx.files += \
- data/gfx/blue.svg \
- data/gfx/cyan.svg \
- data/gfx/green.svg \
- data/gfx/magenta.svg \
- data/gfx/node.svg \
- data/gfx/red.svg \
- data/gfx/yellow.svg
+gfx.files = \
+ data/gfx/*.svg
+
+translations.path = $$DATADIR/translations
+translations.files = \
+ data/translations/*.qm
 
 DISTFILES += COPYING ChangeLog README
 

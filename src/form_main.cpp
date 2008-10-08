@@ -70,8 +70,6 @@ FormMain::FormMain() :
 	connect(m_ui->actionAboutQt,		SIGNAL(triggered()),	qApp,		SLOT(aboutQt()));
 	connect(m_ui->actionAbout,			SIGNAL(triggered()),				SLOT(showAbout()));
 	
-	//m_grpLanguages->addAction(m_ui->actionLangEnglish);
-	
 	QSettings s;
 	m_ui->actionAntialiasing->setChecked(s.value("antialiasing", false).toBool());
 	m_ui->actionAntialiasing->setWhatsThis(tr("Enable anti-aliasing. Improves quality."));

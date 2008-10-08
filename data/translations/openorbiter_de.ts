@@ -5,18 +5,17 @@
     <message>
         <location filename="../../ui/form_about.ui" line="13"/>
         <source>About OpenOrbiter</source>
-        <translation type="unfinished">Über OpenOrbiter
-</translation>
+        <translation>Über OpenOrbiter</translation>
     </message>
     <message>
         <location filename="../../ui/form_about.ui" line="71"/>
         <source>OpenOrbiter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../ui/form_about.ui" line="78"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../ui/form_about.ui" line="102"/>
@@ -35,82 +34,82 @@ There is NO WARRANTY, to the extent permitted by law.</source>
     <message>
         <location filename="../../ui/form_main.ui" line="19"/>
         <source>OpenOrbiter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="39"/>
         <source>Match</source>
-        <translation type="unfinished"></translation>
+        <translation>Wettkampf</translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="47"/>
         <source>Graphics</source>
-        <translation type="unfinished">Grafik</translation>
+        <translation>Grafik</translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="53"/>
         <source>Help</source>
-        <translation type="unfinished">Hilfe</translation>
+        <translation>Hilfe</translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="72"/>
         <source>Quit</source>
-        <translation type="unfinished">Beenden</translation>
+        <translation>Beenden</translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="77"/>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="85"/>
         <source>High quality</source>
-        <translation type="unfinished">Hohe Qualität</translation>
+        <translation>Hohe Qualität</translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="90"/>
         <source>About Qt</source>
-        <translation type="unfinished">Über Qt</translation>
+        <translation>Über Qt</translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="100"/>
         <source>About OpenOrbiter</source>
-        <translation type="unfinished">Über OpenOrbiter</translation>
+        <translation>Über OpenOrbiter</translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="60"/>
         <source>Language</source>
-        <translation type="unfinished">Sprache</translation>
+        <translation>Sprache</translation>
     </message>
     <message>
         <location filename="../../ui/form_main.ui" line="111"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../src/form_main.cpp" line="74"/>
+        <location filename="../../src/form_main.cpp" line="75"/>
         <source>Enable anti-aliasing. Improves quality.</source>
-        <translation type="unfinished">Aktiviert Anti-Aliasing. Verbessert die Bildqualität.</translation>
+        <translation>Aktiviert Anti-Aliasing. Verbessert die Bildqualität.</translation>
     </message>
     <message>
-        <location filename="../../src/form_main.cpp" line="78"/>
+        <location filename="../../src/form_main.cpp" line="174"/>
         <source>Pretty objects</source>
-        <translation type="unfinished">Schöne Objekte</translation>
+        <translation>Schöne Objekte</translation>
     </message>
     <message>
-        <location filename="../../src/form_main.cpp" line="79"/>
+        <location filename="../../src/form_main.cpp" line="175"/>
         <source>Enable rendering of Scalable Vector Graphics (SVG). Improves quality.</source>
-        <translation type="unfinished">Aktiviert Vektorgrafiken (SVG). Verbessert die Bildqualität.</translation>
+        <translation>Aktiviert Vektorgrafiken (SVG). Verbessert die Bildqualität.</translation>
     </message>
     <message>
-        <location filename="../../src/form_main.cpp" line="87"/>
+        <location filename="../../src/form_main.cpp" line="180"/>
         <source>Hardware acceleration</source>
-        <translation type="unfinished">Hardwarebeschleunigung</translation>
+        <translation>Hardwarebeschleunigung</translation>
     </message>
     <message>
-        <location filename="../../src/form_main.cpp" line="88"/>
+        <location filename="../../src/form_main.cpp" line="181"/>
         <source>Enable OpenGL hardware acceleration. May improve speed.</source>
-        <translation type="unfinished">Aktiviert OpenGL Hardwarebeschleunigung. Kann die Geschwindigkeit verbessern.</translation>
+        <translation>Aktiviert OpenGL Hardwarebeschleunigung. Kann die Geschwindigkeit verbessern.</translation>
     </message>
 </context>
 <context>
@@ -118,72 +117,72 @@ There is NO WARRANTY, to the extent permitted by law.</source>
     <message>
         <location filename="../../ui/form_match.ui" line="13"/>
         <source>New match</source>
-        <translation type="unfinished">Neues Match</translation>
+        <translation>Neuer Wettkampf</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="23"/>
         <source>End conditions</source>
-        <translation type="unfinished">Siegbedingungen</translation>
+        <translation>Siegbedingungen</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="32"/>
         <source>Score</source>
-        <translation type="unfinished">Sieg nach Punkten</translation>
+        <translation>Punktelimit</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="55"/>
         <source>Number of games</source>
-        <translation type="unfinished">Anzahl an Spielen</translation>
+        <translation>Anzahl an Spielen</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="78"/>
         <source>Time limit</source>
-        <translation type="unfinished">Zeitlimit</translation>
+        <translation>Zeitlimit</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="88"/>
         <source> min</source>
-        <translation type="unfinished">Min</translation>
+        <translation>Min</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="104"/>
         <source>Players</source>
-        <translation type="unfinished">Spieler</translation>
+        <translation>Spieler</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="119"/>
         <source>Add</source>
-        <translation type="unfinished">Hinzufügen</translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="129"/>
         <source>Remove</source>
-        <translation type="unfinished">Entfernen</translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="143"/>
         <source>Maps</source>
-        <translation type="unfinished">Karten</translation>
+        <translation>Karten</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="151"/>
         <source>Scale maps:</source>
-        <translation type="unfinished">Karten skalieren:</translation>
+        <translation>Karten skalieren:</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="158"/>
         <source> %</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="222"/>
         <source>Start match</source>
-        <translation type="unfinished">Match starten</translation>
+        <translation>Wettkampf starten</translation>
     </message>
     <message>
         <location filename="../../ui/form_match.ui" line="229"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -191,27 +190,22 @@ There is NO WARRANTY, to the extent permitted by law.</source>
     <message>
         <location filename="../../src/match.cpp" line="63"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/match.cpp" line="89"/>
         <source>Press your keys</source>
-        <translation type="unfinished">Drückt eure Tasten</translation>
-    </message>
-    <message>
-        <location filename="../../src/match.cpp" line="162"/>
-        <source>&lt;center&gt;&lt;font color=&quot;%1&quot;&gt;%2&lt;/font&gt;&lt;br&gt;%3&lt;/center&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Drückt eure Tasten</translation>
     </message>
     <message>
         <location filename="../../src/match.cpp" line="162"/>
         <source>choose your key</source>
-        <translation type="unfinished">wähle deine Taste</translation>
+        <translation>wähle deine Taste</translation>
     </message>
     <message>
         <location filename="../../src/match.cpp" line="203"/>
         <source>wins</source>
-        <translation type="unfinished">hat gewonnen</translation>
+        <translation>hat gewonnen</translation>
     </message>
 </context>
 </TS>
