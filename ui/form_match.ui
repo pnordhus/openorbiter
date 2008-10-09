@@ -253,6 +253,7 @@
   <tabstop>treePlayers</tabstop>
   <tabstop>btnAdd</tabstop>
   <tabstop>btnRemove</tabstop>
+  <tabstop>spinMapScale</tabstop>
   <tabstop>treeMaps</tabstop>
  </tabstops>
  <resources/>

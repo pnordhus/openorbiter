@@ -46,6 +46,7 @@ private:
 
 private:
 	QGraphicsRectItem*		m_item;
+	QGraphicsRectItem*		m_item2;
 	QGraphicsEllipseItem*	m_itemCap1;
 	QGraphicsEllipseItem*	m_itemCap2;
 	Rect*					m_rect;
