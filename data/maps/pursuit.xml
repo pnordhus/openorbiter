@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE oomap SYSTEM "oomap.dtd">
+
+<oomap name="Impossible Pursuit" width="40" height="40">
+	<spawn x="10" y="2" />
+	<spawn x="15" y="2" />
+	<spawn x="25" y="2" />
+	<spawn x="30" y="2" />
+	
+	<spawn x="12.5" y="4" />
+	<spawn x="17.5" y="4" />
+	<spawn x="22.5" y="4" />
+	<spawn x="27.5" y="4" />
+	
+	<node x="20" y="20" />
+	
+	<bouncer x1="20" y1="0" x2="30" y2="0" width="0.5" boost="3" />
+	<bouncer x1="10" y1="40" x2="20" y2="40" width="0.5" boost="3" />
+	
+	<bouncer x1="10" y1="10" x2="10" y2="20" width="0.5" boost="3" />
+	<bouncer x1="40" y1="10" x2="40" y2="20" width="0.5" boost="3" />
+	
+	<bouncer x1="0" y1="20" x2="0" y2="30" width="0.5" boost="3" />
+	<bouncer x1="30" y1="20" x2="30" y2="30" width="0.5" boost="3" />
+</oomap>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE oomap SYSTEM "oomap.dtd">
+
+<oomap name="Broken Hourglass" width="30" height="40">
+	<spawn x="10" y="2" />
+	<spawn x="15" y="2" />
+	<spawn x="25" y="2" />
+	<spawn x="30" y="2" />
+	
+	<spawn x="12.5" y="4" />
+	<spawn x="17.5" y="4" />
+	<spawn x="22.5" y="4" />
+	<spawn x="27.5" y="4" />
+	
+	<node x="15" y="10" />
+	
+	<bouncer x1="0" y1="0" x2="30" y2="0" width="0.5" boost="3" />
+	<bouncer x1="0" y1="40" x2="30" y2="40" width="0.5" boost="3" />
+	
+	<bouncer x1="0" y1="0" x2="0" y2="15" width="0.5" boost="3" />
+	<bouncer x1="0" y1="15" x2="10" y2="25" width="0.5" boost="3" />
+	
+	<bouncer x1="30" y1="0" x2="30" y2="15" width="0.5" boost="3" />
+	<bouncer x1="30" y1="15" x2="20" y2="25" width="0.5" boost="3" />
+	
+	<bouncer x1="0" y1="40" x2="0" y2="25" width="0.5" boost="3" />
+	<bouncer x1="30" y1="40" x2="30" y2="25" width="0.5" boost="3" />
+</oomap>
