@@ -5,15 +5,15 @@
 	<author>Bernd Hügel</author>
 	<name lang="de">Kaputte Sanduhr</name>
 	
+	<spawn x="5" y="2" />
 	<spawn x="10" y="2" />
-	<spawn x="15" y="2" />
+	<spawn x="20" y="2" />
 	<spawn x="25" y="2" />
-	<spawn x="30" y="2" />
 	
+	<spawn x="7.5" y="4" />
 	<spawn x="12.5" y="4" />
 	<spawn x="17.5" y="4" />
 	<spawn x="22.5" y="4" />
-	<spawn x="27.5" y="4" />
 	
 	<node x="15" y="10" />
 	
