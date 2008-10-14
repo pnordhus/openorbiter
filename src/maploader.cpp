@@ -85,14 +85,18 @@ void MapLoader::parse()
 	while (!n.isNull()) {
 		QDomElement e = n.toElement();
 		if(!e.isNull()) {
-			if (e.tagName() == "spawn")
+			if (e.tagName() == "author")
+				parseAuthor(e);
+			else if (e.tagName() == "name")
+				parseName(e);
+			else if (e.tagName() == "spawn")
 				parseSpawn(e);
 			else if (e.tagName() == "node")
 				parseNode(e);
 			else if (e.tagName() == "bouncer")
 				parseBouncer(e);
 			else
-				throw QString("Invalid element ''").arg(e.tagName());
+				qDebug() << qPrintable(QString("Ignoring unknown element '%1'.").arg(e.tagName()));
 		} else {
 			throw QString("Unknown error");
 		}
@@ -148,6 +152,19 @@ void MapLoader::parseRoot(const QDomElement& e)
 	gravity.y = optional(e, "gravityY", 10.0f);
 	
 	m_map = new MapDef(mapName, mapWidth, mapHeight, gravity);
+}
+
+
+void MapLoader::parseAuthor(const QDomElement& e)
+{
+	m_map->setAuthor(e.text());
+}
+
+
+void MapLoader::parseName(const QDomElement& e)
+{
+	const QString lang = require<QString>(e, "lang", "No language given for name");
+	m_map->setName(lang, e.text());
 }
 
 

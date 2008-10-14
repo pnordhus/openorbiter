@@ -2,6 +2,8 @@
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
 <oomap name="SCUMM Bar" width="60" height="40">
+	<author>Bernd Hügel</author>
+	
 	<spawn x="13.75" y="2.5" />
 	<spawn x="21.25" y="2.5" />
 	<spawn x="28.75" y="2.5" />

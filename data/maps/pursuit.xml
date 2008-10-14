@@ -2,6 +2,9 @@
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
 <oomap name="Impossible Pursuit" width="40" height="40">
+	<author>Bernd Hügel</author>
+	<name lang="de">Jagd ohne Ende</name>
+	
 	<spawn x="10" y="2" />
 	<spawn x="15" y="2" />
 	<spawn x="25" y="2" />

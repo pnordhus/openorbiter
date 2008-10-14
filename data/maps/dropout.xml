@@ -2,6 +2,9 @@
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
 <oomap name="Right Drop-out" width="40" height="40">
+	<author>Bernd Hügel</author>
+	<name lang="de">Sie fallen nach rechts</name>
+	
 	<spawn x="10" y="2" />
 	<spawn x="15" y="2" />
 	<spawn x="25" y="2" />

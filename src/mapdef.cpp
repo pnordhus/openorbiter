@@ -20,6 +20,7 @@
 
 
 #include "mapdef.h"
+#include <QSettings>
 
 
 MapDef::MapDef(const QString& name, float width, float height, const Vector& gravity) :
@@ -30,6 +31,28 @@ MapDef::MapDef(const QString& name, float width, float height, const Vector& gra
 	m_gravity(gravity)
 {
 	
+}
+
+
+QString MapDef::nameTranslated() const
+{
+	const QString lang = QSettings().value("language").toString();
+	if (m_names.contains(lang))
+		return m_names.value(lang);
+	
+	return m_name;
+}
+
+
+void MapDef::setName(const QString& lang, const QString& name)
+{
+	m_names[lang] = name;
+}
+
+
+void MapDef::setAuthor(const QString& author)
+{
+	m_author = author;
 }
 
 

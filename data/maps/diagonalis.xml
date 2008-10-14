@@ -2,6 +2,8 @@
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
 <oomap name="Diagonalis" width="40" height="40">
+	<author>Bernd Hügel</author>
+	
 	<spawn x="10" y="2" />
 	<spawn x="15" y="2" />
 	<spawn x="25" y="2" />

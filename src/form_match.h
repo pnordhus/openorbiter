@@ -59,6 +59,8 @@ private slots:
 	void	playersSelectionChanged();
 	void	mapsSelectionChanged(const QItemSelection&);
 	void	mapChanged(QStandardItem* item);
+	void	selectAllMaps();
+	void	deselectAllMaps();
 
 private:
 	Ui::FormMatch*		m_ui;

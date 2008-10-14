@@ -120,69 +120,151 @@ There is NO WARRANTY, to the extent permitted by law.</source>
         <translation>Neuer Wettkampf</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="23"/>
+        <location filename="../../ui/form_match.ui" line="19"/>
         <source>End conditions</source>
         <translation>Siegbedingungen</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="32"/>
+        <location filename="../../ui/form_match.ui" line="28"/>
         <source>Score</source>
         <translation>Punktelimit</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="55"/>
-        <source>Number of games</source>
-        <translation>Anzahl an Spielen</translation>
-    </message>
-    <message>
-        <location filename="../../ui/form_match.ui" line="78"/>
+        <location filename="../../ui/form_match.ui" line="74"/>
         <source>Time limit</source>
         <translation>Zeitlimit</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="88"/>
+        <location filename="../../ui/form_match.ui" line="84"/>
         <source> min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="104"/>
+        <location filename="../../ui/form_match.ui" line="241"/>
         <source>Players</source>
         <translation>Spieler</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="119"/>
+        <location filename="../../ui/form_match.ui" line="262"/>
         <source>Add</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="129"/>
+        <location filename="../../ui/form_match.ui" line="272"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="143"/>
+        <location filename="../../ui/form_match.ui" line="100"/>
         <source>Maps</source>
         <translation>Karten</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="151"/>
-        <source>Scale maps:</source>
-        <translation>Karten skalieren:</translation>
-    </message>
-    <message>
-        <location filename="../../ui/form_match.ui" line="158"/>
+        <location filename="../../ui/form_match.ui" line="220"/>
         <source> %</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="222"/>
+        <location filename="../../ui/form_match.ui" line="302"/>
         <source>Start match</source>
         <translation>Wettkampf starten</translation>
     </message>
     <message>
-        <location filename="../../ui/form_match.ui" line="229"/>
+        <location filename="../../ui/form_match.ui" line="309"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="51"/>
+        <source>Games</source>
+        <translation>Spiele</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="207"/>
+        <source>Settings</source>
+        <translation>Optionen</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="213"/>
+        <source>Map size:</source>
+        <translation>Kartengröße:</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="128"/>
+        <source>Speed:</source>
+        <translation type="obsolete">Geschwindigkeit:</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="151"/>
+        <source>Gravity:</source>
+        <translation type="obsolete">Gravitation:</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="175"/>
+        <source>Bouncer boost:</source>
+        <translation type="obsolete">Bouncerboost:</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="195"/>
+        <source>Node boost:</source>
+        <translation type="obsolete">Knotenboost:</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="120"/>
+        <source>Select all</source>
+        <translation>Alle auswählen</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="127"/>
+        <source>Select none</source>
+        <translation>Keine auswählen</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="161"/>
+        <source>Author:</source>
+        <translation>Autor:</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="175"/>
+        <source>Nodes:</source>
+        <translation>Knoten:</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_match.ui" line="352"/>
+        <source>Bouncers:</source>
+        <translation type="obsolete">Bouncer:</translation>
+    </message>
+    <message>
+        <location filename="../../src/form_match.cpp" line="54"/>
+        <source>Name</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/form_match.cpp" line="137"/>
+        <source>You have to add at least 2 players!</source>
+        <translation>Du musst mindestens zwei Spieler auswählen!</translation>
+    </message>
+    <message>
+        <location filename="../../src/form_match.cpp" line="142"/>
+        <source>You have to select at least 1 map!</source>
+        <translation>Du musst mindestens eine Karte auswählen!</translation>
+    </message>
+    <message>
+        <location filename="../../src/form_match.cpp" line="151"/>
+        <source>Please give each player a name!</source>
+        <translation>Bitte gib jedem Spieler einen Namen!</translation>
+    </message>
+    <message>
+        <location filename="../../src/form_match.cpp" line="156"/>
+        <source>There are at least two players named &apos;%1&apos;!
+Please make sure all player names are unique.</source>
+        <translation>Es gibt mindestens zwei Spieler mit Namen &apos;%1&apos;!
+Bitte stell sicher, dass jeder Spielername nur einmal vorkommt.</translation>
+    </message>
+    <message>
+        <location filename="../../src/form_match.cpp" line="190"/>
+        <source>Player %1</source>
+        <translation>Spieler %1</translation>
     </message>
 </context>
 <context>

@@ -2,6 +2,9 @@
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
 <oomap name="Single" width="40" height="30">
+	<author>Philipp Nordhus</author>
+	<name lang="de">Ein Punkt sie zu knechten</name>
+	
 	<spawn x="10" y="2" />
 	<spawn x="15" y="2" />
 	<spawn x="25" y="2" />

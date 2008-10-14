@@ -26,8 +26,8 @@
 #include "bouncerdef.h"
 #include "physics/vector.h"
 #include <QList>
+#include <QMap>
 #include <QString>
-
 
 
 class MapDef
@@ -37,6 +37,8 @@ public:
 
 public:
 	const QString&		name() const { return m_name; }
+	QString				nameTranslated() const;
+	const QString&		author() const { return m_author; }
 	float				width() const { return m_width; }
 	float				height() const { return m_height; }
 	float				scale() const { return m_scale; }
@@ -48,20 +50,24 @@ public:
 
 public:
 	void	setScale(float scale);
+	void	setAuthor(const QString& author);
+	void	setName(const QString& lang, const QString& name);
 	void	addNode(const Vector& pos);
 	void	addSpawn(const Vector& spawn);
 	void	addBouncer(const BouncerDef& def);
 
 private:
 	QString			m_name;
+	QString			m_author;
 	float			m_width;
 	float			m_height;
 	float			m_scale;
 	Vector			m_gravity;
 	
-	QList<Vector>		m_nodes;
-	QList<Vector>		m_spawns;
-	QList<BouncerDef>	m_bouncers;
+	QList<Vector>			m_nodes;
+	QList<Vector>			m_spawns;
+	QList<BouncerDef>		m_bouncers;
+	QMap<QString, QString>	m_names;
 };
 
 

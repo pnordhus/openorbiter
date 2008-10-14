@@ -2,6 +2,9 @@
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
 <oomap name="Double" width="50" height="37.5">
+	<author>Philipp Nordhus</author>
+	<name lang="de">Doppelt hält besser</name>
+	
 	<spawn x="13.75" y="2.5" />
 	<spawn x="21.25" y="2.5" />
 	<spawn x="28.75" y="2.5" />

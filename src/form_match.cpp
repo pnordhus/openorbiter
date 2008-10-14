@@ -36,10 +36,12 @@ FormMatch::FormMatch(QWidget* parent) :
 	m_ui = new Ui::FormMatch;
 	m_ui->setupUi(this);
 	
-	connect(m_ui->btnStart,		SIGNAL(clicked()),		SLOT(start()));
-	connect(m_ui->btnAdd,		SIGNAL(clicked()),		SLOT(addPlayer()));
-	connect(m_ui->btnRemove,	SIGNAL(clicked()),		SLOT(removePlayer()));
-	connect(&m_modelMaps,		SIGNAL(itemChanged(QStandardItem*)), SLOT(mapChanged(QStandardItem*)));
+	connect(m_ui->btnStart,			SIGNAL(clicked()),		SLOT(start()));
+	connect(m_ui->btnAdd,			SIGNAL(clicked()),		SLOT(addPlayer()));
+	connect(m_ui->btnRemove,		SIGNAL(clicked()),		SLOT(removePlayer()));
+	connect(m_ui->btnSelectAll,		SIGNAL(clicked()),		SLOT(selectAllMaps()));
+	connect(m_ui->btnSelectNone,	SIGNAL(clicked()),		SLOT(deselectAllMaps()));
+	connect(&m_modelMaps,			SIGNAL(itemChanged(QStandardItem*)), SLOT(mapChanged(QStandardItem*)));
 	
 	m_scene = new Scene;
 	m_ui->view->setScene(m_scene);
@@ -48,8 +50,8 @@ FormMatch::FormMatch(QWidget* parent) :
 	m_ui->treePlayers->setModel(&m_modelPlayers);
 	m_ui->treeMaps->setModel(&m_modelMaps);
 	
-	m_modelPlayers.setHorizontalHeaderLabels(QStringList() << "Name");
-	m_modelMaps.setHorizontalHeaderLabels(QStringList() << "Name");
+	m_modelPlayers.setHorizontalHeaderLabels(QStringList() << tr("Name"));
+	m_modelMaps.setHorizontalHeaderLabels(QStringList() << tr("Name"));
 	
 	m_colors.append(Qt::red);
 	m_colors.append(Qt::green);
@@ -112,7 +114,7 @@ void FormMatch::setMaps(const QList<MapDef>& maps)
 	QStringList mapNames = s.value("maps").toStringList();
 	
 	foreach (const MapDef& map, maps) {
-		QStandardItem* itemName = new QStandardItem(map.name());
+		QStandardItem* itemName = new QStandardItem(map.nameTranslated());
 		itemName->setData(QVariant::fromValue((void*) &map));
 		itemName->setCheckable(true);
 		if (mapNames.contains(map.name())) {
@@ -132,12 +134,12 @@ void FormMatch::setMaps(const QList<MapDef>& maps)
 void FormMatch::start()
 {
 	if (m_modelPlayers.rowCount() < 2) {
-		QMessageBox::warning(this, "Unable to start match", "You have to add at least 2 players!");
+		QMessageBox::warning(this, "OpenOrbiter", tr("You have to add at least 2 players!"));
 		return;
 	}
 	
 	if (m_selectedMaps.size() < 1) {
-		QMessageBox::warning(this, "Unable to start match", "You have to select at least 1 map!");
+		QMessageBox::warning(this, "OpenOrbiter", tr("You have to select at least 1 map!"));
 		return;
 	}
 	
@@ -146,12 +148,12 @@ void FormMatch::start()
 		const QString name = m_modelPlayers.item(i)->text();
 		
 		if (name.isEmpty()) {
-			QMessageBox::warning(this, "Unable to start match", "Please give each player a name!");
+			QMessageBox::warning(this, "OpenOrbiter", tr("Please give each player a name!"));
 			return;
 		}
 		
 		if (names.contains(name)) {
-			QMessageBox::warning(this, "Unable to start match", QString("There are at least two players named '%1'!\nPlease make sure all player names are unique.").arg(name));
+			QMessageBox::warning(this, "OpenOrbiter", tr("There are at least two players named '%1'!\nPlease make sure all player names are unique.").arg(name));
 			return;
 		}
 		
@@ -185,7 +187,7 @@ void FormMatch::addPlayer(QString name)
 	
 	if (name.isEmpty()) {
 		for (int i = 0; i < 8; i++) {
-			name = QString("Player %1").arg(i + 1);
+			name = tr("Player %1").arg(i + 1);
 			bool found = false;
 			for (int j = 0; j < m_modelPlayers.rowCount(); j++) {
 				if (m_modelPlayers.item(j)->text() == name) {
@@ -240,6 +242,9 @@ void FormMatch::mapsSelectionChanged(const QItemSelection& sel)
 		QStandardItem* item = m_modelMaps.itemFromIndex(list.first());
 		const MapDef* def = static_cast<const MapDef*>(item->data().value<void*>());
 		m_map = new Map(*def, *m_scene);
+		m_ui->lblMapName->setText(def->nameTranslated());
+		m_ui->lblMapAuthor->setText(def->author());
+		m_ui->lblMapNodes->setText(QString::number(def->nodes().size()));
 	}
 }
 
@@ -275,4 +280,18 @@ void FormMatch::mapChanged(QStandardItem* item)
 		m_selectedMaps.insert(map);
 	else
 		m_selectedMaps.remove(map);
+}
+
+
+void FormMatch::selectAllMaps()
+{
+	for (int i = 0; i < m_modelMaps.rowCount(); i++)
+		m_modelMaps.item(i)->setCheckState(Qt::Checked);
+}
+
+
+void FormMatch::deselectAllMaps()
+{
+	for (int i = 0; i < m_modelMaps.rowCount(); i++)
+		m_modelMaps.item(i)->setCheckState(Qt::Unchecked);
 }

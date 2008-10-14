@@ -45,6 +45,8 @@ private:
 	void		load(const QString& filename);
 	void		parse();
 	void		parseRoot(const QDomElement& e);
+	void		parseAuthor(const QDomElement& e);
+	void		parseName(const QDomElement& name);
 	void		parseSpawn(const QDomElement& e);
 	void		parseNode(const QDomElement& e);
 	void		parseBouncer(const QDomElement& e);
