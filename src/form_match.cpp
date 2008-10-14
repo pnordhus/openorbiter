@@ -59,8 +59,8 @@ FormMatch::FormMatch(QWidget* parent) :
 	m_colors.append(Qt::yellow);
 	m_colors.append(Qt::cyan);
 	m_colors.append(Qt::magenta);
-	m_colors.append(Qt::darkYellow);
 	m_colors.append(Qt::lightGray);
+	m_colors.append(Qt::darkGray);
 	
 	foreach (const QColor& color, m_colors) {
 		QPixmap pixmap(16, 16);

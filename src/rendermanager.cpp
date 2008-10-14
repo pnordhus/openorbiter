@@ -89,8 +89,8 @@ RenderManager::RenderManager()
 	loadRenderer("yellow",		Qt::yellow);
 	loadRenderer("cyan",		Qt::cyan);
 	loadRenderer("magenta",		Qt::magenta);
-	loadRenderer("darkYellow",	Qt::darkYellow);
 	loadRenderer("lightGray",	Qt::lightGray);
+	loadRenderer("darkGray",	Qt::darkGray);
 #endif
 }
 
@@ -107,7 +107,7 @@ RenderManager::~RenderManager()
 #ifdef QT_SVG_LIB
 void RenderManager::loadRenderer(const QString& name, const QColor& color)
 {
-	QSvgRenderer* renderer = new QSvgRenderer(QString(OO_DATADIR "/gfx/%1.svg").arg(name));
+	QSvgRenderer* renderer = new QSvgRenderer(QString(OO_DATADIR "/gfx/%1.svg").arg(name.toLower()));
 	if (renderer->isValid())
 		m_rendererOrbiter.insert(color.name(), renderer);
 	else
