@@ -55,7 +55,7 @@ FormMain::FormMain() :
 		if (s.contains("language"))
 			lang = s.value("language").toString();
 		else
-			lang = QLocale::system().name();
+			lang = QLocale::system().name().left(2);
 		
 		loadLanguage("de", "Deutsch", lang);
 	}
@@ -136,6 +136,8 @@ void FormMain::loadLanguage(const QString& name, const QString& fullname, const 
 		action->setChecked(true);
 		m_translator = translator;
 		qApp->installTranslator(translator);
+		QSettings s;
+		s.setValue("language", name);
 	}
 	
 	action->setProperty("lang", name);
