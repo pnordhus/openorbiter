@@ -42,7 +42,7 @@ public:
 
 private:
 	QGraphicsItem*		m_item;
-	static const float	m_radius = 0.3f;
+	static const float	m_radius;
 
 private:
 	Q_DISABLE_COPY(Node);

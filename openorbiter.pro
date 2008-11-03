@@ -8,7 +8,12 @@ isEmpty(DATADIR) {
 
 TEMPLATE = app
 CONFIG += warn_on
-DEFINES += OO_DATADIR=\"\\\"$$DATADIR\\\"\"
+
+macx-xcode {
+	DEFINES += OO_DATADIR=\"../../data\"
+} else {
+	DEFINES += OO_DATADIR=\\\"$$DATADIR\\\"
+}
 
 QT += core gui xml
 INSTALLS += \

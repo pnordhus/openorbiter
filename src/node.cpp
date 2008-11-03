@@ -24,6 +24,9 @@
 #include "scene.h"
 
 
+const float Node::m_radius = 0.3f;
+
+
 Node::Node(Scene& scene)
 {
 	m_item = RenderManager::get().createNodeItem(m_radius);
