@@ -58,6 +58,9 @@ FormMain::FormMain() :
 			lang = QLocale::system().name().left(2);
 		
 		loadLanguage("de", "Deutsch", lang);
+		
+		if (m_translators.isEmpty())
+			m_ui->menubar->removeAction(m_ui->menuLanguage->menuAction());
 	}
 	
 	RenderManager::create();
