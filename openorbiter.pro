@@ -39,6 +39,7 @@ win32-g++ {
 	UI_DIR = release
 	RCC_DIR = release
 	TARGET = release/bin/openorbiter
+	RC_FILE = res/win.rc
 } else {
 	CONFIG += silent debug_and_release
 	
@@ -108,9 +109,6 @@ SOURCES = src/bouncer.cpp \
 
 RESOURCES = \
  res/openorbiter.qrc
-
-RC_FILE = \
- res/win.rc
 
 TRANSLATIONS = \
  data/translations/openorbiter_de.ts
