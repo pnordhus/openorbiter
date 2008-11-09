@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
-<oomap name="Magic 8-Room" width="40" height="60">
+<oomap name="Magic 8-Room" width="40" height="60" difficulty="hard">
 	<author>Bernd Hügel</author>
 	<name lang="de">ZickZack</name>
 	

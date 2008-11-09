@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
-<oomap name="Leaky Bucket" width="40" height="40">
+<oomap name="Leaky Bucket" width="40" height="40" difficulty="easy">
 	<author>Bernd Hügel</author>
 	<name lang="de">Ein Loch ist im Eimer</name>
 	

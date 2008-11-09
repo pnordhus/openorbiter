@@ -61,6 +61,7 @@ private slots:
 	void	mapChanged(QStandardItem* item);
 	void	selectAllMaps();
 	void	deselectAllMaps();
+	void	difficultyChanged(int);
 
 private:
 	Ui::FormMatch*		m_ui;

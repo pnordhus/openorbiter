@@ -41,7 +41,8 @@ FormMatch::FormMatch(QWidget* parent) :
 	connect(m_ui->btnRemove,		SIGNAL(clicked()),		SLOT(removePlayer()));
 	connect(m_ui->btnSelectAll,		SIGNAL(clicked()),		SLOT(selectAllMaps()));
 	connect(m_ui->btnSelectNone,	SIGNAL(clicked()),		SLOT(deselectAllMaps()));
-	connect(&m_modelMaps,			SIGNAL(itemChanged(QStandardItem*)), SLOT(mapChanged(QStandardItem*)));
+	connect(m_ui->comboDifficulty,	SIGNAL(currentIndexChanged(int)),		SLOT(difficultyChanged(int)));
+	connect(&m_modelMaps,			SIGNAL(itemChanged(QStandardItem*)),	SLOT(mapChanged(QStandardItem*)));
 	
 	m_scene = new Scene;
 	m_ui->view->setScene(m_scene);
@@ -86,6 +87,8 @@ FormMatch::FormMatch(QWidget* parent) :
 		QStringList players = s.value("players").toStringList();
 		foreach (const QString& name, players)
 			addPlayer(name);
+		
+		m_ui->comboDifficulty->setCurrentIndex(s.value("difficulty").toInt());
 	}
 	
 	connect(m_ui->treePlayers->selectionModel(),
@@ -128,6 +131,7 @@ void FormMatch::setMaps(const QList<MapDef>& maps)
 	}
 	
 	m_ui->treeMaps->sortByColumn(0, Qt::AscendingOrder);
+	difficultyChanged(m_ui->comboDifficulty->currentIndex());
 }
 
 
@@ -171,13 +175,14 @@ void FormMatch::save()
 		players << m_modelPlayers.item(i)->text();
 	
 	QStringList maps;
-	foreach (const MapDef* map, m_selectedMaps)
-		maps << map->name();
+	for (int i = 0; i < m_modelMaps.rowCount(); i++)
+		maps << static_cast<const MapDef*>(m_modelMaps.item(i, 0)->data().value<void*>())->name();
 	
 	QSettings s;
 	s.setValue("mapscale", m_ui->spinMapScale->value());
 	s.setValue("players", players);
 	s.setValue("maps", maps);
+	s.setValue("difficulty", m_ui->comboDifficulty->currentIndex());
 }
 
 
@@ -244,6 +249,7 @@ void FormMatch::mapsSelectionChanged(const QItemSelection& sel)
 		m_map = new Map(*def, *m_scene);
 		m_ui->lblMapName->setText(def->nameTranslated());
 		m_ui->lblMapAuthor->setText(def->author());
+		m_ui->lblMapDifficulty->setText(def->difficultyString());
 		m_ui->lblMapNodes->setText(QString::number(def->nodes().size()));
 	}
 }
@@ -276,7 +282,7 @@ QList<MapDef> FormMatch::maps() const
 void FormMatch::mapChanged(QStandardItem* item)
 {
 	const MapDef* map = static_cast<const MapDef*>(item->data().value<void*>());
-	if (item->checkState() == Qt::Checked)
+	if ((item->checkState() == Qt::Checked) && (!m_ui->treeMaps->isRowHidden(item->row(), QModelIndex())))
 		m_selectedMaps.insert(map);
 	else
 		m_selectedMaps.remove(map);
@@ -294,4 +300,19 @@ void FormMatch::deselectAllMaps()
 {
 	for (int i = 0; i < m_modelMaps.rowCount(); i++)
 		m_modelMaps.item(i)->setCheckState(Qt::Unchecked);
+}
+
+
+void FormMatch::difficultyChanged(int diff)
+{
+	for (int i = 0; i < m_modelMaps.rowCount(); i++) {
+		QStandardItem* item = m_modelMaps.item(i, 0);
+		const MapDef* map = static_cast<const MapDef*>(item->data().value<void*>());
+		if ((diff == 0) || (map->difficulty() == MapDef::Difficulty(diff - 1))) {
+			m_ui->treeMaps->setRowHidden(i, QModelIndex(), false);
+		} else {
+			m_ui->treeMaps->setRowHidden(i, QModelIndex(), true);
+		}
+		mapChanged(item);
+	}
 }

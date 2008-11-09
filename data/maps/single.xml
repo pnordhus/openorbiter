@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
-<oomap name="Single" width="40" height="30">
+<oomap name="Single" width="40" height="30" difficulty="normal">
 	<author>Philipp Nordhus</author>
 	<name lang="de">Ein Punkt sie zu knechten</name>
 	

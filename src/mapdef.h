@@ -33,7 +33,10 @@
 class MapDef
 {
 public:
-	MapDef(const QString& name, float width, float height, const Vector& gravity);
+	enum Difficulty { DiffEasy, DiffNormal, DiffHard };
+
+public:
+	MapDef(const QString& name, float width, float height, const Vector& gravity, Difficulty diff);
 
 public:
 	const QString&		name() const { return m_name; }
@@ -46,6 +49,8 @@ public:
 	QList<Vector>		spawns() const { return m_spawns; }
 	QList<BouncerDef>	bouncers() const { return m_bouncers; }
 	Vector				gravity() const { return m_gravity; }
+	Difficulty			difficulty() const { return m_difficulty; }
+	QString				difficultyString() const;
 	void				validate() const;
 
 public:
@@ -63,6 +68,7 @@ private:
 	float			m_height;
 	float			m_scale;
 	Vector			m_gravity;
+	Difficulty		m_difficulty;
 	
 	QList<Vector>			m_nodes;
 	QList<Vector>			m_spawns;

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
-<oomap name="Bermuda Triangle" width="40" height="30">
+<oomap name="Bermuda Triangle" width="40" height="30" difficulty="easy">
 	<author>Philipp Nordhus</author>
 	<name lang="de">Bermuda Dreieck</name>
 	

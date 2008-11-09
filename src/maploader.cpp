@@ -151,7 +151,18 @@ void MapLoader::parseRoot(const QDomElement& e)
 	gravity.x = optional(e, "gravityX", 0.0f);
 	gravity.y = optional(e, "gravityY", 10.0f);
 	
-	m_map = new MapDef(mapName, mapWidth, mapHeight, gravity);
+	const QString diffString = require<QString>(e, "difficulty", "No difficulty defined");
+	MapDef::Difficulty diff;
+	if (diffString == "easy")
+		diff = MapDef::DiffEasy;
+	else if (diffString == "normal")
+		diff = MapDef::DiffNormal;
+	else if (diffString == "hard")
+		diff = MapDef::DiffHard;
+	else
+		throw QString("Invalid difficulty");
+	
+	m_map = new MapDef(mapName, mapWidth, mapHeight, gravity, diff);
 }
 
 

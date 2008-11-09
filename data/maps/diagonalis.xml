@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
-<oomap name="Diagonalis" width="40" height="40">
+<oomap name="Diagonalis" width="40" height="40" difficulty="easy">
 	<author>Bernd Hügel</author>
 	
 	<spawn x="10" y="2" />

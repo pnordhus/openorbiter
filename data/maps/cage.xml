@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
-<oomap name="The Cage" width="40" height="30">
+<oomap name="The Cage" width="40" height="30" difficulty="easy">
 	<author>Philipp Nordhus</author>
 	<name lang="de">Der Käfig</name>
 	

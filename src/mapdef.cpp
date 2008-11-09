@@ -23,12 +23,13 @@
 #include <QSettings>
 
 
-MapDef::MapDef(const QString& name, float width, float height, const Vector& gravity) :
+MapDef::MapDef(const QString& name, float width, float height, const Vector& gravity, Difficulty diff) :
 	m_name(name),
 	m_width(width),
 	m_height(height),
 	m_scale(1.0f),
-	m_gravity(gravity)
+	m_gravity(gravity),
+	m_difficulty(diff)
 {
 	
 }
@@ -87,4 +88,17 @@ void MapDef::validate() const
 	
 	if (m_spawns.size() < 8)
 		throw QString("Map has too few spawn points");
+}
+
+
+QString MapDef::difficultyString() const
+{
+	switch (m_difficulty) {
+		case DiffEasy:		return "Easy";
+		case DiffNormal:	return "Normal";
+		case DiffHard:		return "Hard";
+	}
+	
+	Q_ASSERT(false);
+	return "";
 }

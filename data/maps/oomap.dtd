@@ -8,6 +8,7 @@
 <!ATTLIST map	height			CDATA	#REQUIRED>
 <!ATTLIST map	gravityX		CDATA	"0.0">
 <!ATTLIST map	gravityY		CDATA	"10.0">
+<!ATTLIST map	difficulty		CDATA	#REQUIRED>
 
 <!ATTLIST spawn	x				CDATA	#REQUIRED>
 <!ATTLIST spawn	y				CDATA	#REQUIRED>
