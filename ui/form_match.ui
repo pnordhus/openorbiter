@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>827</width>
+    <width>790</width>
     <height>488</height>
    </rect>
   </property>
@@ -113,15 +113,9 @@
           </item>
           <item>
            <widget class="QComboBox" name="comboDifficulty" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
             <item>
              <property name="text" >
-              <string>Show all</string>
+              <string>All</string>
              </property>
             </item>
             <item>
@@ -158,14 +152,14 @@
           <item>
            <widget class="QPushButton" name="btnSelectAll" >
             <property name="text" >
-             <string>Select all</string>
+             <string>All</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="btnSelectNone" >
             <property name="text" >
-             <string>Select none</string>
+             <string>None</string>
             </property>
            </widget>
           </item>

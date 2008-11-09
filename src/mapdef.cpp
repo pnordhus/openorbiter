@@ -94,9 +94,9 @@ void MapDef::validate() const
 QString MapDef::difficultyString() const
 {
 	switch (m_difficulty) {
-		case DiffEasy:		return "Easy";
-		case DiffNormal:	return "Normal";
-		case DiffHard:		return "Hard";
+		case DiffEasy:		return QObject::tr("Easy");
+		case DiffNormal:	return QObject::tr("Normal");
+		case DiffHard:		return QObject::tr("Hard");
 	}
 	
 	Q_ASSERT(false);
