@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>184</height>
+    <height>217</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -15,86 +15,88 @@
   <property name="sizeGripEnabled" >
    <bool>false</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3" >
+  <layout class="QVBoxLayout" name="verticalLayout" >
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" >
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout" >
-       <property name="rightMargin" >
-        <number>10</number>
+    <layout class="QGridLayout" name="gridLayout" >
+     <item rowspan="3" row="0" column="0" >
+      <widget class="QLabel" name="label_2" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Maximum" hsizetype="Maximum" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="bottomMargin" >
-        <number>10</number>
+       <property name="text" >
+        <string/>
        </property>
-       <item>
-        <widget class="QLabel" name="label_2" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Maximum" hsizetype="Maximum" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap resource="../res/openorbiter.qrc" >:/orbiter-64.png</pixmap>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2" >
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+       <property name="pixmap" >
+        <pixmap resource="../res/openorbiter.qrc" >:/orbiter-64.png</pixmap>
+       </property>
+      </widget>
      </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2" >
-       <item>
-        <widget class="QLabel" name="lblVersion" >
-         <property name="font" >
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text" >
-          <string>OpenOrbiter</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblBuildTime" >
-         <property name="text" >
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer" >
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+     <item row="0" column="1" >
+      <widget class="QLabel" name="lblVersion" >
+       <property name="font" >
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Version</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QLabel" name="lblBuildTime" >
+       <property name="text" >
+        <string>Build</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <spacer name="verticalSpacer_2" >
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>128</width>
+         <height>18</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>407</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_4" >
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="text" >
+      <string>For Tilman</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QLabel" name="label" >

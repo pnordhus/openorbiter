@@ -35,6 +35,7 @@ FormMatch::FormMatch(QWidget* parent) :
 {
 	m_ui = new Ui::FormMatch;
 	m_ui->setupUi(this);
+	m_ui->boxConditions->hide();
 	
 	connect(m_ui->btnStart,			SIGNAL(clicked()),		SLOT(start()));
 	connect(m_ui->btnAdd,			SIGNAL(clicked()),		SLOT(addPlayer()));

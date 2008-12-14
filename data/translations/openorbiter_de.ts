@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
-<defaultcodec></defaultcodec>
 <context>
     <name>FormAbout</name>
     <message>
@@ -9,24 +8,29 @@
         <translation>Über OpenOrbiter</translation>
     </message>
     <message>
-        <location filename="../../ui/form_about.ui" line="71"/>
-        <source>OpenOrbiter</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../ui/form_about.ui" line="78"/>
-        <source>TextLabel</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../ui/form_about.ui" line="102"/>
+        <location filename="../../ui/form_about.ui" line="104"/>
         <source>Licensed under GNU General Public License Version 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/form_about.ui" line="109"/>
+        <location filename="../../ui/form_about.ui" line="111"/>
         <source>This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_about.ui" line="94"/>
+        <source>For Tilman</source>
+        <translation>Für Tilman</translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_about.ui" line="46"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/form_about.ui" line="53"/>
+        <source>Build</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -201,34 +205,34 @@ There is NO WARRANTY, to the extent permitted by law.</source>
         <translation>Knoten:</translation>
     </message>
     <message>
-        <location filename="../../src/form_match.cpp" line="55"/>
+        <location filename="../../src/form_match.cpp" line="56"/>
         <source>Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/form_match.cpp" line="141"/>
+        <location filename="../../src/form_match.cpp" line="142"/>
         <source>You have to add at least 2 players!</source>
         <translation>Du musst mindestens zwei Spieler auswählen!</translation>
     </message>
     <message>
-        <location filename="../../src/form_match.cpp" line="146"/>
+        <location filename="../../src/form_match.cpp" line="147"/>
         <source>You have to select at least 1 map!</source>
         <translation>Du musst mindestens eine Karte auswählen!</translation>
     </message>
     <message>
-        <location filename="../../src/form_match.cpp" line="155"/>
+        <location filename="../../src/form_match.cpp" line="156"/>
         <source>Please give each player a name!</source>
         <translation>Bitte gib jedem Spieler einen Namen!</translation>
     </message>
     <message>
-        <location filename="../../src/form_match.cpp" line="160"/>
+        <location filename="../../src/form_match.cpp" line="161"/>
         <source>There are at least two players named &apos;%1&apos;!
 Please make sure all player names are unique.</source>
         <translation>Es gibt mindestens zwei Spieler mit Namen &apos;%1&apos;!
 Bitte stell sicher, dass jeder Spielername nur einmal vorkommt.</translation>
     </message>
     <message>
-        <location filename="../../src/form_match.cpp" line="195"/>
+        <location filename="../../src/form_match.cpp" line="196"/>
         <source>Player %1</source>
         <translation>Spieler %1</translation>
     </message>

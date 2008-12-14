@@ -22,7 +22,7 @@
 #define DEFS_H
 
 
-static const char* OPENORBITER_VERSION_STRING = "OpenOrbiter 0.4-pre";
+static const char* OPENORBITER_VERSION_STRING = "OpenOrbiter 0.4";
 
 
 #endif // DEFS_H

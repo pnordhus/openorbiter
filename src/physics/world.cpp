@@ -44,7 +44,7 @@ void World::setGravity(const Vector& gravity)
 
 void World::process(float time)
 {
-	const uint iterations = time / 0.01;
+	const uint iterations = time / 0.001;
 	const float stepSize = time / iterations;
 	
 	for (uint i = 0; i < iterations; i++) {

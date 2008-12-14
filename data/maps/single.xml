@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE oomap SYSTEM "oomap.dtd">
 
-<oomap name="Single" width="40" height="30" difficulty="normal">
+<oomap name="One node to rule them all" width="40" height="30" difficulty="normal">
 	<author>Philipp Nordhus</author>
-	<name lang="de">Ein Punkt sie zu knechten</name>
+	<name lang="de">Ein Knoten, sie zu knechten</name>
 	
 	<spawn x="10" y="2" />
 	<spawn x="15" y="2" />
