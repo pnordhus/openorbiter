@@ -176,8 +176,11 @@ void FormMatch::save()
 		players << m_modelPlayers.item(i)->text();
 	
 	QStringList maps;
-	for (int i = 0; i < m_modelMaps.rowCount(); i++)
-		maps << static_cast<const MapDef*>(m_modelMaps.item(i, 0)->data().value<void*>())->name();
+	for (int i = 0; i < m_modelMaps.rowCount(); i++) {
+		QStandardItem* item = m_modelMaps.item(i, 0);
+		if (item->checkState() == Qt::Checked)
+			maps << static_cast<const MapDef*>(item->data().value<void*>())->name();
+	}
 	
 	QSettings s;
 	s.setValue("mapscale", m_ui->spinMapScale->value());
