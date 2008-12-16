@@ -89,7 +89,13 @@ FormMatch::FormMatch(QWidget* parent) :
 		foreach (const QString& name, players)
 			addPlayer(name);
 		
-		m_ui->comboDifficulty->setCurrentIndex(s.value("difficulty").toInt());
+		while (m_modelPlayers.rowCount() < 2)
+			addPlayer();
+		
+		int difficulty = 1;
+		if (s.contains("difficulty"))
+			difficulty = s.value("difficulty").toInt();
+		m_ui->comboDifficulty->setCurrentIndex(difficulty);
 	}
 	
 	connect(m_ui->treePlayers->selectionModel(),
@@ -115,13 +121,14 @@ void FormMatch::setMaps(const QList<MapDef>& maps)
 	m_modelMaps.removeRows(0, m_modelMaps.rowCount());
 	
 	QSettings s;
+	const bool selectAllMaps = !s.contains("maps");
 	QStringList mapNames = s.value("maps").toStringList();
 	
 	foreach (const MapDef& map, maps) {
 		QStandardItem* itemName = new QStandardItem(map.nameTranslated());
 		itemName->setData(QVariant::fromValue((void*) &map));
 		itemName->setCheckable(true);
-		if (mapNames.contains(map.name())) {
+		if (selectAllMaps || mapNames.contains(map.name())) {
 			itemName->setCheckState(Qt::Checked);
 			mapChanged(itemName);
 		} else {

@@ -1,0 +1,12 @@
+0.4.1
+  - Save map selection correctly.
+  - Select difficulty "Easy" on first start.
+  - Select all maps on first start.
+  - Assure there are at least 2 players in the list when opening the new match dialog.
+
+  Windows:
+  - Installer now asks for startmenu folder.
+  - Fixed uninstaller registry key.
+
+0.4
+  - Complete rewrite.
