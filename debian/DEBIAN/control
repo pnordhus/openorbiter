@@ -1,0 +1,8 @@
+Package: openorbiter
+Version: 0.4-1
+Section: base
+Priority: optional
+Architecture: all
+Depends: libqt4-dev (>= 4.4.0)
+Maintainer: Philipp Nordhus <pnordhus@users.sourceforge.net>
+Description: Dexterity game for 2-8 players on one computer

@@ -1,13 +1,22 @@
+!ifndef version
+  !define version "0.0"
+!endif
+
 !include "MUI.nsh"
 
 Name "OpenOrbiter"
 
-OutFile "installer.exe"
+OutFile "openorbiter-${version}-setup.exe"
 InstallDir "$PROGRAMFILES\OpenOrbiter"
 InstallDirRegKey HKCU "Software\OpenOrbiter" ""
 
-SetCompressor lzma
+SetCompressor /SOLID lzma
 
+Var StartMenuFolder
+
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\OpenOrbiter"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "StartMenuFolder"
 
 !define MUI_ABORTWARNING
 !define MUI_HEADERIMAGE
@@ -15,11 +24,12 @@ SetCompressor lzma
 
 !insertmacro MUI_PAGE_LICENSE "..\COPYING"
 !insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder 
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
-
+!insertmacro MUI_LANGUAGE "German"
 
 Section "Install"
   CreateDirectory "$INSTDIR"
@@ -45,13 +55,17 @@ Section "Install"
   DetailPrint "Creating Uninstaller"
   WriteUninstaller "$INSTDIR\uninstall.exe"
   
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter "DisplayName" "OpenOrbiter (remove only)"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter" "DisplayName" "OpenOrbiter"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter" "UninstallString" "$INSTDIR\Uninstall.exe"
   
   DetailPrint "Creating shortcuts"
-  CreateDirectory "$SMPROGRAMS\OpenOrbiter"
-  CreateShortCut "$SMPROGRAMS\OpenOrbiter\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\OpenOrbiter\OpenOrbiter.lnk" "$INSTDIR\openorbiter.exe" "" "$INSTDIR\openorbiter.exe" 0
+  
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+    CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\OpenOrbiter.lnk" "$INSTDIR\openorbiter.exe" "" "$INSTDIR\openorbiter.exe" 0
+  !insertmacro MUI_STARTMENU_WRITE_END
+  
   CreateShortCut "$DESKTOP\OpenOrbiter.lnk" "$INSTDIR\openorbiter.exe" "" "$INSTDIR\openorbiter.exe" 0
 SectionEnd
 
@@ -63,7 +77,9 @@ Section "Uninstall"
   DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter"
   
   Delete "$DESKTOP\OpenOrbiter.lnk"
-  Delete "$SMPROGRAMS\OpenOrbiter\Uninstall.lnk"
-  Delete "$SMPROGRAMS\OpenOrbiter\OpenOrbiter.lnk"
-  RMDir "$SMPROGRAMS\OpenOrbiter"
+  
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
+  Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\OpenOrbiter.lnk"
+  RMDir "$SMPROGRAMS\$StartMenuFolder"
 SectionEnd

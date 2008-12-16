@@ -1,9 +1,13 @@
 isEmpty(PREFIX) {
-	PREFIX =  /usr/local
+	PREFIX = /usr/local
 }
 
 isEmpty(DATADIR) {
-	DATADIR =  $$PREFIX/share/openorbiter
+	DATADIR = $$PREFIX/share/openorbiter
+}
+
+isEmpty(INSTALLROOT) {
+	INSTALLROOT = 
 }
 
 TEMPLATE = app
@@ -113,18 +117,18 @@ RESOURCES = \
 TRANSLATIONS = \
  data/translations/openorbiter_de.ts
 
-maps.path = $$DATADIR/maps
+maps.path = $$INSTALLROOT/$$DATADIR/maps
 maps.files = \
  data/maps/*.xml
 
-gfx.path = $$DATADIR/gfx
+gfx.path = $$INSTALLROOT/$$DATADIR/gfx
 gfx.files = \
  data/gfx/*.svg
 
-translations.path = $$DATADIR/translations
+translations.path = $$INSTALLROOT/$$DATADIR/translations
 translations.files = \
  data/translations/*.qm
 
 DISTFILES += COPYING ChangeLog README
 
-target.path = $$PREFIX/bin
+target.path = $$INSTALLROOT/$$PREFIX/bin
