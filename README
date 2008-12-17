@@ -9,16 +9,7 @@ game "Orbituary". Since then it has evolved into a platform independent
 Qt application with an easy to use interface.
 
 
-2. How to play
-
-This is pretty straight forward: Each player uses a single key to control
-an Orbiter on a 2-dimensional map. Pressing the key attaches or detaches the
-Orbiter to or from the nearest Node. While linked to a Node the Orbiter moves
-around it on a circle, gaining speed. While not linked, the Orbiter is affected
-by gravity, so it basically falls.
-
-
-3. Installation
+2. Installation
 
 To compile and install OpenOrbiter simply do the following:
 
