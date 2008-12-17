@@ -75,6 +75,7 @@ private:
 	QTimer			m_timer;
 	QTime			m_time;
 	QString			m_textPrefix;
+	uint			m_frameRate;
 	
 	State			m_state;
 	
