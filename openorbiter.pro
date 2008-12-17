@@ -129,6 +129,6 @@ translations.path = $$INSTALLROOT/$$DATADIR/translations
 translations.files = \
  data/translations/*.qm
 
-DISTFILES += COPYING ChangeLog README
+DISTFILES += COPYING NEWS README
 
 target.path = $$INSTALLROOT/$$PREFIX/bin
