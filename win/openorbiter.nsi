@@ -36,7 +36,8 @@ Section "Install"
   DetailPrint "Installing new files"
   
   SetOutPath "$INSTDIR"
-  file /r release\bin\openorbiter.exe
+  file /oname=OpenOrbiter.exe release\bin\openorbiter.exe
+  file ChangeLog.txt
   file /r libs\*.*
   
   SetOutPath "$INSTDIR\maps"
