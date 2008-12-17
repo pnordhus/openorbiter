@@ -1,12 +1,10 @@
 0.4.1
-  - Save map selection correctly.
-  - Select difficulty "Easy" on first start.
-  - Select all maps on first start.
+  - Frame rate increased.
+  - Map selection correctly is now saved correctly.
+  - Difficulty "Easy" is selected on first start.
+  - All maps are selected on first start.
   - Assure there are at least 2 players in the list when opening the new match dialog.
-
-  Windows:
-  - Installer now asks for startmenu folder.
-  - Fixed uninstaller registry key.
+  - Several fixes and improvements for Windows installer.
 
 0.4
   - Complete rewrite.

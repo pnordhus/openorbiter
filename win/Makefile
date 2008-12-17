@@ -6,6 +6,7 @@ all:
 	@lrelease ../openorbiter.pro
 	@make -f Makefile.win32 -j3
 	@unix2dos -n ../ChangeLog ChangeLog.txt
+	@unix2dos -n ../README.win ReadMe.txt
 	@makensis -Dversion=$(VERSION) openorbiter.nsi
 
 clean:
