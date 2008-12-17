@@ -26,14 +26,20 @@
 #include "player.h"
 #include "scene.h"
 #include <algorithm>
+#include <QSettings>
 
 
 Match::Match(Scene& scene) :
 	m_scene(scene),
 	m_game(NULL),
+	m_frameRate(60),
 	m_state(Setup)
 {
 	connect(&m_timer, SIGNAL(timeout()), SLOT(process()));
+	
+	QSettings s;
+	if (s.contains("framerate"))
+		m_frameRate = qBound(10, s.value("framerate").toInt(), 200);
 }
 
 
@@ -95,7 +101,7 @@ void Match::resume()
 	Q_ASSERT(m_state != Ingame);
 	
 	m_state = Ingame;
-	m_timer.start(30);
+	m_timer.start(1000 / m_frameRate);
 	m_time.restart();
 	m_scene.hideText();
 	m_textPrefix = "";
