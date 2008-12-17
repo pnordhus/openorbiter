@@ -371,8 +371,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>btnStart</tabstop>
-  <tabstop>btnCancel</tabstop>
   <tabstop>checkBox</tabstop>
   <tabstop>spinBox</tabstop>
   <tabstop>checkBox_2</tabstop>
@@ -382,10 +380,13 @@
   <tabstop>treePlayers</tabstop>
   <tabstop>btnAdd</tabstop>
   <tabstop>btnRemove</tabstop>
-  <tabstop>spinMapScale</tabstop>
+  <tabstop>comboDifficulty</tabstop>
   <tabstop>treeMaps</tabstop>
   <tabstop>btnSelectAll</tabstop>
   <tabstop>btnSelectNone</tabstop>
+  <tabstop>spinMapScale</tabstop>
+  <tabstop>btnStart</tabstop>
+  <tabstop>btnCancel</tabstop>
  </tabstops>
  <resources/>
  <connections>
