@@ -45,8 +45,7 @@ Section "Install"
   
   SetOutPath "$INSTDIR"
   file /oname=OpenOrbiter.exe release\bin\openorbiter.exe
-  file ChangeLog.txt
-  file ReadMe.txt
+  file News.txt
   file /r libs\*.*
   
   SetOutPath "$INSTDIR\maps"
@@ -70,7 +69,7 @@ Section "Install"
   WriteRegStr   HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter" "HelpLink" "http://openorbiter.sf.net/"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter" "NoRepair" 1
-  WriteRegStr   HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter" "Readme" "$INSTDIR\Readme.txt"
+  WriteRegStr   HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter" "Readme" "$INSTDIR\News.txt"
   WriteRegStr   HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenOrbiter" "UninstallString" "$INSTDIR\Uninstall.exe"
   
   DetailPrint "Creating shortcuts"

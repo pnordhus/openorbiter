@@ -1,10 +1,10 @@
-0.4.1
+Version 0.4.1 (2008-12-xx)
   - Frame rate increased.
-  - Map selection correctly is now saved correctly.
+  - Map selection is now saved correctly.
   - Difficulty "Easy" is selected on first start.
   - All maps are selected on first start.
-  - Assure there are at least 2 players in the list when opening the new match dialog.
+  - Assure there are at least 2 players when opening the new match dialog.
   - Several fixes and improvements for Windows installer.
 
-0.4
+Version 0.4 (2008-12-14)
   - Complete rewrite.
