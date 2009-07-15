@@ -8,7 +8,8 @@ set(QT_USE_QTOPENGL true CACHE BOOL "Build with OpenGL support")
 set(QT_USE_QTXML true)
 include(${QT_USE_FILE})
 
-set(CMAKE_DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/openorbiter CACHE PATH "Data directory")
+set(CMAKE_DATA_PATH ${CMAKE_INSTALL_PREFIX}/share CACHE PATH "Directory for shared files, 'openorbiter' will be appended automatically")
+set(DATA_PATH ${CMAKE_DATA_PATH}/openorbiter)
 
 configure_file(src/config.h.in config.h)
 
@@ -92,6 +93,6 @@ add_executable(openorbiter ${SOURCES} ${UIC_SOURCES} ${MOC_SOURCES} ${QRC_SOURCE
 target_link_libraries(openorbiter ${QT_LIBRARIES})
 
 install(TARGETS openorbiter DESTINATION bin)
-install(DIRECTORY "data/gfx" DESTINATION "${CMAKE_DATA_PATH}" PATTERN ".svn" EXCLUDE)
-install(DIRECTORY "data/maps" DESTINATION "${CMAKE_DATA_PATH}" PATTERN ".svn" EXCLUDE)
-install(FILES ${QM_SOURCES} DESTINATION "${CMAKE_DATA_PATH}/translations")
+install(DIRECTORY "data/gfx" DESTINATION "${DATA_PATH}" PATTERN ".svn" EXCLUDE)
+install(DIRECTORY "data/maps" DESTINATION "${DATA_PATH}" PATTERN ".svn" EXCLUDE)
+install(FILES ${QM_SOURCES} DESTINATION "${DATA_PATH}/translations")

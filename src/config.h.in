@@ -29,7 +29,7 @@
 #ifdef Q_OS_WIN
 	static const QDir g_dataDir(".");
 #else
-	static const QDir g_dataDir("${CMAKE_DATA_PATH}");
+	static const QDir g_dataDir("${DATA_PATH}");
 #endif
 
 
