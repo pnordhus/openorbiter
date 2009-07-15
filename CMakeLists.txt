@@ -93,6 +93,10 @@ add_executable(openorbiter ${SOURCES} ${UIC_SOURCES} ${MOC_SOURCES} ${QRC_SOURCE
 target_link_libraries(openorbiter ${QT_LIBRARIES})
 
 install(TARGETS openorbiter DESTINATION bin)
-install(DIRECTORY "data/gfx" DESTINATION "${DATA_PATH}" PATTERN ".svn" EXCLUDE)
+
+if(QT_USE_QTSVG)
+	install(DIRECTORY "data/gfx" DESTINATION "${DATA_PATH}" PATTERN ".svn" EXCLUDE)
+endif(QT_USE_QTSVG)
+
 install(DIRECTORY "data/maps" DESTINATION "${DATA_PATH}" PATTERN ".svn" EXCLUDE)
 install(FILES ${QM_SOURCES} DESTINATION "${DATA_PATH}/translations")
