@@ -20,7 +20,6 @@
 
 
 #include "config.h"
-#include "defs.h"
 #include "form_main.h"
 #include "form_match.h"
 #include "mapdef.h"
@@ -175,7 +174,7 @@ void FormMain::langChanged()
 
 void FormMain::retranslate()
 {
-	setWindowTitle(OPENORBITER_VERSION_STRING);
+	setWindowTitle(g_openOrbiterVersion);
 	
 #ifdef QT_SVG_LIB
 	m_actionSvg->setText(tr("Pretty objects"));
@@ -249,7 +248,7 @@ void FormMain::showAbout()
 	QDialog dlg(this);
 	Ui::FormAbout about;
 	about.setupUi(&dlg);
-	about.lblVersion->setText(OPENORBITER_VERSION_STRING);
+	about.lblVersion->setText(g_openOrbiterVersion);
 	about.lblBuildTime->setText(QString("Build date: %1 %2").arg(__DATE__).arg(__TIME__));
 	dlg.exec();
 }

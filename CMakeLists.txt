@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 project(openorbiter)
 
+set(OPENORBITER_VERSION "0.5-pre")
+
 find_package(Qt4 4.4.0 REQUIRED)
 
 set(QT_USE_QTSVG true CACHE BOOL "Build with SVG support")
@@ -15,14 +17,13 @@ set(DATA_PATH ${CMAKE_DATA_PATH}/openorbiter)
 configure_file(src/config.h.in config.h)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCES
 	src/bouncer.cpp
 	src/bouncer.h
 	src/bouncerdef.cpp
 	src/bouncerdef.h
-	src/defs.h
 	src/form_main.cpp
 	src/form_main.h
 	src/form_match.cpp

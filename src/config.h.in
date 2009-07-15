@@ -26,6 +26,9 @@
 #include <QDir>
 
 
+static const QString g_openOrbiterVersion = "OpenOrbiter ${OPENORBITER_VERSION}";
+
+
 #ifdef Q_OS_WIN
 	static const QDir g_dataDir(".");
 #else
