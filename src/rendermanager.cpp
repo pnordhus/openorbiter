@@ -19,9 +19,11 @@
  ***************************************************************************/
 
 
+#include "config.h"
 #include "rendermanager.h"
 #include <QBrush>
 #include <QPen>
+
 
 #ifdef QT_SVG_LIB
 #  include <QGraphicsSvgItem>
@@ -75,7 +77,7 @@ RenderManager::RenderManager()
 #ifdef QT_SVG_LIB
 	m_useSvg = false;
 	
-	QSvgRenderer* renderer = new QSvgRenderer(QString(OO_DATADIR "/gfx/node.svg"));
+	QSvgRenderer* renderer = new QSvgRenderer(g_dataDir.absoluteFilePath("gfx/node.svg"));
 	if (renderer->isValid()) {
 		m_rendererNode = renderer;
 	} else {
@@ -107,7 +109,7 @@ RenderManager::~RenderManager()
 #ifdef QT_SVG_LIB
 void RenderManager::loadRenderer(const QString& name, const QColor& color)
 {
-	QSvgRenderer* renderer = new QSvgRenderer(QString(OO_DATADIR "/gfx/%1.svg").arg(name.toLower()));
+	QSvgRenderer* renderer = new QSvgRenderer(g_dataDir.absoluteFilePath(QString("gfx/%1.svg").arg(name.toLower())));
 	if (renderer->isValid())
 		m_rendererOrbiter.insert(color.name(), renderer);
 	else

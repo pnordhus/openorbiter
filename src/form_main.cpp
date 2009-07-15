@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 
+#include "config.h"
 #include "defs.h"
 #include "form_main.h"
 #include "form_match.h"
@@ -100,7 +101,8 @@ FormMain::FormMain() :
 	
 	restoreGeometry(s.value("geometry", QSize(400, 400)).toByteArray());
 	
-	QDir dir(OO_DATADIR "/maps");
+	QDir dir = g_dataDir;
+	dir.cd("maps");
 	QStringList files = dir.entryList(QStringList() << "*.xml", QDir::Files | QDir::Readable);
 	foreach (const QString& file, files) {
 		MapLoader loader;
@@ -124,7 +126,7 @@ FormMain::~FormMain()
 void FormMain::loadLanguage(const QString& name, const QString& fullname, const QString& defaultLang)
 {
 	QTranslator* translator = new QTranslator(this);
-	if (!translator->load(QString(OO_DATADIR "/translations/openorbiter_") + name)) {
+	if (!translator->load(g_dataDir.absoluteFilePath("translations/openorbiter_" + name))) {
 		delete translator;
 		return;
 	}
