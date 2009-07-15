@@ -8,7 +8,7 @@ set(QT_USE_QTOPENGL true CACHE BOOL "Build with OpenGL support")
 set(QT_USE_QTXML true)
 include(${QT_USE_FILE})
 
-set(DATADIR share/openorbiter CACHE PATH "Data directory, prefix is automatically prepended")
+set(CMAKE_DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/openorbiter CACHE PATH "Data directory")
 
 configure_file(src/config.h.in config.h)
 
