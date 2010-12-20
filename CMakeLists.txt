@@ -19,3 +19,8 @@ add_subdirectory(src)
 
 install(DIRECTORY "data/gfx" DESTINATION "${DATA_PATH}")
 install(DIRECTORY "data/maps" DESTINATION "${DATA_PATH}")
+
+if(UNIX)
+    install(FILES data/openorbiter.desktop DESTINATION share/applications)
+    install(FILES data/openorbiter.png DESTINATION share/pixmaps )
+endif(UNIX)
